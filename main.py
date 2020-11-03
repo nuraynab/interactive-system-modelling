@@ -9,10 +9,15 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 
 from create_project import Ui_EditProjectInfoWindow
+from create_version import Ui_EditVersionInfoWindow
+from project_desc import Ui_ProjectDescWindow
+from version_desc import Ui_VersionDescWindow
+from project import Ui_ProjectWindow
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1162, 861)
@@ -80,6 +85,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.tableWidget.setFont(font)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.tableWidget.setLineWidth(1)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideRight)
         self.tableWidget.setShowGrid(True)
@@ -191,6 +197,33 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.createBtn.clicked.connect(self.new_project)
+        self.editProjInfoBtn.clicked.connect(self.edit_project)
+        self.editVerInfoBtn.clicked.connect(self.edit_version)
+        self.viewProjDescBtn.clicked.connect(self.project_desc)
+        self.viewVerDescBtn.clicked.connect(self.version_desc)
+        self.deleteProjBtn.clicked.connect(self.delete_project)
+        self.deleteVerBtn.clicked.connect(self.delete_version)
+        self.openBtn.clicked.connect(self.open_project)
+
+    def delete_project(self):
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return   
+        reply = QMessageBox.question(self, "Delete project", "Are you sure you want to delete this project and its versions?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            for item in listItems:
+               self.listWidget.takeItem(self.listWidget.row(item))
+        else:
+            return
+
+    def delete_version(self):
+        tableItems=self.tableWidget.selectedItems()
+        if not tableItems: return   
+        reply = QMessageBox.question(self, "Delete version", "Are you sure you want to delete this version?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            for item in tableItems:
+               self.tableWidget.takeItem(self.tableWidget.row(item), self.tableWidget.column(item))
+        else:
+            return
 
     def new_project(self):
         self.EditProjectInfoWindow = QtWidgets.QMainWindow()
@@ -198,6 +231,45 @@ class Ui_MainWindow(object):
         self.ui.setupUi(self.EditProjectInfoWindow)
         self.EditProjectInfoWindow.show()
 
+    def edit_project(self):
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return  
+        for item in listItems:
+            self.EditProjectInfoWindow = QtWidgets.QMainWindow()
+            self.ui = Ui_EditProjectInfoWindow()
+            self.ui.setupUi(self.EditProjectInfoWindow)
+            self.EditProjectInfoWindow.show()
+
+    def edit_version(self):
+        tableItems=self.tableWidget.selectedItems()
+        if not tableItems: return  
+        for item in tableItems:
+            self.EditVersionInfoWindow = QtWidgets.QMainWindow()
+            self.ui = Ui_EditVersionInfoWindow()
+            self.ui.setupUi(self.EditVersionInfoWindow)
+            self.EditVersionInfoWindow.show()
+
+    def project_desc(self):
+        self.ProjectDescWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ProjectDescWindow()
+        self.ui.setupUi(self.ProjectDescWindow)
+        self.ProjectDescWindow.show()
+
+    def version_desc(self):
+        self.VersionDescWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_VersionDescWindow()
+        self.ui.setupUi(self.VersionDescWindow)
+        self.VersionDescWindow.show()
+
+    def open_project(self):
+        listItems=self.listWidget.selectedItems()
+        tableItems=self.tableWidget.selectedItems()
+        if not listItems: return 
+        if not tableItems: return 
+        self.ProjectWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ProjectWindow()
+        self.ui.setupUi(self.ProjectWindow)
+        self.ProjectWindow.show()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
