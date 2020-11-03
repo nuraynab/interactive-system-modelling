@@ -22,6 +22,7 @@ from project import Ui_ProjectWindow
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
 projects_dict = {}
+versions_dict = {}
 
 class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
@@ -91,7 +92,7 @@ class Ui_MainWindow(QWidget):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.tableWidget.setFont(font)
-        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+        #self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.tableWidget.setLineWidth(1)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideRight)
         self.tableWidget.setShowGrid(True)
@@ -99,7 +100,6 @@ class Ui_MainWindow(QWidget):
         self.tableWidget.setCornerButtonEnabled(True)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
-        self.tableWidget.setRowCount(2)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -117,26 +117,6 @@ class Ui_MainWindow(QWidget):
         font.setPointSize(14)
         item.setFont(font)
         self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(0, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(1, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(1, 1, item)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(182)
         self.tableWidget.verticalHeader().setCascadingSectionResizes(False)
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
@@ -210,15 +190,45 @@ class Ui_MainWindow(QWidget):
         self.deleteProjBtn.clicked.connect(self.delete_project)
         self.deleteVerBtn.clicked.connect(self.delete_version)
         self.openBtn.clicked.connect(self.open_project)
-        self.listWidget.itemClicked.connect(self.show_short_descr)
+        self.listWidget.itemClicked.connect(self.show_project_short_descr)
+        self.listWidget.itemClicked.connect(self.show_versions)
+        self.tableWidget.itemClicked.connect(self.show_version_short_descr)
         self.get_projects()
 
-    def show_short_descr(self):
+    def show_versions(self):
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return  
+        for item in listItems:
+            self.tableWidget.setRowCount(0)
+            db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+            with db:
+                cur = db.cursor()
+                cur.execute("SELECT T2.id, T2.name, T2.project_name, T2.numb, T2.short_descr, T2.long_descr FROM projects T1 INNER JOIN versions T2 ON T1.name = T2.project_name WHERE T1.name = '%s' ORDER BY T2.numb" % (''.join(item.text())))
+                versions = cur.fetchall()
+
+                i = 0
+                for y in versions:
+                    self.tableWidget.setRowCount(i+1)
+                    self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(y[1])))
+                    self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
+                    versions_dict[y[1]] = [y[2], y[3], y[4], y[5]]
+                    i+=1
+
+
+    def show_project_short_descr(self):
         listItems=self.listWidget.selectedItems()
         if not listItems: return  
         for item in listItems:
             self.textBrowser.clear()
             self.textBrowser.append(projects_dict[item.text()][0])
+
+
+    def show_version_short_descr(self):
+        tableItems=self.tableWidget.selectedItems()
+        if not tableItems: return  
+        for item in tableItems:
+            self.textBrowser_2.clear()
+            self.textBrowser_2.append(versions_dict[item.text()][2])
 
 
     def get_projects(self):
@@ -303,16 +313,30 @@ class Ui_MainWindow(QWidget):
         self.VersionDescWindow = QtWidgets.QMainWindow()
         self.ui = Ui_VersionDescWindow()
         self.ui.setupUi(self.VersionDescWindow)
+        # self.ui.textBrowser.append(projects_dict['test'][0])
+        tableItems=self.tableWidget.selectedItems()
+        if not tableItems: return  
+        for item in tableItems:
+            self.ui.textBrowser.clear()
+            self.ui.textBrowser.append(versions_dict[item.text()][3])
         self.VersionDescWindow.show()
+
 
     def open_project(self):
         listItems=self.listWidget.selectedItems()
         tableItems=self.tableWidget.selectedItems()
         if not listItems: return 
         if not tableItems: return 
+        for item in listItems:
+            cur_name = 'Project: ' + item.text()
+        for item in tableItems:
+            cur_vers = 'Version ' + str(versions_dict[item.text()][1]) + ': ' + item.text() 
+
         self.ProjectWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ProjectWindow()
         self.ui.setupUi(self.ProjectWindow)
+        self.ui.label.setText(cur_name)
+        self.ui.label_2.setText(cur_vers)
         self.ProjectWindow.show()
 
     def retranslateUi(self, MainWindow):
@@ -333,24 +357,12 @@ class Ui_MainWindow(QWidget):
 
 
         self.listWidget.setSortingEnabled(__sortingEnabled)
-        item = self.tableWidget.verticalHeaderItem(0)
-        item.setText(_translate("MainWindow", "1"))
-        item = self.tableWidget.verticalHeaderItem(1)
-        item.setText(_translate("MainWindow", "2"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Name"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Version #"))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
-        item = self.tableWidget.item(0, 0)
-        item.setText(_translate("MainWindow", "Version Name 1"))
-        item = self.tableWidget.item(0, 1)
-        item.setText(_translate("MainWindow", "1.0"))
-        item = self.tableWidget.item(1, 0)
-        item.setText(_translate("MainWindow", "Version Name 2"))
-        item = self.tableWidget.item(1, 1)
-        item.setText(_translate("MainWindow", "1.1"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Project Description</span></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version Description</span></p></body></html>"))
