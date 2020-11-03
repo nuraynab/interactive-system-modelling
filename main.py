@@ -10,12 +10,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
+import MySQLdb as mdb
 
 from create_project import Ui_EditProjectInfoWindow
 from create_version import Ui_EditVersionInfoWindow
 from project_desc import Ui_ProjectDescWindow
 from version_desc import Ui_VersionDescWindow
 from project import Ui_ProjectWindow
+
+db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
 class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
@@ -75,11 +78,11 @@ class Ui_MainWindow(QWidget):
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(110, 130, 381, 261))
         self.listWidget.setObjectName("listWidget")
-        item = QtWidgets.QListWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.listWidget.addItem(item)
+        # item = QtWidgets.QListWidgetItem()
+        # font = QtGui.QFont()
+        # font.setPointSize(14)
+        # item.setFont(font)
+        # self.listWidget.addItem(item)
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setGeometry(QtCore.QRect(630, 130, 381, 261))
         font = QtGui.QFont()
@@ -204,6 +207,17 @@ class Ui_MainWindow(QWidget):
         self.deleteProjBtn.clicked.connect(self.delete_project)
         self.deleteVerBtn.clicked.connect(self.delete_version)
         self.openBtn.clicked.connect(self.open_project)
+        self.get_projects()
+
+
+    def get_projects(self):
+        with db:
+            cur = db.cursor()
+            cur.execute("SELECT * FROM projects")
+            projects = cur.fetchall()
+
+            for x in projects:
+                self.listWidget.addItem(x[1])
 
     def delete_project(self):
         listItems=self.listWidget.selectedItems()
@@ -211,7 +225,13 @@ class Ui_MainWindow(QWidget):
         reply = QMessageBox.question(self, "Delete project", "Are you sure you want to delete this project and its versions?", QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             for item in listItems:
-               self.listWidget.takeItem(self.listWidget.row(item))
+                self.listWidget.takeItem(self.listWidget.row(item))
+                db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+                with db:
+                    cur = db.cursor()
+                    cur.execute("DELETE FROM projects WHERE name = '%s'" % (''.join(item.text())))
+                    db.commit()
+
         else:
             return
 
@@ -284,8 +304,10 @@ class Ui_MainWindow(QWidget):
         self.deleteVerBtn.setText(_translate("MainWindow", "Delete"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
-        item = self.listWidget.item(0)
-        item.setText(_translate("MainWindow", "Animal-Dog"))
+        # item = self.listWidget.item(0)
+        # item.setText(_translate("MainWindow", "Animal-Dog"))
+
+
         self.listWidget.setSortingEnabled(__sortingEnabled)
         item = self.tableWidget.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "1"))
@@ -331,4 +353,6 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+
     sys.exit(app.exec_())
+    
