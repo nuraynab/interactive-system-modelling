@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from project import Ui_ProjectWindow
 
 import MySQLdb as mdb
 
@@ -50,6 +51,7 @@ class Ui_EditProjectInfoWindow(object):
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
         self.saveBtn.setGeometry(QtCore.QRect(230, 720, 89, 25))
         self.saveBtn.clicked.connect(self.create_project)
+        self.saveBtn.clicked.connect(EditProjectInfoWindow.close)
         
         font = QtGui.QFont()
         font.setPointSize(14)
@@ -79,10 +81,20 @@ class Ui_EditProjectInfoWindow(object):
                         "VALUES('%s', '%s', '%s')" % (''.join(self.lineEdit.text()),
                                                   ''.join(self.textEdit.toPlainText()),
                                                   ''.join(self.textEdit_2.toPlainText())))
-
+            #cur_name = 'Project: ' + self.lineEdit.text()
+            #cur_vers = 'Version #1.0: New '
  
             db.commit()
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
+        #open the project
+        self.ProjectWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ProjectWindow()
+        self.ui.setupUi(self.ProjectWindow)
+        #self.ProjectWindow.label.setText(cur_name)
+        #self.ProjectWindow.label_2.setText(cur_vers)
+        #self.ProjectWindow.displayInfo()
+        self.ProjectWindow.show()
+
 
     def retranslateUi(self, EditProjectInfoWindow):
         _translate = QtCore.QCoreApplication.translate
