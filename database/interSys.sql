@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 02, 2020 at 10:51 PM
+-- Generation Time: Nov 03, 2020 at 05:28 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -41,7 +41,7 @@ CREATE TABLE `projects` (
 INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 (5, 'test', 'testetsetset', 'setestssssssssssssssssssssssss'),
 (6, 'aaaaaaaa', 'aaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaa'),
-(7, 'Test3', 'This is short description', 'This is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description\nThis is very long description');
+(8, 'test', 'test', 'testing');
 
 --
 -- Indexes for dumped tables
@@ -61,7 +61,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

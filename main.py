@@ -20,6 +20,8 @@ from project import Ui_ProjectWindow
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
+projects_dict = {}
+
 class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -207,7 +209,15 @@ class Ui_MainWindow(QWidget):
         self.deleteProjBtn.clicked.connect(self.delete_project)
         self.deleteVerBtn.clicked.connect(self.delete_version)
         self.openBtn.clicked.connect(self.open_project)
+        self.listWidget.itemClicked.connect(self.show_short_descr)
         self.get_projects()
+
+    def show_short_descr(self):
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return  
+        for item in listItems:
+            self.textBrowser.clear()
+            self.textBrowser.append(projects_dict[item.text()][0])
 
 
     def get_projects(self):
@@ -218,6 +228,8 @@ class Ui_MainWindow(QWidget):
 
             for x in projects:
                 self.listWidget.addItem(x[1])
+                projects_dict[x[1]] = [x[2], x[3]]
+
 
     def delete_project(self):
         listItems=self.listWidget.selectedItems()
@@ -330,20 +342,22 @@ class Ui_MainWindow(QWidget):
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Project Description</span></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version Description</span></p></body></html>"))
-        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This project blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
-        self.textBrowser_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This version blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
+#         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+# "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+# "p, li { white-space: pre-wrap; }\n"
+# "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+# "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This project blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
+#         self.textBrowser_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+# "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+# "p, li { white-space: pre-wrap; }\n"
+# "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+# "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This version blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
         self.viewProjDescBtn.setText(_translate("MainWindow", "View Long Description"))
         self.viewVerDescBtn.setText(_translate("MainWindow", "View Long Description"))
         self.openBtn.setText(_translate("MainWindow", "Open"))
         self.menuInteractive_System_Modelling.setTitle(_translate("MainWindow", "1"))
+
+
 
 
 if __name__ == "__main__":
