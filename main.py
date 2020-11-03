@@ -12,7 +12,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 import MySQLdb as mdb
 
-from create_project import Ui_EditProjectInfoWindow
+from create_project import Ui_CreateProjectInfoWindow
+from edit_project import Ui_EditProjectInfoWindow
 from create_version import Ui_EditVersionInfoWindow
 from project_desc import Ui_ProjectDescWindow
 from version_desc import Ui_VersionDescWindow
@@ -254,14 +255,15 @@ class Ui_MainWindow(QWidget):
         if reply == QMessageBox.Yes:
             for item in tableItems:
                self.tableWidget.takeItem(self.tableWidget.row(item), self.tableWidget.column(item))
+               self.textBrowser.clear()
         else:
             return
 
     def new_project(self):
-        self.EditProjectInfoWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_EditProjectInfoWindow()
-        self.ui.setupUi(self.EditProjectInfoWindow)
-        self.EditProjectInfoWindow.show()
+        self.CreateProjectInfoWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_CreateProjectInfoWindow()
+        self.ui.setupUi(self.CreateProjectInfoWindow)
+        self.CreateProjectInfoWindow.show()
 
     def edit_project(self):
         listItems=self.listWidget.selectedItems()
@@ -270,6 +272,10 @@ class Ui_MainWindow(QWidget):
             self.EditProjectInfoWindow = QtWidgets.QMainWindow()
             self.ui = Ui_EditProjectInfoWindow()
             self.ui.setupUi(self.EditProjectInfoWindow)
+            self.ui.lineEdit.setText(item.text())
+            self.ui.origin_name = item.text()
+            self.ui.textEdit.setText(projects_dict[item.text()][0])
+            self.ui.textEdit_2.setText(projects_dict[item.text()][1])
             self.EditProjectInfoWindow.show()
 
     def edit_version(self):
@@ -285,6 +291,12 @@ class Ui_MainWindow(QWidget):
         self.ProjectDescWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ProjectDescWindow()
         self.ui.setupUi(self.ProjectDescWindow)
+        # self.ui.textBrowser.append(projects_dict['test'][0])
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return  
+        for item in listItems:
+            self.ui.textBrowser.clear()
+            self.ui.textBrowser.append(projects_dict[item.text()][1])
         self.ProjectDescWindow.show()
 
     def version_desc(self):

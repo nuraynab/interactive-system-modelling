@@ -13,11 +13,11 @@ from project import Ui_ProjectWindow
 
 import MySQLdb as mdb
 
-class Ui_CreateProjectInfoWindow(object):
-    def setupUi(self, CreateProjectInfoWindow):
-        CreateProjectInfoWindow.setObjectName("CreateProjectInfoWindow")
-        CreateProjectInfoWindow.resize(553, 818)
-        self.centralwidget = QtWidgets.QWidget(CreateProjectInfoWindow)
+class Ui_EditProjectInfoWindow(object):
+    def setupUi(self, EditProjectInfoWindow):
+        EditProjectInfoWindow.setObjectName("EditProjectInfoWindow")
+        EditProjectInfoWindow.resize(553, 818)
+        self.centralwidget = QtWidgets.QWidget(EditProjectInfoWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(40, 10, 591, 51))
@@ -51,63 +51,53 @@ class Ui_CreateProjectInfoWindow(object):
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
         self.saveBtn.setGeometry(QtCore.QRect(230, 720, 89, 25))
         self.saveBtn.clicked.connect(self.create_project)
-        self.saveBtn.clicked.connect(CreateProjectInfoWindow.close)
+        self.saveBtn.clicked.connect(EditProjectInfoWindow.close)
         
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
         self.saveBtn.setObjectName("saveBtn")
-        CreateProjectInfoWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(CreateProjectInfoWindow)
+        EditProjectInfoWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(EditProjectInfoWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 553, 22))
         self.menubar.setObjectName("menubar")
         self.menuInteractive_System_Modelling = QtWidgets.QMenu(self.menubar)
         self.menuInteractive_System_Modelling.setObjectName("menuInteractive_System_Modelling")
-        CreateProjectInfoWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(CreateProjectInfoWindow)
+        EditProjectInfoWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(EditProjectInfoWindow)
         self.statusbar.setObjectName("statusbar")
-        CreateProjectInfoWindow.setStatusBar(self.statusbar)
+        EditProjectInfoWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
-
-        self.retranslateUi(CreateProjectInfoWindow)
-        QtCore.QMetaObject.connectSlotsByName(CreateProjectInfoWindow)
+        self.origin_name = ''
+        self.retranslateUi(EditProjectInfoWindow)
+        QtCore.QMetaObject.connectSlotsByName(EditProjectInfoWindow)
 
     def create_project(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with db:
             cur = db.cursor()
- 
-            cur.execute("INSERT INTO projects(name, short_descr, long_descr)"
-                        "VALUES('%s', '%s', '%s')" % (''.join(self.lineEdit.text()),
+            
+            cur.execute("UPDATE projects SET name = '%s', short_descr = '%s', long_descr = '%s' WHERE name = '%s'"
+                                                 % (''.join(self.lineEdit.text()),
                                                   ''.join(self.textEdit.toPlainText()),
-                                                  ''.join(self.textEdit_2.toPlainText())))
+                                                  ''.join(self.textEdit_2.toPlainText()),
+                                                  ''.join(self.origin_name)))
             #cur_name = 'Project: ' + self.lineEdit.text()
             #cur_vers = 'Version #1.0: New '
  
             db.commit()
-            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
-        #open the project
-        cur_name = 'Project: ' + self.lineEdit.text()
-        cur_vers = 'Version #1.0: New '
-        self.ProjectWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_ProjectWindow()
-        self.ui.setupUi(self.ProjectWindow)
-        self.ui.label.setText("Project: " + self.lineEdit.text())
-        #self.ProjectWindow.label.setText(cur_name)
-        #self.ProjectWindow.label_2.setText(cur_vers)
-        #self.ProjectWindow.displayInfo()
-        self.ProjectWindow.show()
-        self.ui.label.setText(cur_name)
-        self.ui.label_2.setText(cur_vers)
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
+        
 
-    def retranslateUi(self, CreateProjectInfoWindow):
+
+    def retranslateUi(self, EditProjectInfoWindow):
         _translate = QtCore.QCoreApplication.translate
-        CreateProjectInfoWindow.setWindowTitle(_translate("CreateProjectInfoWindow", "MainWindow"))
-        self.label.setText(_translate("CreateProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit Project Information</span></p></body></html>"))
-        self.label_2.setText(_translate("CreateProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Project Name</span></p></body></html>"))
-        self.label_4.setText(_translate("CreateProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Short Description</span></p></body></html>"))
-        self.label_5.setText(_translate("CreateProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Long Description</span></p></body></html>"))
-        self.label_6.setText(_translate("CreateProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:16pt; color:#888a85;\">Optional</span></p></body></html>"))
-        self.saveBtn.setText(_translate("CreateProjectInfoWindow", "Save"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("CreateProjectInfoWindow", "1"))
+        EditProjectInfoWindow.setWindowTitle(_translate("EditProjectInfoWindow", "MainWindow"))
+        self.label.setText(_translate("EditProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit Project Information</span></p></body></html>"))
+        self.label_2.setText(_translate("EditProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Project Name</span></p></body></html>"))
+        self.label_4.setText(_translate("EditProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Short Description</span></p></body></html>"))
+        self.label_5.setText(_translate("EditProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Long Description</span></p></body></html>"))
+        self.label_6.setText(_translate("EditProjectInfoWindow", "<html><head/><body><p><span style=\" font-size:16pt; color:#888a85;\">Optional</span></p></body></html>"))
+        self.saveBtn.setText(_translate("EditProjectInfoWindow", "Save"))
+        self.menuInteractive_System_Modelling.setTitle(_translate("EditProjectInfoWindow", "1"))
 
