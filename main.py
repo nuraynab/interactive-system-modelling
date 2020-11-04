@@ -305,13 +305,23 @@ class Ui_MainWindow(QWidget):
             self.EditProjectInfoWindow.show()
 
     def edit_version(self):
-        tableItems=self.tableWidget.selectedItems()
-        if not tableItems: return  
-        for item in tableItems:
+        listItems=self.listWidget.selectedItems()
+        if not listItems: return  
+        for x in listItems:
+            curr_row = self.tableWidget.currentRow() 
+            curr_col = self.tableWidget.currentColumn()
+            item = self.tableWidget.item(curr_row, curr_col)
             self.EditVersionInfoWindow = QtWidgets.QMainWindow()
             self.ui = Ui_EditVersionInfoWindow()
             self.ui.setupUi(self.EditVersionInfoWindow)
+            self.ui.label_3.setText(x.text())
+            self.ui.label_7.setText("Version " + str(versions_dict[item.text()][1]))
+            self.ui.lineEdit.setText(item.text())
+            self.ui.origin_name = item.text()
+            self.ui.textEdit.setText(versions_dict[item.text()][2])
+            self.ui.textEdit_2.setText(versions_dict[item.text()][3])
             self.EditVersionInfoWindow.show()
+
 
     def project_desc(self):
         self.ProjectDescWindow = QtWidgets.QMainWindow()

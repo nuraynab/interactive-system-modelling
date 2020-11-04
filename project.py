@@ -10,7 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
+import MySQLdb as mdb
 
+db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
 class Ui_ProjectWindow(QWidget):
     def setupUi(self, ProjectWindow):
