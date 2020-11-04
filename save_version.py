@@ -90,16 +90,18 @@ class Ui_SaveVersionWindow(object):
         self.retranslateUi(SaveVersionWindow)
         QtCore.QMetaObject.connectSlotsByName(SaveVersionWindow)
 
-        self.project_name = QtWidgets.QTextBrowser(self.centralwidget)
+        self.version_name = QtWidgets.QLabel(self.centralwidget)
+        self.version_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_name.setObjectName("version_name")
+        self.project_name = QtWidgets.QLabel(self.centralwidget)
         self.project_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.project_name.setObjectName("project_name")
-        #print (self.project_name)
-        self.short_descr = QtWidgets.QTextBrowser(self.centralwidget)
-        self.short_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
-        self.short_descr.setObjectName("short_descr")
-        self.long_descr = QtWidgets.QTextBrowser(self.centralwidget)
-        self.long_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
-        self.long_descr.setObjectName("long_descr")
+        self.vers_short_descr = QtWidgets.QLabel(self.centralwidget)
+        self.vers_short_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.vers_short_descr.setObjectName("vers_short_descr")
+        self.vers_long_descr = QtWidgets.QLabel(self.centralwidget)
+        self.vers_long_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.vers_long_descr.setObjectName("vers_long_descr")
 
         self.saveBtn.clicked.connect(self.save_cur)
 
@@ -114,8 +116,8 @@ class Ui_SaveVersionWindow(object):
                 saveAs = self.newBtn.text()
                 if self.majorBtn.isChecked() == True:
                     changes = self.majorBtn.text()
-                    cur.execute("INSERT INTO versions (name, project_name, numb, short_descr, long_descr) VALUES ('NewNew', '%s', '%i', '%s', '%s')"
-                        % (''.join()), ''.join(), ''.join(), ''.join())
+                    cur.execute("INSERT INTO versions (name, project_name, numb, short_descr, long_descr) VALUES ('%s New', '%s', '3', '%s', '%s')"
+                        % (self.version_name.text(), self.project_name.text(), self.vers_short_descr.text(), self.vers_long_descr.text()))
                 elif self.minorBtn.isChecked() == True:
                     changes = self.minorBtn.text()
 

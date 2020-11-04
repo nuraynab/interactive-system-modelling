@@ -355,14 +355,18 @@ class Ui_MainWindow(QWidget):
         if curr_row == -1 and curr_col == -1:
             return 
         for item in listItems:
-            cur_name = 'Project: ' + item.text()
+            cur_name = item.text()
 
-        cur_vers = 'Version ' + str(versions_dict[ver_name.text()][1]) + ': ' + ver_name.text()
+        cur_vers = str(versions_dict[ver_name.text()][1]) + ': ' + ver_name.text()
         self.ProjectWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ProjectWindow()
         self.ui.setupUi(self.ProjectWindow)
-        self.ui.label.setText(cur_name)
-        self.ui.label_2.setText(cur_vers)
+        self.ui.label.setText('Project: ' + cur_name)
+        self.ui.label_2.setText('Version ' + cur_vers)
+        self.ui.version_name.setText(ver_name.text())
+        self.ui.project_name.setText(cur_name)
+        self.ui.vers_short_descr.setText(str(versions_dict[ver_name.text()][2]))
+        self.ui.vers_long_descr.setText(str(versions_dict[ver_name.text()][3]))
         self.ProjectWindow.show()
 
     def retranslateUi(self, MainWindow):

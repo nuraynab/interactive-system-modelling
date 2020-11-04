@@ -135,6 +135,19 @@ class Ui_ProjectWindow(QWidget):
         self.retranslateUi(ProjectWindow)
         QtCore.QMetaObject.connectSlotsByName(ProjectWindow)
 
+        self.version_name = QtWidgets.QLabel(self.centralwidget)
+        self.version_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_name.setObjectName("version_name")
+        self.project_name = QtWidgets.QLabel(self.centralwidget)
+        self.project_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.project_name.setObjectName("project_name")
+        self.vers_short_descr = QtWidgets.QLabel(self.centralwidget)
+        self.vers_short_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.vers_short_descr.setObjectName("vers_short_descr")
+        self.vers_long_descr = QtWidgets.QLabel(self.centralwidget)
+        self.vers_long_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.vers_long_descr.setObjectName("vers_long_descr")
+
         self.exitVerBtn.clicked.connect(self.exit_version)
         self.saveVerBtn.clicked.connect(self.save_version)
 
@@ -151,7 +164,10 @@ class Ui_ProjectWindow(QWidget):
         self.SaveVersionWindow = QtWidgets.QMainWindow()
         self.ui = Ui_SaveVersionWindow()
         self.ui.setupUi(self.SaveVersionWindow)
-        #self.ui.project_name.setText(self.label.text())
+        self.ui.version_name.setText(self.version_name.text())
+        self.ui.project_name.setText(self.project_name.text())
+        self.ui.vers_short_descr.setText(self.vers_short_descr.text())
+        self.ui.vers_long_descr.setText(self.vers_long_descr.text())        
         self.SaveVersionWindow.show()
 
     def retranslateUi(self, ProjectWindow):
