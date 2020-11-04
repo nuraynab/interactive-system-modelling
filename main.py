@@ -92,7 +92,7 @@ class Ui_MainWindow(QWidget):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.tableWidget.setFont(font)
-        #self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.tableWidget.setLineWidth(1)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideRight)
         self.tableWidget.setShowGrid(True)
@@ -224,11 +224,11 @@ class Ui_MainWindow(QWidget):
 
 
     def show_version_short_descr(self):
-        tableItems=self.tableWidget.selectedItems()
-        if not tableItems: return  
-        for item in tableItems:
-            self.textBrowser_2.clear()
-            self.textBrowser_2.append(versions_dict[item.text()][2])
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = self.tableWidget.currentColumn()
+        self.textBrowser_2.clear()
+        item = self.tableWidget.item(curr_row, curr_col)
+        self.textBrowser_2.append(versions_dict[item.text()][2])
 
 
     def get_projects(self):
@@ -252,22 +252,38 @@ class Ui_MainWindow(QWidget):
                 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
                 with db:
                     cur = db.cursor()
+                    cur.execute("DELETE FROM versions WHERE project_name = '%s'" % (''.join(item.text())))
                     cur.execute("DELETE FROM projects WHERE name = '%s'" % (''.join(item.text())))
                     db.commit()
-
+                    self.tableWidget.clear()
+                    self.textBrowser.clear()
+                    self.textBrowser_2.clear()
         else:
             return
 
     def delete_version(self):
-        tableItems=self.tableWidget.selectedItems()
-        if not tableItems: return   
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = self.tableWidget.currentColumn()
+        project_name =self.listWidget.currentItem()
+
+        if curr_row == -1 and curr_col == -1:
+            return 
+        ver_name = self.tableWidget.item(curr_row, curr_col)
         reply = QMessageBox.question(self, "Delete version", "Are you sure you want to delete this version?", QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
-            for item in tableItems:
-               self.tableWidget.takeItem(self.tableWidget.row(item), self.tableWidget.column(item))
-               self.textBrowser.clear()
+            
+            self.textBrowser_2.clear()
+            db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+            with db:
+                cur = db.cursor()
+                cur.execute("DELETE FROM versions WHERE name = '%s' AND project_name = '%s'" % (''.join(ver_name.text()),''.join(project_name.text())))
+                db.commit()
+                self.tableWidget.removeRow(curr_row)
+                self.textBrowser_2.clear()
         else:
             return
+
+
 
     def new_project(self):
         self.CreateProjectInfoWindow = QtWidgets.QMainWindow()
@@ -313,25 +329,26 @@ class Ui_MainWindow(QWidget):
         self.VersionDescWindow = QtWidgets.QMainWindow()
         self.ui = Ui_VersionDescWindow()
         self.ui.setupUi(self.VersionDescWindow)
-        # self.ui.textBrowser.append(projects_dict['test'][0])
-        tableItems=self.tableWidget.selectedItems()
-        if not tableItems: return  
-        for item in tableItems:
-            self.ui.textBrowser.clear()
-            self.ui.textBrowser.append(versions_dict[item.text()][3])
-        self.VersionDescWindow.show()
 
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = self.tableWidget.currentColumn()
+        item = self.tableWidget.item(curr_row, curr_col)
+        self.ui.textBrowser.clear()
+        self.ui.textBrowser.append(versions_dict[item.text()][3])
+        self.VersionDescWindow.show()
 
     def open_project(self):
         listItems=self.listWidget.selectedItems()
-        tableItems=self.tableWidget.selectedItems()
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = self.tableWidget.currentColumn()
+        ver_name = self.tableWidget.item(curr_row, curr_col)
         if not listItems: return 
-        if not tableItems: return 
+        if curr_row == -1 and curr_col == -1:
+            return 
         for item in listItems:
             cur_name = 'Project: ' + item.text()
-        for item in tableItems:
-            cur_vers = 'Version ' + str(versions_dict[item.text()][1]) + ': ' + item.text() 
 
+        cur_vers = 'Version ' + str(versions_dict[ver_name.text()][1]) + ': ' + ver_name.text()
         self.ProjectWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ProjectWindow()
         self.ui.setupUi(self.ProjectWindow)
