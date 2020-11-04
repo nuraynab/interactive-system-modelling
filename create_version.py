@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import MySQLdb as mdb
 
 class Ui_EditVersionInfoWindow(object):
     def setupUi(self, EditVersionInfoWindow):
@@ -72,6 +73,26 @@ class Ui_EditVersionInfoWindow(object):
 
         self.retranslateUi(EditVersionInfoWindow)
         QtCore.QMetaObject.connectSlotsByName(EditVersionInfoWindow)
+
+        self.saveBtn.clicked.connect(self.edit_version)
+        self.saveBtn.clicked.connect(EditVersionInfoWindow.close)
+
+    def edit_version(self):
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with db:
+            cur = db.cursor()
+            
+            cur.execute("UPDATE versions SET name = '%s', short_descr = '%s', long_descr = '%s' WHERE name = '%s'"
+                                                 % (''.join(self.lineEdit.text()),
+                                                  ''.join(self.textEdit.toPlainText()),
+                                                  ''.join(self.textEdit_2.toPlainText()),
+                                                  ''.join(self.origin_name)))
+            #cur_name = 'Project: ' + self.lineEdit.text()
+            #cur_vers = 'Version #1.0: New '
+ 
+            db.commit()
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
+        
 
     def retranslateUi(self, EditVersionInfoWindow):
         _translate = QtCore.QCoreApplication.translate

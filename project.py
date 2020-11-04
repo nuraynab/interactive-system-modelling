@@ -10,6 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
+
+from save_version import Ui_SaveVersionWindow
+
 import MySQLdb as mdb
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
@@ -138,20 +141,18 @@ class Ui_ProjectWindow(QWidget):
     def exit_version(self):  
         reply = QMessageBox.question(self, "Exit version", "Do you want to save the changes?", QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
         if reply == QMessageBox.Yes:
-            return
+            self.save_version()
         if reply == QMessageBox.No:
             return
         else:
             return
 
     def save_version(self):  
-        reply = QMessageBox.question(self, "Save version", "Do you want to save the changes as a new version?", QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
-        if reply == QMessageBox.Yes:
-            return
-        if reply == QMessageBox.No:
-            return
-        else:
-            return
+        self.SaveVersionWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_SaveVersionWindow()
+        self.ui.setupUi(self.SaveVersionWindow)
+        #self.ui.project_name.setText(self.label.text())
+        self.SaveVersionWindow.show()
 
     def retranslateUi(self, ProjectWindow):
         _translate = QtCore.QCoreApplication.translate

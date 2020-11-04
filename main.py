@@ -284,7 +284,6 @@ class Ui_MainWindow(QWidget):
             return
 
 
-
     def new_project(self):
         self.CreateProjectInfoWindow = QtWidgets.QMainWindow()
         self.ui = Ui_CreateProjectInfoWindow()
