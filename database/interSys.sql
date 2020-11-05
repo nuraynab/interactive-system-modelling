@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 03, 2020 at 05:28 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.8
+-- Generation Time: Nov 05, 2020 at 12:36 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 CREATE DATABASE interSys;
 USE interSys;
@@ -37,15 +37,6 @@ CREATE TABLE `projects` (
   `long_descr` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `versions` (
-  `id` int(11) NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `project_name` varchar(200) NOT NULL,
-  `numb` int(11) NOT NULL,
-  `short_descr` text NOT NULL,
-  `long_descr` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 --
 -- Dumping data for table `projects`
 --
@@ -53,13 +44,32 @@ CREATE TABLE `versions` (
 INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 (5, 'test', 'testetsetset', 'setestssssssssssssssssssssssss'),
 (6, 'aaaaaaaa', 'aaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaa'),
-(8, 'test2', 'test', 'testing');
+(8, 'test2', 'test', 'testing'),
+(12, 'Animal', 'short', 'long');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `versions`
+--
+
+CREATE TABLE `versions` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `project_name` varchar(200) NOT NULL,
+  `numb` double NOT NULL,
+  `short_descr` text NOT NULL,
+  `long_descr` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `versions`
+--
 
 INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `long_descr`) VALUES
-(10, 'old', 'aaaaaaaa', '1', 'bbbbbbbb', 'bbbbbbbbbbbbbbbbbbbbb'),
-(12, 'new', 'aaaaaaaa', '2', 'cccccccc', 'ccccccccccccccccccccc'),
-(14, 'old', 'test', '1', 'ddd', 'ddddddd');
-
+(10, 'old', 'aaaaaaaa', 1, 'bbb', 'ddddddd'),
+(14, 'old', 'test', 1.2, 'bbb', 'ddddddd'),
+(21, 'old New', 'test', 3, 'bbb', 'ddddddd');
 
 --
 -- Indexes for dumped tables
@@ -71,6 +81,9 @@ INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `lo
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`);
 
+--
+-- Indexes for table `versions`
+--
 ALTER TABLE `versions`
   ADD PRIMARY KEY (`id`);
 
@@ -82,11 +95,13 @@ ALTER TABLE `versions`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
+--
+-- AUTO_INCREMENT for table `versions`
+--
 ALTER TABLE `versions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

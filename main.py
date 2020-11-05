@@ -14,7 +14,7 @@ import MySQLdb as mdb
 
 from create_project import Ui_CreateProjectInfoWindow
 from edit_project import Ui_EditProjectInfoWindow
-from create_version import Ui_EditVersionInfoWindow
+from edit_version import Ui_EditVersionInfoWindow
 from project_desc import Ui_ProjectDescWindow
 from version_desc import Ui_VersionDescWindow
 from project import Ui_ProjectWindow
@@ -365,6 +365,7 @@ class Ui_MainWindow(QWidget):
         self.ui.label_2.setText('Version ' + cur_vers)
         self.ui.version_name.setText(ver_name.text())
         self.ui.project_name.setText(cur_name)
+        self.ui.version_number.setText(str(versions_dict[ver_name.text()][1]))
         self.ui.vers_short_descr.setText(str(versions_dict[ver_name.text()][2]))
         self.ui.vers_long_descr.setText(str(versions_dict[ver_name.text()][3]))
         self.ProjectWindow.show()

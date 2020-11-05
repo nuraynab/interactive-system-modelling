@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from create_version import Ui_CreateVersionInfoWindow
+
 import MySQLdb as mdb
 
 class Ui_SaveVersionWindow(object):
@@ -75,6 +77,8 @@ class Ui_SaveVersionWindow(object):
         self.minorBtn.setFont(font)
         self.minorBtn.setObjectName("minorBtn")
         self.majorMinorBtnGroup.addButton(self.minorBtn)
+        self.majorBtn.setEnabled(False)
+        self.minorBtn.setEnabled(False)
         SaveVersionWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(SaveVersionWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 513, 22))
@@ -96,6 +100,9 @@ class Ui_SaveVersionWindow(object):
         self.project_name = QtWidgets.QLabel(self.centralwidget)
         self.project_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.project_name.setObjectName("project_name")
+        self.version_number = QtWidgets.QLabel(self.centralwidget)
+        self.version_number.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_number.setObjectName("version_number")
         self.vers_short_descr = QtWidgets.QLabel(self.centralwidget)
         self.vers_short_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.vers_short_descr.setObjectName("vers_short_descr")
@@ -103,28 +110,50 @@ class Ui_SaveVersionWindow(object):
         self.vers_long_descr.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.vers_long_descr.setObjectName("vers_long_descr")
 
+        self.newBtn.clicked.connect(self.enableBtn)
+        self.currentBtn.clicked.connect(self.disableBtn)
+
         self.saveBtn.clicked.connect(self.save_cur)
+        self.saveBtn.clicked.connect(SaveVersionWindow.close)
+
+    def enableBtn(self):
+        self.majorBtn.setEnabled(True)
+        self.minorBtn.setEnabled(True)   
+
+    def disableBtn(self):
+        self.majorBtn.setEnabled(False)
+        self.minorBtn.setEnabled(False)        
 
     def save_cur(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with db:
             cur = db.cursor()
             if self.currentBtn.isChecked() == True:
-                saveAs = self.currentBtn.text()
                 #change the version's components, nothing to change in name, number, or descr
+                saveAs = self.currentBtn.text()
+
             elif self.newBtn.isChecked() == True:
                 saveAs = self.newBtn.text()
+
                 if self.majorBtn.isChecked() == True:
                     changes = self.majorBtn.text()
-                    cur.execute("INSERT INTO versions (name, project_name, numb, short_descr, long_descr) VALUES ('%s New', '%s', '3', '%s', '%s')"
-                        % (self.version_name.text(), self.project_name.text(), self.vers_short_descr.text(), self.vers_long_descr.text()))
+                    ver_numb = float(int(float(self.version_number.text())) + 1)
+
                 elif self.minorBtn.isChecked() == True:
                     changes = self.minorBtn.text()
+                    ver_numb = float(self.version_number.text()) + 0.1
 
+                self.CreateVersionInfoWindow = QtWidgets.QMainWindow()
+                self.ui = Ui_CreateVersionInfoWindow()
+                self.ui.setupUi(self.CreateVersionInfoWindow)
+                self.ui.label_3.setText(self.project_name.text())
+                self.ui.label_7.setText("Version " + self.version_number.text())
+                self.ui.project_name.setText(self.project_name.text())
+                self.ui.version_number.setText(str(ver_numb))
+                self.CreateVersionInfoWindow.show()
 
  
             db.commit()
-            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Version Saved Successfully')
        
 
     def retranslateUi(self, SaveVersionWindow):
