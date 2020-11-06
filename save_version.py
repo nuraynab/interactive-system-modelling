@@ -118,7 +118,8 @@ class Ui_SaveVersionWindow(object):
 
     def enableBtn(self):
         self.majorBtn.setEnabled(True)
-        self.minorBtn.setEnabled(True)   
+        self.minorBtn.setEnabled(True) 
+        self.minorBtn.setChecked(True)  
 
     def disableBtn(self):
         self.majorBtn.setEnabled(False)
