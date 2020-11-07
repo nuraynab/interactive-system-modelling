@@ -44,7 +44,6 @@ class Ui_ProjectWindow(QWidget):
         self.line.setObjectName("line")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(40, 80, 401, 51))
-        self.label_2.setObjectName("label_2")
         self.ExpBtn = QtWidgets.QPushButton(self.centralwidget)
         self.ExpBtn.setGeometry(QtCore.QRect(400, 170, 241, 31))
         font = QtGui.QFont()
@@ -178,8 +177,8 @@ class Ui_ProjectWindow(QWidget):
         _translate = QtCore.QCoreApplication.translate
         ProjectWindow.setWindowTitle(_translate("ProjectWindow", "MainWindow"))
         self.saveVerBtn.setText(_translate("ProjectWindow", "Save Version"))
-        self.label.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Project: Animal-Dog</span></p></body></html>"))
-        self.label_2.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version #1.1: Version Name 2</span></p></body></html>"))
+        # self.label.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Project: Animal-Dog</span></p></body></html>"))
+        # self.label_2.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version #1.1: Version Name 2</span></p></body></html>"))
         self.ExpBtn.setText(_translate("ProjectWindow", "Experiments"))
         self.openBtn.setText(_translate("ProjectWindow", "Open Component"))
         self.editDatabaseBtn.setText(_translate("ProjectWindow", "Edit Database"))

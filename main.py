@@ -11,6 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 import MySQLdb as mdb
+from contextlib import closing
 
 from create_project import Ui_CreateProjectInfoWindow
 from edit_project import Ui_EditProjectInfoWindow
@@ -195,14 +196,22 @@ class Ui_MainWindow(QWidget):
         self.tableWidget.itemClicked.connect(self.show_version_short_descr)
         self.get_projects()
 
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.updateWindow)
+        self.timer.start(10000)
+
+
+    def updateWindow(self):
+        self.get_projects()
+ 
+
     def show_versions(self):
         listItems=self.listWidget.selectedItems()
         if not listItems: return  
         for item in listItems:
             self.tableWidget.setRowCount(0)
             db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-            with db:
-                cur = db.cursor()
+            with closing(db.cursor()) as cur:
                 cur.execute("SELECT T2.id, T2.name, T2.project_name, T2.numb, T2.short_descr, T2.long_descr FROM projects T1 INNER JOIN versions T2 ON T1.name = T2.project_name WHERE T1.name = '%s' ORDER BY T2.numb" % (''.join(item.text())))
                 versions = cur.fetchall()
 
@@ -213,6 +222,7 @@ class Ui_MainWindow(QWidget):
                     self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
                     versions_dict[y[1]] = [y[2], y[3], y[4], y[5]]
                     i+=1
+            db.close()
 
 
     def show_project_short_descr(self):
@@ -232,14 +242,16 @@ class Ui_MainWindow(QWidget):
 
 
     def get_projects(self):
-        with db:
-            cur = db.cursor()
+        self.listWidget.clear()
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
             cur.execute("SELECT * FROM projects")
             projects = cur.fetchall()
 
             for x in projects:
                 self.listWidget.addItem(x[1])
                 projects_dict[x[1]] = [x[2], x[3]]
+        db.close()                
 
 
     def delete_project(self):
@@ -250,14 +262,14 @@ class Ui_MainWindow(QWidget):
             for item in listItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
                 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-                with db:
-                    cur = db.cursor()
+                with closing(db.cursor()) as cur:
                     cur.execute("DELETE FROM versions WHERE project_name = '%s'" % (''.join(item.text())))
                     cur.execute("DELETE FROM projects WHERE name = '%s'" % (''.join(item.text())))
                     db.commit()
                     self.tableWidget.clear()
                     self.textBrowser.clear()
                     self.textBrowser_2.clear()
+                db.close()
         else:
             return
 
@@ -274,12 +286,12 @@ class Ui_MainWindow(QWidget):
             
             self.textBrowser_2.clear()
             db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-            with db:
-                cur = db.cursor()
+            with closing(db.cursor()) as cur:
                 cur.execute("DELETE FROM versions WHERE name = '%s' AND project_name = '%s'" % (''.join(ver_name.text()),''.join(project_name.text())))
                 db.commit()
                 self.tableWidget.removeRow(curr_row)
                 self.textBrowser_2.clear()
+            db.close()
         else:
             return
 
@@ -289,6 +301,7 @@ class Ui_MainWindow(QWidget):
         self.ui = Ui_CreateProjectInfoWindow()
         self.ui.setupUi(self.CreateProjectInfoWindow)
         self.CreateProjectInfoWindow.show()
+
 
     def edit_project(self):
         listItems=self.listWidget.selectedItems()

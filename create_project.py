@@ -93,12 +93,17 @@ class Ui_CreateProjectInfoWindow(object):
         self.ui = Ui_ProjectWindow()
         self.ui.setupUi(self.ProjectWindow)
         self.ui.label.setText("Project: " + self.lineEdit.text())
+        self.ui.version_name.setText("New")
+        self.ui.version_number.setText("0")
+        self.ui.project_name.setText(self.lineEdit.text())
+        self.ui.label_2.setText('Version 0')
+
         #self.ProjectWindow.label.setText(cur_name)
         #self.ProjectWindow.label_2.setText(cur_vers)
         #self.ProjectWindow.displayInfo()
         self.ProjectWindow.show()
-        self.ui.label.setText(cur_name)
-        self.ui.label_2.setText(cur_vers)
+        # self.ui.label.setText(cur_name)
+        # self.ui.label_2.setText(cur_vers)
 
     def retranslateUi(self, CreateProjectInfoWindow):
         _translate = QtCore.QCoreApplication.translate
