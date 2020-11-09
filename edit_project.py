@@ -82,6 +82,10 @@ class Ui_EditProjectInfoWindow(object):
                                                   ''.join(self.textEdit.toPlainText()),
                                                   ''.join(self.textEdit_2.toPlainText()),
                                                   ''.join(self.origin_name)))
+            cur.execute("UPDATE versions SET project_name = '%s' WHERE project_name = '%s'"
+                                                 % (''.join(self.lineEdit.text()),
+                                                  ''.join(self.origin_name)))
+
             #cur_name = 'Project: ' + self.lineEdit.text()
             #cur_vers = 'Version #1.0: New '
  
