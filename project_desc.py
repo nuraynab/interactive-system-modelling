@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ProjectDescWindow(object):
     def setupUi(self, ProjectDescWindow):
         ProjectDescWindow.setObjectName("ProjectDescWindow")
-        ProjectDescWindow.resize(553, 416)
+        ProjectDescWindow.setFixedSize(553, 416)
         self.centralwidget = QtWidgets.QWidget(ProjectDescWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)

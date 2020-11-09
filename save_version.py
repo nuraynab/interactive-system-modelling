@@ -17,7 +17,7 @@ import MySQLdb as mdb
 class Ui_SaveVersionWindow(object):
     def setupUi(self, SaveVersionWindow):
         SaveVersionWindow.setObjectName("SaveVersionWindow")
-        SaveVersionWindow.resize(513, 506)
+        SaveVersionWindow.setFixedSize(513, 506)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

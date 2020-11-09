@@ -16,7 +16,7 @@ import MySQLdb as mdb
 class Ui_CreateProjectInfoWindow(object):
     def setupUi(self, CreateProjectInfoWindow):
         CreateProjectInfoWindow.setObjectName("CreateProjectInfoWindow")
-        CreateProjectInfoWindow.resize(553, 818)
+        CreateProjectInfoWindow.setFixedSize(553, 818)
         self.centralwidget = QtWidgets.QWidget(CreateProjectInfoWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)

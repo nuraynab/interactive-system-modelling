@@ -15,7 +15,7 @@ import MySQLdb as mdb
 class Ui_CreateVersionInfoWindow(object):
     def setupUi(self, CreateVersionInfoWindow):
         CreateVersionInfoWindow.setObjectName("CreateVersionInfoWindow")
-        CreateVersionInfoWindow.resize(553, 895)
+        CreateVersionInfoWindow.setFixedSize(553, 895)
         self.centralwidget = QtWidgets.QWidget(CreateVersionInfoWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)

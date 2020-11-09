@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_VersionDescWindow(object):
     def setupUi(self, VersionDescWindow):
         VersionDescWindow.setObjectName("VersionDescWindow")
-        VersionDescWindow.resize(553, 416)
+        VersionDescWindow.setFixedSize(553, 416)
         self.centralwidget = QtWidgets.QWidget(VersionDescWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)

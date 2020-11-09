@@ -21,7 +21,7 @@ db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 class Ui_ProjectWindow(QWidget):
     def setupUi(self, ProjectWindow):
         ProjectWindow.setObjectName("ProjectWindow")
-        ProjectWindow.resize(1162, 861)
+        ProjectWindow.setFixedSize(1162, 861)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
