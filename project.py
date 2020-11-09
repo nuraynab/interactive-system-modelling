@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 
 from save_version import Ui_SaveVersionWindow
+from create_version import Ui_CreateVersionInfoWindow
 
 import MySQLdb as mdb
 
@@ -162,16 +163,34 @@ class Ui_ProjectWindow(QWidget):
         else:
             return
 
-    def save_version(self):  
-        self.SaveVersionWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_SaveVersionWindow()
-        self.ui.setupUi(self.SaveVersionWindow)
-        self.ui.version_name.setText(self.version_name.text())
-        self.ui.project_name.setText(self.project_name.text())
-        self.ui.version_number.setText(self.version_number.text())
-        self.ui.vers_short_descr.setText(self.vers_short_descr.text())
-        self.ui.vers_long_descr.setText(self.vers_long_descr.text())        
-        self.SaveVersionWindow.show()
+    def save_version(self):
+        if self.version_number.text() == str(0):
+            db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+            with db:
+                cur = db.cursor()
+                ver_numb = float(1)
+
+                self.CreateVersionInfoWindow = QtWidgets.QMainWindow()
+                self.ui = Ui_CreateVersionInfoWindow()
+                self.ui.setupUi(self.CreateVersionInfoWindow)
+                self.ui.label_3.setText(self.project_name.text())
+                self.ui.label_7.setText("Version " + str(ver_numb))
+                self.ui.project_name.setText(self.project_name.text())
+                self.ui.version_number.setText(str(ver_numb))
+                self.CreateVersionInfoWindow.show()
+
+     
+                db.commit()
+        else:
+            self.SaveVersionWindow = QtWidgets.QMainWindow()
+            self.ui = Ui_SaveVersionWindow()
+            self.ui.setupUi(self.SaveVersionWindow)
+            self.ui.version_name.setText(self.version_name.text())
+            self.ui.project_name.setText(self.project_name.text())
+            self.ui.version_number.setText(self.version_number.text())
+            self.ui.vers_short_descr.setText(self.vers_short_descr.text())
+            self.ui.vers_long_descr.setText(self.vers_long_descr.text())        
+            self.SaveVersionWindow.show()
 
     def retranslateUi(self, ProjectWindow):
         _translate = QtCore.QCoreApplication.translate
