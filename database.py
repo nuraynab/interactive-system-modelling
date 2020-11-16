@@ -9,7 +9,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import csv
+from itertools import zip_longest
 
+dbFileDir = ""
+categories = ["Animal", "Dog"]
+types = ["can"]
+attributes = ["breath", "move"]
+facts = ["Animal can breath", "Dog is a animal"]
+perceptions = ["Animal can breath", "Dog is a animal"]
+actions = ["Animal dodo", "Dog dodo"]
 
 class Ui_DatabaseWindow(object):
     def setupUi(self, DatabaseWindow):
@@ -184,6 +193,27 @@ class Ui_DatabaseWindow(object):
 
         self.retranslateUi(DatabaseWindow)
         QtCore.QMetaObject.connectSlotsByName(DatabaseWindow)
+
+        self.browseBtn.clicked.connect(self.getFile)
+        self.downloadBtn.clicked.connect(self.saveFile)
+
+
+
+    def getFile(self):
+        dbFileDir, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Open File", QtCore.QDir.currentPath() , '*.csv')
+        print(dbFileDir)
+        #read from file
+
+    def saveFile(self):
+        if dbFileDir == "":
+            fileDir, _ = QtWidgets.QFileDialog.getSaveFileName(self.centralwidget, "Save File", QtCore.QDir.currentPath() , '*.csv')
+            print(fileDir)
+            db = [categories, types, attributes, facts, perceptions, actions]
+            export_data = zip_longest(*db, fillvalue = '')
+            with open('{}.csv'.format(fileDir), 'w+') as dbFile:
+                wr = csv.writer(dbFile)
+                wr.writerow(("Categories", "Types", "Attributes", "Facts", "Perceptions", "Actions"))
+                wr.writerows(export_data)
 
     def retranslateUi(self, DatabaseWindow):
         _translate = QtCore.QCoreApplication.translate
