@@ -186,12 +186,9 @@ class Ui_MainWindow(QWidget):
 
 
     def updateWindow(self):
-        self.get_projects()
-        self.show_versions()
- 
+        self.get_projects() 
 
     def show_versions(self):
-        self.tableWidget.clear()
         listItems=self.listWidget.selectedItems()
         if not listItems: return  
         for item in listItems:
