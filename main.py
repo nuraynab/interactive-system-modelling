@@ -186,8 +186,7 @@ class Ui_MainWindow(QWidget):
 
 
     def updateWindow(self):
-        self.get_projects()
- 
+        self.get_projects() 
 
     def show_versions(self):
         listItems=self.listWidget.selectedItems()
