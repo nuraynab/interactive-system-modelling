@@ -12,6 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import csv
 from itertools import zip_longest
 
+from add_to_database import Ui_AddToDatabaseWindow
+from edit_database_item import Ui_EditDatabaseItemWindow
+
 dbFileDir = ""
 categories = ["Animal", "Dog"]
 types = ["can"]
@@ -196,8 +199,21 @@ class Ui_DatabaseWindow(object):
 
         self.browseBtn.clicked.connect(self.getFile)
         self.downloadBtn.clicked.connect(self.saveFile)
+        self.addBtn.clicked.connect(self.addItem)
+        self.addBtn.clicked.connect(DatabaseWindow.close)
+        self.editBtn.clicked.connect(self.editItem)
 
+    def editItem(self):
+        self.EditDatabaseItemWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_EditDatabaseItemWindow()
+        self.ui.setupUi(self.EditDatabaseItemWindow)
+        self.EditDatabaseItemWindow.show()
 
+    def addItem(self):
+        self.AddToDatabaseWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_AddToDatabaseWindow()
+        self.ui.setupUi(self.AddToDatabaseWindow)
+        self.AddToDatabaseWindow.show()
 
     def getFile(self):
         dbFileDir, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Open File", QtCore.QDir.currentPath() , '*.csv')
