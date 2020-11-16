@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 
 from save_version import Ui_SaveVersionWindow
 from create_version import Ui_CreateVersionInfoWindow
+from database import Ui_DatabaseWindow
 
 import MySQLdb as mdb
 
@@ -133,6 +134,14 @@ class Ui_ProjectWindow(QWidget):
 
         self.exitVerBtn.clicked.connect(self.exit_version)
         self.saveVerBtn.clicked.connect(self.save_version)
+
+        self.editDatabaseBtn.clicked.connect(self.edit_database)
+
+    def edit_database(self):
+        self.DatabaseWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_DatabaseWindow()
+        self.ui.setupUi(self.DatabaseWindow)
+        self.DatabaseWindow.show()
 
     def exit_version(self):  
         reply = QMessageBox.question(self, "Exit version", "Do you want to save the changes?", QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)

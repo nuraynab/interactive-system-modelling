@@ -169,4 +169,3 @@ class Ui_SaveVersionWindow(object):
         self.majorBtn.setText(_translate("SaveVersionWindow", "Major"))
         self.minorBtn.setText(_translate("SaveVersionWindow", "Minor"))
         self.menuInteractive_System_Modelling.setTitle(_translate("SaveVersionWindow", "1"))
-
