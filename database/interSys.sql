@@ -75,6 +75,17 @@ INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `lo
 -- Indexes for dumped tables
 --
 
+CREATE TABLE `databases` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `category` text NOT NULL,
+  `type` text NOT NULL,
+  `attribute` text NOT NULL,
+  `fact` text NOT NULL,
+  `perception` text NOT NULL,
+  `action` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for table `projects`
 --
@@ -85,6 +96,12 @@ ALTER TABLE `projects`
 -- Indexes for table `versions`
 --
 ALTER TABLE `versions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `databases`
+--
+ALTER TABLE `databases`
   ADD PRIMARY KEY (`id`);
 
 --
