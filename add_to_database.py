@@ -10,7 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import database
+import MySQLdb as mdb
+
 
 
 class Ui_AddToDatabaseWindow(object):
@@ -71,33 +72,66 @@ class Ui_AddToDatabaseWindow(object):
         self.retranslateUi(AddToDatabaseWindow)
         QtCore.QMetaObject.connectSlotsByName(AddToDatabaseWindow)
 
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
+
         self.saveBtn.clicked.connect(self.saveItem)
         self.saveBtn.clicked.connect(AddToDatabaseWindow.close)
 
     def saveItem(self):
-        self.DatabaseWindow = QtWidgets.QMainWindow()
-        self.ui = database.Ui_DatabaseWindow()
-        self.ui.setupUi(self.DatabaseWindow)
-        item = QtWidgets.QListWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        item.setText(self.lineEdit.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        version_id = int(self.version_id.text())
+        with db:
+            cur = db.cursor()
 
-        if (str(self.comboBox.currentText()) == "Category"):
-            self.ui.CatListWidget.addItem(item)
-        elif (str(self.comboBox.currentText()) == "Type"):
-            self.ui.TypesListWidget.addItem(item)
-        elif (str(self.comboBox.currentText()) == "Attribute"):
-            self.ui.AttrListWidget.addItem(item)
-        elif (str(self.comboBox.currentText()) == "Fact"):
-            self.ui.FactsListWidget.addItem(item)
-        elif (str(self.comboBox.currentText()) == "Perception"):
-            self.ui.PercListWidget.addItem(item)
-        elif (str(self.comboBox.currentText()) == "Action"):
-            self.ui.ActListWidget.addItem(item)
+            if (str(self.comboBox.currentText()) == "Category"):
+                cur.execute("INSERT INTO categories(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Type"):
+                cur.execute("INSERT INTO types(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Attribute"):
+                cur.execute("INSERT INTO attributes(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Fact"):
+                cur.execute("INSERT INTO facts(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Perception"):
+                cur.execute("INSERT INTO perceptions(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Action"):
+                cur.execute("INSERT INTO actions(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
 
-        self.DatabaseWindow.show()
+            db.commit()
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
+        #open the project
+
+    #def saveItem(self):
+        #self.DatabaseWindow = QtWidgets.QMainWindow()
+        #self.ui = database.Ui_DatabaseWindow()
+        #self.ui.setupUi(self.DatabaseWindow)
+        # item = QtWidgets.QListWidgetItem()
+        # font = QtGui.QFont()
+        # font.setPointSize(14)
+        # item.setFont(font)
+        # item.setText(self.lineEdit.text())
+
+        # if (str(self.comboBox.currentText()) == "Category"):
+        #     self.ui.CatListWidget.addItem(item)
+        # elif (str(self.comboBox.currentText()) == "Type"):
+        #     self.ui.TypesListWidget.addItem(item)
+        # elif (str(self.comboBox.currentText()) == "Attribute"):
+        #     self.ui.AttrListWidget.addItem(item)
+        # elif (str(self.comboBox.currentText()) == "Fact"):
+        #     self.ui.FactsListWidget.addItem(item)
+        # elif (str(self.comboBox.currentText()) == "Perception"):
+        #     self.ui.PercListWidget.addItem(item)
+        # elif (str(self.comboBox.currentText()) == "Action"):
+        #     self.ui.ActListWidget.addItem(item)
+
+        # self.DatabaseWindow.show()
 
 
 

@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import MySQLdb as mdb
 
 class Ui_EditDatabaseItemWindow(object):
     def setupUi(self, EditDatabaseItemWindow):
@@ -38,6 +39,9 @@ class Ui_EditDatabaseItemWindow(object):
         self.saveBtn.setObjectName("saveBtn")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(80, 110, 331, 61))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.lineEdit.setFont(font)
         self.lineEdit.setObjectName("lineEdit")
         EditDatabaseItemWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(EditDatabaseItemWindow)
@@ -53,6 +57,30 @@ class Ui_EditDatabaseItemWindow(object):
 
         self.retranslateUi(EditDatabaseItemWindow)
         QtCore.QMetaObject.connectSlotsByName(EditDatabaseItemWindow)
+
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
+        self.kind = QtWidgets.QLabel(self.centralwidget)
+        self.kind.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.kind.setObjectName("version_id")
+
+        self.saveBtn.clicked.connect(self.saveItem)
+        self.saveBtn.clicked.connect(EditDatabaseItemWindow.close)
+
+    def saveItem(self):
+        version_id = int(self.version_id.text())
+        kind = self.kind.text()
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with db:
+            cur = db.cursor()
+            
+            cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
+                                                 % (kind, ''.join(self.lineEdit.text()), version_id, 
+                                                  ''.join(self.origin_name)))
+ 
+            db.commit()
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
 
     def retranslateUi(self, EditDatabaseItemWindow):
         _translate = QtCore.QCoreApplication.translate
