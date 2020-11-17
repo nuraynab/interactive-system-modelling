@@ -11,17 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import csv
 from itertools import zip_longest
+import pandas
+import io
 
 from add_to_database import Ui_AddToDatabaseWindow
 from edit_database_item import Ui_EditDatabaseItemWindow
 
 dbFileDir = ""
-categories = ["Animal", "Dog"]
-types = ["can"]
-attributes = ["breath", "move"]
-facts = ["Animal can breath", "Dog is a animal"]
-perceptions = ["Animal can breath", "Dog is a animal"]
-actions = ["Animal dodo", "Dog dodo"]
+categories = []
+types = []
+attributes = []
+facts = []
+perceptions = []
+actions = []
 
 class Ui_DatabaseWindow(object):
     def setupUi(self, DatabaseWindow):
@@ -217,10 +219,30 @@ class Ui_DatabaseWindow(object):
 
     def getFile(self):
         dbFileDir, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Open File", QtCore.QDir.currentPath() , '*.csv')
-        print(dbFileDir)
-        #read from file
+        # print(dbFileDir)
+        df = pandas.read_csv(dbFileDir)
+        # print(df)
+        for i, item in df.Categories.dropna().iteritems():
+            categories.append(item)
+        for i, item in df.Attributes.dropna().iteritems():
+            attributes.append(item)
+        for i, item in df.Types.dropna().iteritems():
+            types.append(item)
+        for i, item in df.Facts.dropna().iteritems():
+            facts.append(item)
+        for i, item in df.Perceptions.dropna().iteritems():
+            perceptions.append(item)
+        for i, item in df.Actions.dropna().iteritems():
+            actions.append(item)
+        # print(categories)
+        # print(types)
+        # print(attributes)
+        # print(facts)
+        # print(perceptions)
+        # print(actions)
 
     def saveFile(self):
+        print (dbFileDir)
         if dbFileDir == "":
             fileDir, _ = QtWidgets.QFileDialog.getSaveFileName(self.centralwidget, "Save File", QtCore.QDir.currentPath() , '*.csv')
             print(fileDir)
