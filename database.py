@@ -14,6 +14,7 @@ from itertools import zip_longest
 import pandas
 import io
 import MySQLdb as mdb
+from contextlib import closing
 
 from add_to_database import Ui_AddToDatabaseWindow
 from edit_database_item import Ui_EditDatabaseItemWindow
@@ -201,11 +202,16 @@ class Ui_DatabaseWindow(object):
         self.retranslateUi(DatabaseWindow)
         QtCore.QMetaObject.connectSlotsByName(DatabaseWindow)
 
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
+
         self.browseBtn.clicked.connect(self.getFile)
         self.downloadBtn.clicked.connect(self.saveFile)
         self.addBtn.clicked.connect(self.addItem)
         self.addBtn.clicked.connect(DatabaseWindow.close)
         self.editBtn.clicked.connect(self.editItem)
+
 
     def editItem(self):
         self.EditDatabaseItemWindow = QtWidgets.QMainWindow()
@@ -222,27 +228,138 @@ class Ui_DatabaseWindow(object):
     def getFile(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         dbFileDir, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Open File", QtCore.QDir.currentPath() , '*.csv')
-        # print(dbFileDir)
         df = pandas.read_csv(dbFileDir)
+        # print(dbFileDir)
         # print(df)
-        for i, item in df.Categories.dropna().iteritems():
-            categories.append(item)
-        for i, item in df.Attributes.dropna().iteritems():
-            attributes.append(item)
-        for i, item in df.Types.dropna().iteritems():
-            types.append(item)
-        for i, item in df.Facts.dropna().iteritems():
-            facts.append(item)
-        for i, item in df.Perceptions.dropna().iteritems():
-            perceptions.append(item)
-        for i, item in df.Actions.dropna().iteritems():
-            actions.append(item)
+        version_id = int(self.version_id.text())
+
+        with db:
+            cur = db.cursor()
+
+            cur.execute("DELETE FROM categories WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM types WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM attributes WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM facts WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM perceptions WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM actions WHERE version_id = '%i'" % (version_id))
+
+            for i, item in df.Categories.dropna().iteritems():
+                categories.append(item)
+                cur.execute("INSERT INTO categories(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Types.dropna().iteritems():
+                types.append(item)
+                cur.execute("INSERT INTO types(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Attributes.dropna().iteritems():
+                attributes.append(item)
+                cur.execute("INSERT INTO attributes(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Facts.dropna().iteritems():
+                facts.append(item)
+                cur.execute("INSERT INTO facts(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Perceptions.dropna().iteritems():
+                perceptions.append(item)
+                cur.execute("INSERT INTO perceptions(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Actions.dropna().iteritems():
+                actions.append(item)
+                cur.execute("INSERT INTO actions(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+
+ 
+            db.commit()
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
+        #open the project
         # print(categories)
         # print(types)
         # print(attributes)
         # print(facts)
         # print(perceptions)
         # print(actions)
+        self.getItems()
+
+    def getItems(self):
+        print (int(self.version_id.text()))
+        self.CatListWidget.clear()
+        self.TypesListWidget.clear()
+        self.AttrListWidget.clear()
+        self.FactsListWidget.clear()
+        self.PercListWidget.clear()
+        self.ActListWidget.clear()
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+
+            cur.execute("SELECT * FROM categories WHERE version_id = '%i'" % (version_id))
+            categories = cur.fetchall()
+            for x in categories:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.CatListWidget.addItem(item)
+
+            cur.execute("SELECT * FROM types WHERE version_id = '%i'" % (version_id))
+            types = cur.fetchall()
+            for x in types:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.TypesListWidget.addItem(item)
+
+            cur.execute("SELECT * FROM attributes WHERE version_id = '%i'" % (version_id))
+            attributes = cur.fetchall()
+            for x in attributes:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.AttrListWidget.addItem(item)
+
+            cur.execute("SELECT * FROM facts WHERE version_id = '%i'" % (version_id))
+            facts = cur.fetchall()
+            for x in facts:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.FactsListWidget.addItem(item)
+
+            cur.execute("SELECT * FROM perceptions WHERE version_id = '%i'" % (version_id))
+            perceptions = cur.fetchall()
+            for x in perceptions:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.PercListWidget.addItem(item)
+
+            cur.execute("SELECT * FROM actions WHERE version_id = '%i'" % (version_id))
+            actions = cur.fetchall()
+            for x in actions:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.ActListWidget.addItem(item)
+
+
+        db.close() 
 
     def saveFile(self):
         print (dbFileDir)
@@ -265,10 +382,6 @@ class Ui_DatabaseWindow(object):
         self.label_3.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Types</span></p></body></html>"))
         __sortingEnabled = self.CatListWidget.isSortingEnabled()
         self.CatListWidget.setSortingEnabled(False)
-        item = self.CatListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "Animal"))
-        item = self.CatListWidget.item(1)
-        item.setText(_translate("DatabaseWindow", "Dog"))
         self.CatListWidget.setSortingEnabled(__sortingEnabled)
         self.label_5.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Attributes</span></p></body></html>"))
         self.addBtn.setText(_translate("DatabaseWindow", "Add"))
@@ -276,15 +389,9 @@ class Ui_DatabaseWindow(object):
         self.downloadBtn.setText(_translate("DatabaseWindow", "Download"))
         __sortingEnabled = self.TypesListWidget.isSortingEnabled()
         self.TypesListWidget.setSortingEnabled(False)
-        item = self.TypesListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "can"))
         self.TypesListWidget.setSortingEnabled(__sortingEnabled)
         __sortingEnabled = self.AttrListWidget.isSortingEnabled()
         self.AttrListWidget.setSortingEnabled(False)
-        item = self.AttrListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "breath"))
-        item = self.AttrListWidget.item(1)
-        item.setText(_translate("DatabaseWindow", "move"))
         self.AttrListWidget.setSortingEnabled(__sortingEnabled)
         self.deleteBtn.setText(_translate("DatabaseWindow", "Delete"))
         self.label_4.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Facts</span></p></body></html>"))
@@ -292,23 +399,12 @@ class Ui_DatabaseWindow(object):
         self.label_7.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Actions</span></p></body></html>"))
         __sortingEnabled = self.FactsListWidget.isSortingEnabled()
         self.FactsListWidget.setSortingEnabled(False)
-        item = self.FactsListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "Animal can breath"))
-        item = self.FactsListWidget.item(1)
-        item.setText(_translate("DatabaseWindow", "Dog is a animal"))
         self.FactsListWidget.setSortingEnabled(__sortingEnabled)
         __sortingEnabled = self.PercListWidget.isSortingEnabled()
         self.PercListWidget.setSortingEnabled(False)
-        item = self.PercListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "Animal can breath"))
-        item = self.PercListWidget.item(1)
-        item.setText(_translate("DatabaseWindow", "Dog is a animal"))
         self.PercListWidget.setSortingEnabled(__sortingEnabled)
         __sortingEnabled = self.ActListWidget.isSortingEnabled()
         self.ActListWidget.setSortingEnabled(False)
         item = self.ActListWidget.item(0)
-        item.setText(_translate("DatabaseWindow", "Animal dodo"))
-        item = self.ActListWidget.item(1)
-        item.setText(_translate("DatabaseWindow", "Dog dodo"))
         self.ActListWidget.setSortingEnabled(__sortingEnabled)
         self.menuInteractive_System_Modelling.setTitle(_translate("DatabaseWindow", "1"))

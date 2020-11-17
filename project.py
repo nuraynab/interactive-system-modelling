@@ -116,6 +116,9 @@ class Ui_ProjectWindow(QWidget):
         self.retranslateUi(ProjectWindow)
         QtCore.QMetaObject.connectSlotsByName(ProjectWindow)
 
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
         self.version_name = QtWidgets.QLabel(self.centralwidget)
         self.version_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.version_name.setObjectName("version_name")
@@ -141,6 +144,7 @@ class Ui_ProjectWindow(QWidget):
         self.DatabaseWindow = QtWidgets.QMainWindow()
         self.ui = Ui_DatabaseWindow()
         self.ui.setupUi(self.DatabaseWindow)
+        self.ui.version_id.setText(self.version_id.text())
         self.DatabaseWindow.show()
 
     def exit_version(self):  

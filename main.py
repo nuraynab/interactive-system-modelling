@@ -167,6 +167,10 @@ class Ui_MainWindow(QWidget):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
+
         self.createBtn.clicked.connect(self.new_project)
         self.editProjInfoBtn.clicked.connect(self.edit_project)
         self.editVerInfoBtn.clicked.connect(self.edit_version)
@@ -203,7 +207,7 @@ class Ui_MainWindow(QWidget):
                     self.tableWidget.setRowCount(i+1)
                     self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(y[1])))
                     self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
-                    versions_dict[y[1]] = [y[2], y[3], y[4], y[5]]
+                    versions_dict[y[1]] = [y[2], y[3], y[4], y[5], y[0]]
                     i+=1
             db.close()
 
@@ -371,6 +375,7 @@ class Ui_MainWindow(QWidget):
         self.ui.version_number.setText(str(versions_dict[ver_name.text()][1]))
         self.ui.vers_short_descr.setText(str(versions_dict[ver_name.text()][2]))
         self.ui.vers_long_descr.setText(str(versions_dict[ver_name.text()][3]))
+        self.ui.version_id.setText(str(versions_dict[ver_name.text()][4]))
         self.ProjectWindow.show()
 
     def retranslateUi(self, MainWindow):
