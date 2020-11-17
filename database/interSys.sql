@@ -72,19 +72,68 @@ INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `lo
 (21, 'old New', 'test', 3, 'bbb', 'ddddddd');
 
 --
--- Indexes for dumped tables
+-- Table structure for table `categories`
 --
 
-CREATE TABLE `databases` (
+CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
-  `category` text NOT NULL,
-  `type` text NOT NULL,
-  `attribute` text NOT NULL,
-  `fact` text NOT NULL,
-  `perception` text NOT NULL,
-  `action` text NOT NULL
+  `value` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `types`
+--
+
+CREATE TABLE `types` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `attributes`
+--
+
+CREATE TABLE `attributes` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `facts`
+--
+
+CREATE TABLE `facts` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `perceptions`
+--
+
+CREATE TABLE `perceptions` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `actions`
+--
+
+CREATE TABLE `actions` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
 
 --
 -- Indexes for table `projects`
@@ -99,9 +148,39 @@ ALTER TABLE `versions`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `databases`
+-- Indexes for table `categories`
 --
-ALTER TABLE `databases`
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `types`
+--
+ALTER TABLE `types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `attributes`
+--
+ALTER TABLE `attributes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `facts`
+--
+ALTER TABLE `facts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `perceptions`
+--
+ALTER TABLE `perceptions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `actions`
+--
+ALTER TABLE `actions`
   ADD PRIMARY KEY (`id`);
 
 --

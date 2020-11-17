@@ -13,9 +13,11 @@ import csv
 from itertools import zip_longest
 import pandas
 import io
+import MySQLdb as mdb
 
 from add_to_database import Ui_AddToDatabaseWindow
 from edit_database_item import Ui_EditDatabaseItemWindow
+
 
 dbFileDir = ""
 categories = []
@@ -218,6 +220,7 @@ class Ui_DatabaseWindow(object):
         self.AddToDatabaseWindow.show()
 
     def getFile(self):
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         dbFileDir, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Open File", QtCore.QDir.currentPath() , '*.csv')
         # print(dbFileDir)
         df = pandas.read_csv(dbFileDir)
