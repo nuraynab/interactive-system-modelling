@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 from save_version import Ui_SaveVersionWindow
 from create_version import Ui_CreateVersionInfoWindow
 from database import Ui_DatabaseWindow
+from sem_mem import Ui_SemMemWindow
 
 import MySQLdb as mdb
 
@@ -142,6 +143,15 @@ class Ui_ProjectWindow(QWidget):
         self.saveVerBtn.clicked.connect(self.save_version)
 
         self.editDatabaseBtn.clicked.connect(self.edit_database)
+        self.SemMBtn.clicked.connect(self.sem_mem)
+
+    def sem_mem(self):
+        self.SemMemWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_SemMemWindow()
+        self.ui.setupUi(self.SemMemWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.SemMemWindow.show()
 
     def edit_database(self):
         self.DatabaseWindow = QtWidgets.QMainWindow()

@@ -72,6 +72,19 @@ INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `lo
 (21, 'old New', 'test', 3, 'bbb', 'ddddddd');
 
 
+
+--
+-- Table structure for table `sem_mem`
+--
+
+CREATE TABLE `sem_mem` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `domain` text NOT NULL,
+  `fact` text NOT NULL,
+  `retr_time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Table structure for table `domains`
 --
@@ -169,6 +182,12 @@ ALTER TABLE `versions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sem_mem`
+--
+ALTER TABLE `sem_mem`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `domains`
 --
 ALTER TABLE `domains`
@@ -230,6 +249,13 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `versions`
 --
 ALTER TABLE `versions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+COMMIT;
+
+--
+-- AUTO_INCREMENT for table `sem_mem`
+--
+ALTER TABLE `sem_mem`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
