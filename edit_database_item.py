@@ -11,11 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import MySQLdb as mdb
+from contextlib import closing
 
 class Ui_EditDatabaseItemWindow(object):
     def setupUi(self, EditDatabaseItemWindow):
         EditDatabaseItemWindow.setObjectName("EditDatabaseItemWindow")
-        EditDatabaseItemWindow.resize(513, 320)
+        EditDatabaseItemWindow.resize(513, 523)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -32,17 +33,50 @@ class Ui_EditDatabaseItemWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(120, 210, 241, 25))
+        self.saveBtn.setGeometry(QtCore.QRect(120, 390, 241, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
         self.saveBtn.setObjectName("saveBtn")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(80, 110, 331, 61))
+        self.lineEdit.setGeometry(QtCore.QRect(80, 190, 331, 61))
+        self.lineEdit.setObjectName("lineEdit")
+        self.CatComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 200, 331, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
+        self.CatComboBox.setFont(font)
+        self.CatComboBox.setObjectName("CatComboBox")
+        self.TypesComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.TypesComboBox.setFont(font)
+        self.TypesComboBox.setObjectName("TypesComboBox")
+        self.AttrComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.AttrComboBox.setGeometry(QtCore.QRect(80, 300, 331, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.AttrComboBox.setFont(font)
+        self.AttrComboBox.setObjectName("AttrComboBox")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(50, 86, 291, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(60, 120, 300, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.editBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.editBtn.setGeometry(QtCore.QRect(320, 120, 130, 25))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.editBtn.setFont(font)
+        self.editBtn.setObjectName("editBtn")
         EditDatabaseItemWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(EditDatabaseItemWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 513, 22))
@@ -58,6 +92,11 @@ class Ui_EditDatabaseItemWindow(object):
         self.retranslateUi(EditDatabaseItemWindow)
         QtCore.QMetaObject.connectSlotsByName(EditDatabaseItemWindow)
 
+        self.lineEdit.hide()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+
         self.version_id = QtWidgets.QLabel(self.centralwidget)
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.version_id.setObjectName("version_id")
@@ -65,12 +104,91 @@ class Ui_EditDatabaseItemWindow(object):
         self.kind.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.kind.setObjectName("version_id")
 
+        self.editBtn.clicked.connect(self.start)
         self.saveBtn.clicked.connect(self.saveItem)
         self.saveBtn.clicked.connect(EditDatabaseItemWindow.close)
+
+    def simpleEdit(self):
+        self.lineEdit.show()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+        self.CatComboBox.clear()
+        self.TypesComboBox.clear()
+        self.AttrComboBox.clear()
+
+    def editQuestion(self):
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 200, 331, 41))
+        self.editFQ()
+        cur_fact = self.lineEdit.text().split()
+        cur_type = cur_fact[0]
+        cur_cat = cur_fact[1]
+        cur_attr = cur_fact[2]
+        self.CatComboBox.setCurrentText(cur_cat)
+        self.TypesComboBox.setCurrentText(cur_type)
+        self.AttrComboBox.setCurrentText(cur_attr)
+        self.lineEdit.clear()
+
+
+    def editFact(self):
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 200, 331, 41))
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        self.editFQ()
+        cur_fact = self.lineEdit.text().split()
+        cur_cat = cur_fact[0]
+        cur_type = cur_fact[1]
+        cur_attr = cur_fact[2]
+        self.CatComboBox.setCurrentText(cur_cat)
+        self.TypesComboBox.setCurrentText(cur_type)
+        self.AttrComboBox.setCurrentText(cur_attr)
+        self.lineEdit.clear()
+
+    def editFQ(self):
+        self.CatComboBox.show()
+        self.TypesComboBox.show()
+        self.AttrComboBox.show()
+        self.lineEdit.hide()
+
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM categories WHERE version_id = '%i'" % (version_id))
+            categories = cur.fetchall()
+            for x in categories:
+                self.CatComboBox.addItem(x[2])
+            cur.execute("SELECT * FROM types WHERE version_id = '%i'" % (version_id))
+            types = cur.fetchall()
+            for x in types:
+                self.TypesComboBox.addItem(x[2])
+            cur.execute("SELECT * FROM attributes WHERE version_id = '%i'" % (version_id))
+            attributes = cur.fetchall()
+            for x in attributes:
+                self.AttrComboBox.addItem(x[2])
+
+
+    def start(self):
+        if (self.kind.text() == "domains" or 
+                self.kind.text() == "categories" or 
+                self.kind.text() == "types" or 
+                self.kind.text() == "attributes" or 
+                self.kind.text() == "perceptions" or 
+                self.kind.text() == "actions"):
+            self.simpleEdit()
+        elif self.kind.text() == "facts":
+            self.editFact()
+        elif self.kind.text() == "questions":
+            self.editQuestion()
 
     def saveItem(self):
         version_id = int(self.version_id.text())
         kind = self.kind.text()
+        if kind == "facts":
+            cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
+            self.lineEdit.setText(cur_fact)
+        if kind == "questions":
+            cur_question = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
+            self.lineEdit.setText(cur_question)
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with db:
             cur = db.cursor()
@@ -87,5 +205,7 @@ class Ui_EditDatabaseItemWindow(object):
         EditDatabaseItemWindow.setWindowTitle(_translate("EditDatabaseItemWindow", "MainWindow"))
         self.label.setText(_translate("EditDatabaseItemWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit</span></p></body></html>"))
         self.saveBtn.setText(_translate("EditDatabaseItemWindow", "Save"))
+        self.editBtn.setText(_translate("EditDatabaseItemWindow", "Edit"))
+        self.label_2.setText(_translate("EditDatabaseItemWindow", "Current item"))
         self.menuInteractive_System_Modelling.setTitle(_translate("EditDatabaseItemWindow", "1"))
 

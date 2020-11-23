@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>513</width>
-    <height>320</height>
+    <height>523</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,7 +50,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>210</y>
+      <y>390</y>
       <width>241</width>
       <height>25</height>
      </rect>
@@ -68,10 +68,139 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>110</y>
+      <y>190</y>
       <width>331</width>
       <height>61</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="CatComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>200</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Animal</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dog</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="TypesComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>250</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>can</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>has</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="AttrComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>300</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>breathe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>move</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>86</y>
+      <width>291</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Current name of the item</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>120</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Dog</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="editBtn">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>120</y>
+      <width>151</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Edit</string>
     </property>
    </widget>
   </widget>
@@ -96,7 +225,6 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="majorMinorBtnGroup"/>
-  <buttongroup name="curNewBtnGroup"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

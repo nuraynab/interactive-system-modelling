@@ -11,13 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import MySQLdb as mdb
+from contextlib import closing
 
 
 
 class Ui_AddToDatabaseWindow(object):
     def setupUi(self, AddToDatabaseWindow):
         AddToDatabaseWindow.setObjectName("AddToDatabaseWindow")
-        AddToDatabaseWindow.resize(513, 419)
+        AddToDatabaseWindow.resize(513, 531)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -34,7 +35,7 @@ class Ui_AddToDatabaseWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(120, 300, 241, 25))
+        self.saveBtn.setGeometry(QtCore.QRect(120, 430, 241, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
@@ -55,10 +56,47 @@ class Ui_AddToDatabaseWindow(object):
         self.comboBox.addItem("")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(80, 190, 331, 61))
+        self.lineEdit.setObjectName("lineEdit")
+        self.CatComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
+        self.CatComboBox.setFont(font)
+        self.CatComboBox.setObjectName("CatComboBox")
+        self.TypesComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 300, 331, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.TypesComboBox.setFont(font)
+        self.TypesComboBox.setObjectName("TypesComboBox")
+        self.AttrComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.AttrComboBox.setGeometry(QtCore.QRect(80, 350, 331, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.AttrComboBox.setFont(font)
+        self.AttrComboBox.setObjectName("AttrComboBox")
+        self.FactsComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.FactsComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.FactsComboBox.setFont(font)
+        self.FactsComboBox.setObjectName("FactsComboBox")
+        self.createBtn = QtWidgets.QRadioButton(self.centralwidget)
+        self.createBtn.setGeometry(QtCore.QRect(80, 180, 331, 23))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.createBtn.setFont(font)
+        self.createBtn.setObjectName("createBtn")
+        self.buttonGroup = QtWidgets.QButtonGroup(AddToDatabaseWindow)
+        self.buttonGroup.setObjectName("buttonGroup")
+        self.buttonGroup.addButton(self.createBtn)
+        self.convertBtn = QtWidgets.QRadioButton(self.centralwidget)
+        self.convertBtn.setGeometry(QtCore.QRect(80, 210, 331, 23))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.convertBtn.setFont(font)
+        self.convertBtn.setObjectName("convertBtn")
+        self.buttonGroup.addButton(self.convertBtn)
         AddToDatabaseWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(AddToDatabaseWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 513, 22))
@@ -74,12 +112,125 @@ class Ui_AddToDatabaseWindow(object):
         self.retranslateUi(AddToDatabaseWindow)
         QtCore.QMetaObject.connectSlotsByName(AddToDatabaseWindow)
 
+        self.lineEdit.hide()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+        self.FactsComboBox.hide()
+        self.createBtn.hide()
+        self.convertBtn.hide()
+
         self.version_id = QtWidgets.QLabel(self.centralwidget)
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.version_id.setObjectName("version_id")
 
+        self.comboBox.activated.connect(self.choose)
         self.saveBtn.clicked.connect(self.saveItem)
         self.saveBtn.clicked.connect(AddToDatabaseWindow.close)
+
+    def choose(self):
+        if (str(self.comboBox.currentText()) == "Domain" or 
+            str(self.comboBox.currentText()) == "Category" or 
+            str(self.comboBox.currentText()) == "Type" or 
+            str(self.comboBox.currentText()) == "Attribute" or 
+            str(self.comboBox.currentText()) == "Perception" or 
+            str(self.comboBox.currentText()) == "Action"):
+            self.simpleAdd()
+        if (str(self.comboBox.currentText()) == "Fact"):
+            self.addFact()
+        if (str(self.comboBox.currentText()) == "Question"):
+            self.addQuestion()
+
+    def addFact(self):
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 300, 331, 41))
+        self.CatComboBox.show()
+        self.TypesComboBox.show()
+        self.AttrComboBox.show()
+        self.lineEdit.hide()
+        self.FactsComboBox.hide()
+        self.createBtn.hide()
+        self.convertBtn.hide()
+        self.CatComboBox.clear()
+        self.TypesComboBox.clear()
+        self.AttrComboBox.clear()
+        self.FactsComboBox.clear()
+        self.lineEdit.clear()
+        self.createNew()
+
+    def createNew(self):
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM categories WHERE version_id = '%i'" % (version_id))
+            categories = cur.fetchall()
+            for x in categories:
+                self.CatComboBox.addItem(x[2])
+            cur.execute("SELECT * FROM types WHERE version_id = '%i'" % (version_id))
+            types = cur.fetchall()
+            for x in types:
+                self.TypesComboBox.addItem(x[2])
+            cur.execute("SELECT * FROM attributes WHERE version_id = '%i'" % (version_id))
+            attributes = cur.fetchall()
+            for x in attributes:
+                self.AttrComboBox.addItem(x[2])
+        
+        
+
+    def createQuestion(self):
+        self.CatComboBox.setGeometry(QtCore.QRect(80, 300, 331, 41))
+        self.TypesComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
+        self.CatComboBox.show()
+        self.TypesComboBox.show()
+        self.AttrComboBox.show()
+        self.FactsComboBox.hide()
+        self.CatComboBox.clear()
+        self.TypesComboBox.clear()
+        self.AttrComboBox.clear()
+        self.FactsComboBox.clear()
+        self.lineEdit.clear()
+        self.createNew()
+        
+
+    def convertQuestion(self):
+        self.FactsComboBox.show()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+        self.CatComboBox.clear()
+        self.TypesComboBox.clear()
+        self.AttrComboBox.clear()
+        self.FactsComboBox.clear()
+        self.lineEdit.clear()
+
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM facts WHERE version_id = '%i'" % (version_id))
+            facts = cur.fetchall()
+            for x in facts:
+                self.FactsComboBox.addItem(x[2])
+        
+
+    def addQuestion(self):
+        self.createBtn.show()
+        self.convertBtn.show()
+        self.lineEdit.hide()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+        self.FactsComboBox.hide()
+        self.createBtn.clicked.connect(self.createQuestion)
+        self.convertBtn.clicked.connect(self.convertQuestion)
+
+    def simpleAdd(self):
+        self.lineEdit.show()
+        self.CatComboBox.hide()
+        self.TypesComboBox.hide()
+        self.AttrComboBox.hide()
+        self.FactsComboBox.hide()
+        self.createBtn.hide()
+        self.convertBtn.hide()
 
     def saveItem(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
@@ -100,9 +251,19 @@ class Ui_AddToDatabaseWindow(object):
                 cur.execute("INSERT INTO attributes(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Fact"):
+                cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
+                self.lineEdit.setText(cur_fact)
                 cur.execute("INSERT INTO facts(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Question"):
+                cur_question = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
+                if (cur_question == "  ?"):
+                    cur_fact = str(self.FactsComboBox.currentText()).split()
+                    cur_cat = cur_fact[0]
+                    cur_type = cur_fact[1]
+                    cur_attr = cur_fact[2]
+                    cur_question = cur_type + " " + cur_cat + " " + cur_attr + "?"
+                self.lineEdit.setText(cur_question)
                 cur.execute("INSERT INTO questions(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Perception"):
@@ -156,6 +317,8 @@ class Ui_AddToDatabaseWindow(object):
         self.comboBox.setItemText(5, _translate("AddToDatabaseWindow", "Question"))
         self.comboBox.setItemText(6, _translate("AddToDatabaseWindow", "Perception"))
         self.comboBox.setItemText(7, _translate("AddToDatabaseWindow", "Action"))
+        self.createBtn.setText(_translate("AddToDatabaseWindow", "Create a new question"))
+        self.convertBtn.setText(_translate("AddToDatabaseWindow", "Create a question from a fact"))
         self.menuInteractive_System_Modelling.setTitle(_translate("AddToDatabaseWindow", "1"))
 
 

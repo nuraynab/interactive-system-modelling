@@ -315,6 +315,7 @@ class Ui_DatabaseWindow(QWidget):
             self.ui.lineEdit.setText(item.text())
             self.ui.version_id.setText(self.version_id.text())
             self.ui.kind.setText(kind)
+            self.ui.label_3.setText(item.text())
             self.ui.origin_name = item.text()
             self.EditDatabaseItemWindow.show()
         

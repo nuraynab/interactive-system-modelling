@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>513</width>
-    <height>419</height>
+    <height>531</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,7 +50,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>300</y>
+      <y>430</y>
       <width>241</width>
       <height>25</height>
      </rect>
@@ -80,6 +80,11 @@
     </property>
     <item>
      <property name="text">
+      <string>Domain</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Category</string>
      </property>
     </item>
@@ -93,6 +98,26 @@
       <string>Attribute</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Fact</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Question</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Perception</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Action</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
@@ -103,6 +128,148 @@
       <height>61</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QComboBox" name="CatComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>250</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Animal</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dog</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="TypesComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>300</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>can</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>has</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="AttrComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>350</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>breathe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>move</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="FactsComboBox">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>250</y>
+      <width>331</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Animal can breath</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Animal can move</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>180</y>
+      <width>331</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Create a new question</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>210</y>
+      <width>331</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Create a question from a fact</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -126,7 +293,6 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="majorMinorBtnGroup"/>
-  <buttongroup name="curNewBtnGroup"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
