@@ -22,10 +22,12 @@ from edit_database_item import Ui_EditDatabaseItemWindow
 
 
 dbFileDir = ""
+domains = []
 categories = []
 types = []
 attributes = []
 facts = []
+questions = []
 perceptions = []
 actions = []
 
@@ -53,21 +55,37 @@ class Ui_DatabaseWindow(QWidget):
         self.browseBtn.setFont(font)
         self.browseBtn.setObjectName("browseBtn")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(40, 10, 410, 51))
+        self.label.setGeometry(QtCore.QRect(40, 10, 591, 51))
         self.label.setObjectName("label")
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setGeometry(QtCore.QRect(0, 70, 1161, 16))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
+        self.label_1 = QtWidgets.QLabel(self.centralwidget)
+        self.label_1.setGeometry(QtCore.QRect(70, 170, 211, 51))
+        self.label_1.setObjectName("label_1")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(120, 80, 211, 51))
+        self.label_2.setGeometry(QtCore.QRect(360, 170, 211, 51))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(490, 80, 151, 51))
+        self.label_3.setGeometry(QtCore.QRect(670, 170, 151, 51))
         self.label_3.setObjectName("label_3")
+        self.DomListWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.DomListWidget.setGeometry(QtCore.QRect(20, 220, 271, 241))
+        self.DomListWidget.setObjectName("DomListWidget")
+        item = QtWidgets.QListWidgetItem()
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        item.setFont(font)
+        self.DomListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        item.setFont(font)
+        self.DomListWidget.addItem(item)
         self.CatListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.CatListWidget.setGeometry(QtCore.QRect(30, 130, 341, 261))
+        self.CatListWidget.setGeometry(QtCore.QRect(300, 220, 271, 241))
         self.CatListWidget.setObjectName("CatListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -79,17 +97,17 @@ class Ui_DatabaseWindow(QWidget):
         font.setPointSize(14)
         item.setFont(font)
         self.CatListWidget.addItem(item)
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(840, 80, 271, 51))
-        self.label_5.setObjectName("label_5")
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(920, 170, 271, 51))
+        self.label_4.setObjectName("label_4")
         self.addBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.addBtn.setGeometry(QtCore.QRect(570, 750, 151, 31))
+        self.addBtn.setGeometry(QtCore.QRect(570, 770, 151, 31))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.addBtn.setFont(font)
         self.addBtn.setObjectName("addBtn")
         self.editBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.editBtn.setGeometry(QtCore.QRect(760, 750, 151, 31))
+        self.editBtn.setGeometry(QtCore.QRect(760, 770, 151, 31))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.editBtn.setFont(font)
@@ -101,7 +119,7 @@ class Ui_DatabaseWindow(QWidget):
         self.saveBtn.setFont(font)
         self.saveBtn.setObjectName("saveBtn")
         self.TypesListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.TypesListWidget.setGeometry(QtCore.QRect(400, 130, 341, 261))
+        self.TypesListWidget.setGeometry(QtCore.QRect(580, 220, 271, 241))
         self.TypesListWidget.setObjectName("TypesListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -109,7 +127,7 @@ class Ui_DatabaseWindow(QWidget):
         item.setFont(font)
         self.TypesListWidget.addItem(item)
         self.AttrListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.AttrListWidget.setGeometry(QtCore.QRect(770, 130, 341, 261))
+        self.AttrListWidget.setGeometry(QtCore.QRect(860, 220, 271, 241))
         self.AttrListWidget.setObjectName("AttrListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -122,22 +140,25 @@ class Ui_DatabaseWindow(QWidget):
         item.setFont(font)
         self.AttrListWidget.addItem(item)
         self.deleteBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.deleteBtn.setGeometry(QtCore.QRect(950, 750, 151, 31))
+        self.deleteBtn.setGeometry(QtCore.QRect(950, 770, 151, 31))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.deleteBtn.setFont(font)
         self.deleteBtn.setObjectName("deleteBtn")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(140, 400, 211, 51))
-        self.label_4.setObjectName("label_4")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(90, 460, 211, 51))
+        self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(480, 400, 211, 51))
+        self.label_6.setGeometry(QtCore.QRect(350, 460, 211, 51))
         self.label_6.setObjectName("label_6")
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(860, 400, 211, 51))
+        self.label_7.setGeometry(QtCore.QRect(620, 460, 211, 51))
         self.label_7.setObjectName("label_7")
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setGeometry(QtCore.QRect(920, 460, 211, 51))
+        self.label_8.setObjectName("label_8")
         self.FactsListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.FactsListWidget.setGeometry(QtCore.QRect(30, 460, 341, 261))
+        self.FactsListWidget.setGeometry(QtCore.QRect(20, 510, 271, 241))
         self.FactsListWidget.setObjectName("FactsListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -149,8 +170,21 @@ class Ui_DatabaseWindow(QWidget):
         font.setPointSize(14)
         item.setFont(font)
         self.FactsListWidget.addItem(item)
+        self.QuestListWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.QuestListWidget.setGeometry(QtCore.QRect(300, 510, 271, 241))
+        self.QuestListWidget.setObjectName("QuestListWidget")
+        item = QtWidgets.QListWidgetItem()
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        item.setFont(font)
+        self.QuestListWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        item.setFont(font)
+        self.QuestListWidget.addItem(item)
         self.PercListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.PercListWidget.setGeometry(QtCore.QRect(400, 460, 341, 261))
+        self.PercListWidget.setGeometry(QtCore.QRect(580, 510, 271, 241))
         self.PercListWidget.setObjectName("PercListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -163,7 +197,7 @@ class Ui_DatabaseWindow(QWidget):
         item.setFont(font)
         self.PercListWidget.addItem(item)
         self.ActListWidget = QtWidgets.QListWidget(self.centralwidget)
-        self.ActListWidget.setGeometry(QtCore.QRect(770, 460, 341, 261))
+        self.ActListWidget.setGeometry(QtCore.QRect(860, 510, 271, 241))
         self.ActListWidget.setObjectName("ActListWidget")
         item = QtWidgets.QListWidgetItem()
         font = QtGui.QFont()
@@ -175,26 +209,40 @@ class Ui_DatabaseWindow(QWidget):
         font.setPointSize(14)
         item.setFont(font)
         self.ActListWidget.addItem(item)
-        self.CatListWidget.raise_()
-        self.updateBtn.raise_()
-        self.browseBtn.raise_()
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(40, 80, 351, 51))
+        self.label_9.setObjectName("label_9")
+        self.label_9.setFont(font)
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setGeometry(QtCore.QRect(40, 120, 351, 51))
+        self.label_10.setObjectName("label_10")
+        self.label_10.setFont(font)
         self.label.raise_()
         self.line.raise_()
+        self.label_1.raise_()
         self.label_2.raise_()
         self.label_3.raise_()
-        self.label_5.raise_()
-        self.addBtn.raise_()
-        self.editBtn.raise_()
-        self.saveBtn.raise_()
-        self.TypesListWidget.raise_()
-        self.AttrListWidget.raise_()
-        self.deleteBtn.raise_()
         self.label_4.raise_()
+        self.label_5.raise_()
         self.label_6.raise_()
         self.label_7.raise_()
+        self.label_8.raise_()
+        self.label_9.raise_()
+        self.label_10.raise_()
+        self.DomListWidget.raise_()
+        self.CatListWidget.raise_()
+        self.TypesListWidget.raise_()
+        self.AttrListWidget.raise_()
         self.FactsListWidget.raise_()
+        self.QuestListWidget.raise_()
         self.PercListWidget.raise_()
         self.ActListWidget.raise_()
+        self.updateBtn.raise_()
+        self.browseBtn.raise_()
+        self.saveBtn.raise_()
+        self.addBtn.raise_()
+        self.editBtn.raise_()
+        self.deleteBtn.raise_()
         DatabaseWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(DatabaseWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1159, 22))
@@ -221,10 +269,12 @@ class Ui_DatabaseWindow(QWidget):
         self.editBtn.clicked.connect(self.editItem)
         self.deleteBtn.clicked.connect(self.deleteItem)
 
+        self.DomListWidget.clicked.connect(self.pressedDom)
         self.CatListWidget.clicked.connect(self.pressedCat)
         self.TypesListWidget.clicked.connect(self.pressedTypes)
         self.AttrListWidget.clicked.connect(self.pressedAttr)
         self.FactsListWidget.clicked.connect(self.pressedFacts)
+        self.QuestListWidget.clicked.connect(self.pressedQuest)
         self.PercListWidget.clicked.connect(self.pressedPerc)
         self.ActListWidget.clicked.connect(self.pressedAct)
 
@@ -234,8 +284,11 @@ class Ui_DatabaseWindow(QWidget):
 
 
     def editItem(self):
-        listItems=self.CatListWidget.selectedItems()
-        kind = "categories"
+        listItems=self.DomListWidget.selectedItems()
+        kind = "domains"
+        if not listItems: 
+            listItems=self.CatListWidget.selectedItems()
+            kind = "categories"
         if not listItems: 
             listItems=self.TypesListWidget.selectedItems()
             kind = "types"
@@ -245,6 +298,9 @@ class Ui_DatabaseWindow(QWidget):
         if not listItems: 
             listItems=self.FactsListWidget.selectedItems()
             kind = "facts"
+        if not listItems: 
+            listItems=self.QuestListWidget.selectedItems()
+            kind = "questions"
         if not listItems: 
             listItems=self.PercListWidget.selectedItems()
             kind = "perceptions"
@@ -264,10 +320,12 @@ class Ui_DatabaseWindow(QWidget):
         
 
     def deleteItem(self):
+        self.deleteDom()
         self.deleteCat()
         self.deleteTypes()
         self.deleteAttr()
         self.deleteFacts()
+        self.deleteQuest()
         self.deletePerc()
         self.deleteAct()
 
@@ -291,13 +349,20 @@ class Ui_DatabaseWindow(QWidget):
         with db:
             cur = db.cursor()
 
+            cur.execute("DELETE FROM domains WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM categories WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM types WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM attributes WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM facts WHERE version_id = '%i'" % (version_id))
+            cur.execute("DELETE FROM questions WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM perceptions WHERE version_id = '%i'" % (version_id))
             cur.execute("DELETE FROM actions WHERE version_id = '%i'" % (version_id))
 
+            for i, item in df.Domains.dropna().iteritems():
+                domains.append(item)
+                cur.execute("INSERT INTO domains(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
             for i, item in df.Categories.dropna().iteritems():
                 categories.append(item)
                 cur.execute("INSERT INTO categories(version_id, value)"
@@ -316,6 +381,11 @@ class Ui_DatabaseWindow(QWidget):
             for i, item in df.Facts.dropna().iteritems():
                 facts.append(item)
                 cur.execute("INSERT INTO facts(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id,
+                                                  ''.join(item)))
+            for i, item in df.Questions.dropna().iteritems():
+                questions.append(item)
+                cur.execute("INSERT INTO questions(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id,
                                                   ''.join(item)))
             for i, item in df.Perceptions.dropna().iteritems():
@@ -342,15 +412,27 @@ class Ui_DatabaseWindow(QWidget):
         self.getItems()
 
     def getItems(self):
+        self.DomListWidget.clear()
         self.CatListWidget.clear()
         self.TypesListWidget.clear()
         self.AttrListWidget.clear()
         self.FactsListWidget.clear()
+        self.QuestListWidget.clear()
         self.PercListWidget.clear()
         self.ActListWidget.clear()
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
+
+            cur.execute("SELECT * FROM domains WHERE version_id = '%i'" % (version_id))
+            domains = cur.fetchall()
+            for x in domains:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.DomListWidget.addItem(item)
 
             cur.execute("SELECT * FROM categories WHERE version_id = '%i'" % (version_id))
             categories = cur.fetchall()
@@ -392,6 +474,16 @@ class Ui_DatabaseWindow(QWidget):
                 item.setFont(font)
                 self.FactsListWidget.addItem(item)
 
+            cur.execute("SELECT * FROM questions WHERE version_id = '%i'" % (version_id))
+            questions = cur.fetchall()
+            for x in questions:
+                item = QtWidgets.QListWidgetItem()
+                item.setText(x[2])
+                font = QtGui.QFont()
+                font.setPointSize(14)
+                item.setFont(font)
+                self.QuestListWidget.addItem(item)
+
             cur.execute("SELECT * FROM perceptions WHERE version_id = '%i'" % (version_id))
             perceptions = cur.fetchall()
             for x in perceptions:
@@ -416,12 +508,17 @@ class Ui_DatabaseWindow(QWidget):
         db.close() 
 
     def saveFile(self):
+        domains = []
         categories = []
         types = []
         attributes = []
         facts = []
+        questions = []
         perceptions = []
         actions = []
+
+        for index in range(self.DomListWidget.count()):
+            domains.append(self.DomListWidget.item(index).text())
 
         for index in range(self.CatListWidget.count()):
             categories.append(self.CatListWidget.item(index).text())
@@ -434,6 +531,9 @@ class Ui_DatabaseWindow(QWidget):
 
         for index in range(self.FactsListWidget.count()):
             facts.append(self.FactsListWidget.item(index).text())
+
+        for index in range(self.QuestListWidget.count()):
+            questions.append(self.QuestListWidget.item(index).text())
 
         for index in range(self.PercListWidget.count()):
             perceptions.append(self.PercListWidget.item(index).text())
@@ -454,17 +554,32 @@ class Ui_DatabaseWindow(QWidget):
 
         file = dbFileDir if dbFileDir != "" else '{}.csv'.format(newFileDir)
 
-        db = [categories, types, attributes, facts, perceptions, actions]
+        db = [domains, categories, types, attributes, facts, questions, perceptions, actions]
         export_data = zip_longest(*db, fillvalue = '')
 
         with open(file, 'w') as dbFile:
             wr = csv.writer(dbFile)
-            wr.writerow(("Categories", "Types", "Attributes", "Facts", "Perceptions", "Actions"))
+            wr.writerow(("Domains", "Categories", "Types", "Attributes", "Facts", "Questions", "Perceptions", "Actions"))
             wr.writerows(export_data)
 
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Saved Successfully')
 
 
+
+    def deleteDom(self):
+        listItems=self.DomListWidget.selectedItems()
+        if not listItems: return   
+        reply = QMessageBox.question(self, "Delete item", "Are you sure you want to delete this item?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            for item in listItems:
+                self.DomListWidget.takeItem(self.DomListWidget.row(item))
+                db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+                with closing(db.cursor()) as cur:
+                    cur.execute("DELETE FROM domains WHERE value = '%s'" % (''.join(item.text())))
+                    db.commit()
+                db.close()
+        else:
+            return
 
     def deleteCat(self):
         listItems=self.CatListWidget.selectedItems()
@@ -526,6 +641,21 @@ class Ui_DatabaseWindow(QWidget):
         else:
             return
 
+    def deleteQuest(self):
+        listItems=self.QuestListWidget.selectedItems()
+        if not listItems: return   
+        reply = QMessageBox.question(self, "Delete item", "Are you sure you want to delete this item?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            for item in listItems:
+                self.QuestListWidget.takeItem(self.QuestListWidget.row(item))
+                db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+                with closing(db.cursor()) as cur:
+                    cur.execute("DELETE FROM questions WHERE value = '%s'" % (''.join(item.text())))
+                    db.commit()
+                db.close()
+        else:
+            return
+
     def deletePerc(self):
         listItems=self.PercListWidget.selectedItems()
         if not listItems: return   
@@ -557,7 +687,10 @@ class Ui_DatabaseWindow(QWidget):
             return
 
 
-    def pressedCat(self):
+    def pressedDom(self):
+        for i in range(self.CatListWidget.count()):
+            item = self.CatListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.TypesListWidget.count()):
             item = self.TypesListWidget.item(i)
             item.setSelected(False)
@@ -566,6 +699,32 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.FactsListWidget.count()):
             item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.PercListWidget.count()):
+            item = self.PercListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.ActListWidget.count()):
+            item = self.ActListWidget.item(i)
+            item.setSelected(False)
+
+    def pressedCat(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.TypesListWidget.count()):
+            item = self.TypesListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.AttrListWidget.count()):
+            item = self.AttrListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.FactsListWidget.count()):
+            item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
             item.setSelected(False)
         for i in range(self.PercListWidget.count()):
             item = self.PercListWidget.item(i)
@@ -575,6 +734,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
 
     def pressedTypes(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.CatListWidget.count()):
             item = self.CatListWidget.item(i)
             item.setSelected(False)
@@ -583,6 +745,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.FactsListWidget.count()):
             item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
             item.setSelected(False)
         for i in range(self.PercListWidget.count()):
             item = self.PercListWidget.item(i)
@@ -592,6 +757,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
 
     def pressedAttr(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.CatListWidget.count()):
             item = self.CatListWidget.item(i)
             item.setSelected(False)
@@ -600,6 +768,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.FactsListWidget.count()):
             item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
             item.setSelected(False)
         for i in range(self.PercListWidget.count()):
             item = self.PercListWidget.item(i)
@@ -609,6 +780,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
 
     def pressedFacts(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.CatListWidget.count()):
             item = self.CatListWidget.item(i)
             item.setSelected(False)
@@ -617,6 +791,32 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.AttrListWidget.count()):
             item = self.AttrListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.PercListWidget.count()):
+            item = self.PercListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.ActListWidget.count()):
+            item = self.ActListWidget.item(i)
+            item.setSelected(False)
+
+    def pressedQuest(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.CatListWidget.count()):
+            item = self.CatListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.TypesListWidget.count()):
+            item = self.TypesListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.AttrListWidget.count()):
+            item = self.AttrListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.FactsListWidget.count()):
+            item = self.FactsListWidget.item(i)
             item.setSelected(False)
         for i in range(self.PercListWidget.count()):
             item = self.PercListWidget.item(i)
@@ -626,6 +826,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
 
     def pressedPerc(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.CatListWidget.count()):
             item = self.CatListWidget.item(i)
             item.setSelected(False)
@@ -637,12 +840,18 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.FactsListWidget.count()):
             item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
             item.setSelected(False)
         for i in range(self.ActListWidget.count()):
             item = self.ActListWidget.item(i)
             item.setSelected(False)
 
     def pressedAct(self):
+        for i in range(self.DomListWidget.count()):
+            item = self.DomListWidget.item(i)
+            item.setSelected(False)
         for i in range(self.CatListWidget.count()):
             item = self.CatListWidget.item(i)
             item.setSelected(False)
@@ -654,6 +863,9 @@ class Ui_DatabaseWindow(QWidget):
             item.setSelected(False)
         for i in range(self.FactsListWidget.count()):
             item = self.FactsListWidget.item(i)
+            item.setSelected(False)
+        for i in range(self.QuestListWidget.count()):
+            item = self.QuestListWidget.item(i)
             item.setSelected(False)
         for i in range(self.PercListWidget.count()):
             item = self.PercListWidget.item(i)
@@ -668,12 +880,13 @@ class Ui_DatabaseWindow(QWidget):
         self.updateBtn.setText(_translate("DatabaseWindow", "Update"))
         self.browseBtn.setText(_translate("DatabaseWindow", "Browse"))
         self.label.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Database</span></p></body></html>"))
+        self.label_1.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Domains</span></p></body></html>"))
         self.label_2.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Categories</span></p></body></html>"))
         self.label_3.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Types</span></p></body></html>"))
         __sortingEnabled = self.CatListWidget.isSortingEnabled()
         self.CatListWidget.setSortingEnabled(False)
         self.CatListWidget.setSortingEnabled(__sortingEnabled)
-        self.label_5.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Attributes</span></p></body></html>"))
+        self.label_4.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Attributes</span></p></body></html>"))
         self.addBtn.setText(_translate("DatabaseWindow", "Add"))
         self.editBtn.setText(_translate("DatabaseWindow", "Edit"))
         self.saveBtn.setText(_translate("DatabaseWindow", "Save"))
@@ -684,9 +897,10 @@ class Ui_DatabaseWindow(QWidget):
         self.AttrListWidget.setSortingEnabled(False)
         self.AttrListWidget.setSortingEnabled(__sortingEnabled)
         self.deleteBtn.setText(_translate("DatabaseWindow", "Delete"))
-        self.label_4.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Facts</span></p></body></html>"))
-        self.label_6.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Perceptions</span></p></body></html>"))
-        self.label_7.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Actions</span></p></body></html>"))
+        self.label_5.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Facts</span></p></body></html>"))
+        self.label_6.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Questions</span></p></body></html>"))
+        self.label_7.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Perceptions</span></p></body></html>"))
+        self.label_8.setText(_translate("DatabaseWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Actions</span></p></body></html>"))
         __sortingEnabled = self.FactsListWidget.isSortingEnabled()
         self.FactsListWidget.setSortingEnabled(False)
         self.FactsListWidget.setSortingEnabled(__sortingEnabled)

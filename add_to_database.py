@@ -51,6 +51,8 @@ class Ui_AddToDatabaseWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(80, 190, 331, 61))
         font = QtGui.QFont()
@@ -85,6 +87,9 @@ class Ui_AddToDatabaseWindow(object):
         with db:
             cur = db.cursor()
 
+            if (str(self.comboBox.currentText()) == "Domain"):
+                cur.execute("INSERT INTO domains(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Category"):
                 cur.execute("INSERT INTO categories(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
@@ -96,6 +101,9 @@ class Ui_AddToDatabaseWindow(object):
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Fact"):
                 cur.execute("INSERT INTO facts(version_id, value)"
+                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+            if (str(self.comboBox.currentText()) == "Question"):
+                cur.execute("INSERT INTO questions(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
             if (str(self.comboBox.currentText()) == "Perception"):
                 cur.execute("INSERT INTO perceptions(version_id, value)"
@@ -140,12 +148,14 @@ class Ui_AddToDatabaseWindow(object):
         AddToDatabaseWindow.setWindowTitle(_translate("AddToDatabaseWindow", "MainWindow"))
         self.label.setText(_translate("AddToDatabaseWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Add to Database</span></p></body></html>"))
         self.saveBtn.setText(_translate("AddToDatabaseWindow", "Save"))
-        self.comboBox.setItemText(0, _translate("AddToDatabaseWindow", "Category"))
-        self.comboBox.setItemText(1, _translate("AddToDatabaseWindow", "Type"))
-        self.comboBox.setItemText(2, _translate("AddToDatabaseWindow", "Attribute"))
-        self.comboBox.setItemText(3, _translate("AddToDatabaseWindow", "Fact"))
-        self.comboBox.setItemText(4, _translate("AddToDatabaseWindow", "Perception"))
-        self.comboBox.setItemText(5, _translate("AddToDatabaseWindow", "Action"))
+        self.comboBox.setItemText(0, _translate("AddToDatabaseWindow", "Domain"))
+        self.comboBox.setItemText(1, _translate("AddToDatabaseWindow", "Category"))
+        self.comboBox.setItemText(2, _translate("AddToDatabaseWindow", "Type"))
+        self.comboBox.setItemText(3, _translate("AddToDatabaseWindow", "Attribute"))
+        self.comboBox.setItemText(4, _translate("AddToDatabaseWindow", "Fact"))
+        self.comboBox.setItemText(5, _translate("AddToDatabaseWindow", "Question"))
+        self.comboBox.setItemText(6, _translate("AddToDatabaseWindow", "Perception"))
+        self.comboBox.setItemText(7, _translate("AddToDatabaseWindow", "Action"))
         self.menuInteractive_System_Modelling.setTitle(_translate("AddToDatabaseWindow", "1"))
 
 

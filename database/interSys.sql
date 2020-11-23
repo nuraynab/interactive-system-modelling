@@ -71,6 +71,17 @@ INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `lo
 (14, 'old', 'test', 1.2, 'bbb', 'ddddddd'),
 (21, 'old New', 'test', 3, 'bbb', 'ddddddd');
 
+
+--
+-- Table structure for table `domains`
+--
+
+CREATE TABLE `domains` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Table structure for table `categories`
 --
@@ -106,6 +117,16 @@ CREATE TABLE `attributes` (
 --
 
 CREATE TABLE `facts` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `value` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
   `value` text NOT NULL
@@ -148,6 +169,12 @@ ALTER TABLE `versions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `domains`
+--
+ALTER TABLE `domains`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -169,6 +196,12 @@ ALTER TABLE `attributes`
 -- Indexes for table `facts`
 --
 ALTER TABLE `facts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `questions`
+--
+ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -201,6 +234,13 @@ ALTER TABLE `versions`
 COMMIT;
 
 --
+-- AUTO_INCREMENT for table `domains`
+--
+ALTER TABLE `domains`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+COMMIT;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -225,6 +265,13 @@ COMMIT;
 -- AUTO_INCREMENT for table `facts`
 --
 ALTER TABLE `facts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+COMMIT;
+
+--
+-- AUTO_INCREMENT for table `questions`
+--
+ALTER TABLE `questions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 

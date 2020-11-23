@@ -67,8 +67,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>80</y>
+      <x>360</x>
+      <y>170</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -80,8 +80,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>80</y>
+      <x>670</x>
+      <y>170</y>
       <width>151</width>
       <height>51</height>
      </rect>
@@ -93,10 +93,10 @@
    <widget class="QListWidget" name="CatListWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>130</y>
-      <width>341</width>
-      <height>261</height>
+      <x>300</x>
+      <y>220</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
@@ -120,11 +120,11 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="label_5">
+   <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>840</x>
-      <y>80</y>
+      <x>920</x>
+      <y>170</y>
       <width>271</width>
       <height>51</height>
      </rect>
@@ -137,7 +137,7 @@
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>750</y>
+      <y>770</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -155,7 +155,7 @@
     <property name="geometry">
      <rect>
       <x>760</x>
-      <y>750</y>
+      <y>770</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -190,10 +190,10 @@
    <widget class="QListWidget" name="TypesListWidget">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>130</y>
-      <width>341</width>
-      <height>261</height>
+      <x>580</x>
+      <y>220</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
@@ -210,10 +210,10 @@
    <widget class="QListWidget" name="AttrListWidget">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>130</y>
-      <width>341</width>
-      <height>261</height>
+      <x>860</x>
+      <y>220</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
@@ -241,7 +241,7 @@
     <property name="geometry">
      <rect>
       <x>950</x>
-      <y>750</y>
+      <y>770</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -255,11 +255,11 @@
      <string>Delete</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>400</y>
+      <x>90</x>
+      <y>460</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -268,11 +268,11 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Facts&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
+   <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>400</y>
+      <x>620</x>
+      <y>460</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -281,11 +281,11 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Perceptions&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>400</y>
+      <x>920</x>
+      <y>460</y>
       <width>211</width>
       <height>51</height>
      </rect>
@@ -297,15 +297,15 @@
    <widget class="QListWidget" name="FactsListWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>460</y>
-      <width>341</width>
-      <height>261</height>
+      <x>20</x>
+      <y>510</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>Animal can breath</string>
+      <string>Animal can breathe</string>
      </property>
      <property name="font">
       <font>
@@ -327,15 +327,15 @@
    <widget class="QListWidget" name="PercListWidget">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>460</y>
-      <width>341</width>
-      <height>261</height>
+      <x>580</x>
+      <y>510</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>Animal can breath</string>
+      <string>Animal can breathe</string>
      </property>
      <property name="font">
       <font>
@@ -357,10 +357,10 @@
    <widget class="QListWidget" name="ActListWidget">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>460</y>
-      <width>341</width>
-      <height>261</height>
+      <x>860</x>
+      <y>510</y>
+      <width>271</width>
+      <height>241</height>
      </rect>
     </property>
     <item>
@@ -384,25 +384,143 @@
      </property>
     </item>
    </widget>
+   <widget class="QListWidget" name="DomListWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>271</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Animals</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dogs</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_1">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>170</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Domains&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="QuestListWidget">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>510</y>
+      <width>271</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Can animal breathe?</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Can dog breathe?</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>460</y>
+      <width>211</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Questions&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>80</y>
+      <width>351</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Project: Animal-Dog&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>120</y>
+      <width>351</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Version #1.1: New&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>CatListWidget</zorder>
    <zorder>browseBtn</zorder>
    <zorder>label</zorder>
    <zorder>line</zorder>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
-   <zorder>label_5</zorder>
+   <zorder>label_4</zorder>
    <zorder>addBtn</zorder>
    <zorder>editBtn</zorder>
    <zorder>downloadBtn</zorder>
    <zorder>TypesListWidget</zorder>
    <zorder>AttrListWidget</zorder>
    <zorder>deleteBtn</zorder>
-   <zorder>label_4</zorder>
-   <zorder>label_6</zorder>
+   <zorder>label_5</zorder>
    <zorder>label_7</zorder>
+   <zorder>label_8</zorder>
    <zorder>FactsListWidget</zorder>
    <zorder>PercListWidget</zorder>
    <zorder>ActListWidget</zorder>
+   <zorder>DomListWidget</zorder>
+   <zorder>label_1</zorder>
+   <zorder>QuestListWidget</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_9</zorder>
+   <zorder>label_10</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
