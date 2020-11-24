@@ -104,7 +104,7 @@ class Ui_EditDatabaseItemWindow(object):
         self.kind.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.kind.setObjectName("version_id")
 
-        self.editBtn.clicked.connect(self.start)
+        self.editBtn.clicked.connect(self.startNow)
         self.saveBtn.clicked.connect(self.saveItem)
         self.saveBtn.clicked.connect(EditDatabaseItemWindow.close)
 
@@ -167,7 +167,7 @@ class Ui_EditDatabaseItemWindow(object):
                 self.AttrComboBox.addItem(x[2])
 
 
-    def start(self):
+    def startNow(self):
         if (self.kind.text() == "domains" or 
                 self.kind.text() == "categories" or 
                 self.kind.text() == "types" or 

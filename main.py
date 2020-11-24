@@ -223,7 +223,7 @@ class Ui_MainWindow(QWidget):
 
     def show_version_short_descr(self):
         curr_row = self.tableWidget.currentRow() 
-        curr_col = self.tableWidget.currentColumn()
+        curr_col = 0
         self.textBrowser_2.clear()
         item = self.tableWidget.item(curr_row, curr_col)
         self.textBrowser_2.append(versions_dict[item.text()][2])
@@ -269,7 +269,7 @@ class Ui_MainWindow(QWidget):
 
     def delete_version(self):
         curr_row = self.tableWidget.currentRow() 
-        curr_col = self.tableWidget.currentColumn()
+        curr_col = 0
         project_name =self.listWidget.currentItem()
 
         if curr_row == -1 and curr_col == -1:
@@ -315,7 +315,7 @@ class Ui_MainWindow(QWidget):
         if not listItems: return  
         for x in listItems:
             curr_row = self.tableWidget.currentRow() 
-            curr_col = self.tableWidget.currentColumn()
+            curr_col = 0
             item = self.tableWidget.item(curr_row, curr_col)
             self.EditVersionInfoWindow = QtWidgets.QMainWindow()
             self.ui = Ui_EditVersionInfoWindow()

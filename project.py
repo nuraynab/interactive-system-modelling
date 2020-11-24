@@ -151,6 +151,7 @@ class Ui_ProjectWindow(QWidget):
         self.ui.setupUi(self.SemMemWindow)
         self.ui.label_2.setText(self.label.text())
         self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
         self.SemMemWindow.show()
 
     def edit_database(self):

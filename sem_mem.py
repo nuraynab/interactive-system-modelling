@@ -9,9 +9,20 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
+import csv
+from itertools import zip_longest
+import pandas
+import io
+import MySQLdb as mdb
+from contextlib import closing
 
+from add_to_sem_mem import Ui_AddToSemMemWindow
+from edit_fact_repr_in_sem_mem import Ui_EditFactReprInSemMemWindow
 
-class Ui_SemMemWindow(object):
+fact_repr_dict = []
+
+class Ui_SemMemWindow(QWidget):
     def setupUi(self, SemMemWindow):
         SemMemWindow.setObjectName("SemMemWindow")
         SemMemWindow.resize(1159, 861)
@@ -38,6 +49,7 @@ class Ui_SemMemWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.tableWidget.setFont(font)
+        self.tableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.tableWidget.setLineWidth(1)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideRight)
         self.tableWidget.setShowGrid(True)
@@ -45,7 +57,7 @@ class Ui_SemMemWindow(object):
         self.tableWidget.setCornerButtonEnabled(True)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(3)
-        self.tableWidget.setRowCount(3)
+        self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -71,36 +83,6 @@ class Ui_SemMemWindow(object):
         font.setPointSize(14)
         item.setFont(font)
         self.tableWidget.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(0, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(0, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(0, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(1, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(1, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.tableWidget.setItem(1, 2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(2, 0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(2, 1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setItem(2, 2, item)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(324)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(71)
@@ -115,6 +97,12 @@ class Ui_SemMemWindow(object):
         self.label_3.setGeometry(QtCore.QRect(40, 120, 351, 51))
         self.label_3.setObjectName("label_3")
         self.label_3.setFont(font)
+        self.updateBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.updateBtn.setGeometry(QtCore.QRect(420, 10, 191, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.updateBtn.setFont(font)
+        self.updateBtn.setObjectName("updateBtn")
         self.addBtn = QtWidgets.QPushButton(self.centralwidget)
         self.addBtn.setGeometry(QtCore.QRect(510, 750, 151, 31))
         font = QtGui.QFont()
@@ -139,6 +127,7 @@ class Ui_SemMemWindow(object):
         self.label_4.raise_()
         self.label_2.raise_()
         self.label_3.raise_()
+        self.updateBtn.raise_()
         self.addBtn.raise_()
         self.editBtn.raise_()
         self.deleteBtn.raise_()
@@ -157,17 +146,88 @@ class Ui_SemMemWindow(object):
         self.retranslateUi(SemMemWindow)
         QtCore.QMetaObject.connectSlotsByName(SemMemWindow)
 
+        self.version_id = QtWidgets.QLabel(self.centralwidget)
+        self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_id.setObjectName("version_id")
+
+        self.updateBtn.clicked.connect(self.getFacts)
+        self.addBtn.clicked.connect(self.addFact)
+        self.editBtn.clicked.connect(self.editFact)
+        self.deleteBtn.clicked.connect(self.deleteFact)
+
+    def editFact(self):
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = 0
+        if curr_row == -1 and curr_col == -1:
+            return 
+        cur_dom = self.tableWidget.item(curr_row, curr_col).text()
+        cur_fact = self.tableWidget.item(curr_row, curr_col+1).text()
+        cur_time = self.tableWidget.item(curr_row, curr_col+2).text()
+
+        self.EditFactReprInSemMemWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_EditFactReprInSemMemWindow()
+        self.ui.setupUi(self.EditFactReprInSemMemWindow)
+        self.ui.lineEdit.setText(cur_time)
+        self.ui.version_id.setText(self.version_id.text())
+        self.ui.label_3.setText(cur_dom + " - " + cur_fact + " - " + cur_time)
+        self.ui.origin_dom = cur_dom
+        self.ui.origin_fact = cur_fact
+        self.EditFactReprInSemMemWindow.show()
+
+    def deleteFact(self):
+        version_id = int(self.version_id.text())
+        curr_row = self.tableWidget.currentRow() 
+        curr_col = 0
+
+        if curr_row == -1 and curr_col == -1:
+            return 
+        cur_dom = self.tableWidget.item(curr_row, curr_col).text()
+        cur_fact = self.tableWidget.item(curr_row, curr_col+1).text()
+        reply = QMessageBox.question(self, "Delete fact representation", "Are you sure you want to delete this fact representation?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            
+            db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+            with closing(db.cursor()) as cur:
+                cur.execute("DELETE FROM sem_mem WHERE version_id = '%i' AND domain = '%s' AND fact = '%s'" % (version_id, cur_dom, cur_fact))
+                db.commit()
+                self.tableWidget.removeRow(curr_row)
+            db.close()
+        else:
+            return
+
+    def getFacts(self):
+        version_id = int(self.version_id.text())
+        self.tableWidget.setRowCount(0)
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
+            fact_repr = cur.fetchall()
+
+            i = 0
+            for y in fact_repr:
+                self.tableWidget.setRowCount(i+1)
+                self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(y[2])))
+                self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
+                self.tableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(y[4])))
+                #fact_repr_dict[y[3]] = [y[2], y[4]]
+                i+=1
+        db.close()
+
+
+    def addFact(self):
+        self.AddToSemMemWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_AddToSemMemWindow()
+        self.ui.setupUi(self.AddToSemMemWindow)
+        self.ui.version_id.setText(self.version_id.text())
+        self.AddToSemMemWindow.show()
+
+
+
     def retranslateUi(self, SemMemWindow):
         _translate = QtCore.QCoreApplication.translate
         SemMemWindow.setWindowTitle(_translate("SemMemWindow", "MainWindow"))
         self.label.setText(_translate("SemMemWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Semantic Memory</span></p></body></html>"))
         self.label_4.setText(_translate("SemMemWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Facts</span></p></body></html>"))
-        item = self.tableWidget.verticalHeaderItem(0)
-        item.setText(_translate("SemMemWindow", "1"))
-        item = self.tableWidget.verticalHeaderItem(1)
-        item.setText(_translate("SemMemWindow", "2"))
-        item = self.tableWidget.verticalHeaderItem(2)
-        item.setText(_translate("SemMemWindow", "3"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("SemMemWindow", "Domain"))
         item = self.tableWidget.horizontalHeaderItem(1)
@@ -176,25 +236,8 @@ class Ui_SemMemWindow(object):
         item.setText(_translate("SemMemWindow", "Retrieval Time (sec)"))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
-        item = self.tableWidget.item(0, 0)
-        item.setText(_translate("SemMemWindow", "Animals"))
-        item = self.tableWidget.item(0, 1)
-        item.setText(_translate("SemMemWindow", "Animal can breath"))
-        item = self.tableWidget.item(0, 2)
-        item.setText(_translate("SemMemWindow", "1"))
-        item = self.tableWidget.item(1, 0)
-        item.setText(_translate("SemMemWindow", "Animals"))
-        item = self.tableWidget.item(1, 1)
-        item.setText(_translate("SemMemWindow", "Animal can move"))
-        item = self.tableWidget.item(1, 2)
-        item.setText(_translate("SemMemWindow", "1"))
-        item = self.tableWidget.item(2, 0)
-        item.setText(_translate("SemMemWindow", "Dogs"))
-        item = self.tableWidget.item(2, 1)
-        item.setText(_translate("SemMemWindow", "Dog can bark"))
-        item = self.tableWidget.item(2, 2)
-        item.setText(_translate("SemMemWindow", "1"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
+        self.updateBtn.setText(_translate("SemMemWindow", "Update"))
         self.addBtn.setText(_translate("SemMemWindow", "Add"))
         self.editBtn.setText(_translate("SemMemWindow", "Edit"))
         self.deleteBtn.setText(_translate("SemMemWindow", "Delete"))
