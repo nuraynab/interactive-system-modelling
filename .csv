@@ -1,3 +1,4 @@
-Categories,Types,Attributes,Facts,Perceptions,Actions
-Animal,can,breath,Animal can breath,Animal can breath,Animal dodo
-Dog,,move,Dog is a animal,Dog is a animal,Dog dodo
+Representation,Domain,Category,Delay,Typed Attribute
+Fact,animals,animal,1,can breathe
+Fact,dogs,dog,1,is a animal
+Fact,animals,animal,1,can breathe

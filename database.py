@@ -551,7 +551,6 @@ class Ui_DatabaseWindow(QWidget):
 
         if dbFileDir == "":
             newFileDir, _ = QtWidgets.QFileDialog.getSaveFileName(self.centralwidget, "Save File", QtCore.QDir.currentPath() , '*.csv')
-            print(newFileDir)
 
         file = dbFileDir if dbFileDir != "" else '{}.csv'.format(newFileDir)
 

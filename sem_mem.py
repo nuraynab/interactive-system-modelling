@@ -103,6 +103,12 @@ class Ui_SemMemWindow(QWidget):
         font.setPointSize(14)
         self.updateBtn.setFont(font)
         self.updateBtn.setObjectName("updateBtn")
+        self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.saveBtn.setGeometry(QtCore.QRect(900, 10, 191, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.saveBtn.setFont(font)
+        self.saveBtn.setObjectName("saveBtn")
         self.addBtn = QtWidgets.QPushButton(self.centralwidget)
         self.addBtn.setGeometry(QtCore.QRect(510, 750, 151, 31))
         font = QtGui.QFont()
@@ -154,6 +160,8 @@ class Ui_SemMemWindow(QWidget):
         self.addBtn.clicked.connect(self.addFact)
         self.editBtn.clicked.connect(self.editFact)
         self.deleteBtn.clicked.connect(self.deleteFact)
+        self.saveBtn.clicked.connect(self.saveFile)
+
 
     def editFact(self):
         curr_row = self.tableWidget.currentRow() 
@@ -221,7 +229,27 @@ class Ui_SemMemWindow(QWidget):
         self.ui.version_id.setText(self.version_id.text())
         self.AddToSemMemWindow.show()
 
+    def saveFile(self):
 
+        domains = []
+        categories = []
+        delays = []
+        typed_attr = []
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
+            fact_repr = cur.fetchall()
+        
+        newFileDir, _ = QtWidgets.QFileDialog.getSaveFileName(self.centralwidget, "Save File", QtCore.QDir.currentPath() , '*.csv')
+
+        with open('{}.csv'.format(newFileDir), 'w') as dbFile:
+            wr = csv.writer(dbFile)
+            wr.writerow(("Representation", "Domain", "Category", "Delay", "Typed Attribute"))
+            for y in fact_repr:
+                fact = str(y[3]).split(" ", 1)
+                wr.writerow(("Fact", str(y[2]), fact[0], str(y[4]), fact[1]))
+            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Saved Successfully')
 
     def retranslateUi(self, SemMemWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -241,4 +269,5 @@ class Ui_SemMemWindow(QWidget):
         self.addBtn.setText(_translate("SemMemWindow", "Add"))
         self.editBtn.setText(_translate("SemMemWindow", "Edit"))
         self.deleteBtn.setText(_translate("SemMemWindow", "Delete"))
+        self.saveBtn.setText(_translate("DatabaseWindow", "Save"))
         self.menuInteractive_System_Modelling.setTitle(_translate("SemMemWindow", "1"))
