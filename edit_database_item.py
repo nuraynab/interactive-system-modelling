@@ -135,13 +135,15 @@ class Ui_EditDatabaseItemWindow(object):
         self.CatComboBox.setGeometry(QtCore.QRect(80, 200, 331, 41))
         self.TypesComboBox.setGeometry(QtCore.QRect(80, 250, 331, 41))
         self.editFQ()
-        cur_fact = self.lineEdit.text().split()
-        cur_cat = cur_fact[0]
-        cur_type = cur_fact[1]
-        cur_attr = cur_fact[2]
-        self.CatComboBox.setCurrentText(cur_cat)
-        self.TypesComboBox.setCurrentText(cur_type)
-        self.AttrComboBox.setCurrentText(cur_attr)
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND value = '%s'" % (version_id, ''.join(self.lineEdit.text())))
+            facts = cur.fetchall()
+            for x in facts:
+                self.CatComboBox.setCurrentText(x[3])
+                self.TypesComboBox.setCurrentText(x[4])
+                self.AttrComboBox.setCurrentText(x[5])
         self.lineEdit.clear()
 
     def editFQ(self):
@@ -181,24 +183,34 @@ class Ui_EditDatabaseItemWindow(object):
             self.editQuestion()
 
     def saveItem(self):
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         version_id = int(self.version_id.text())
         kind = self.kind.text()
         if kind == "facts":
             cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
             self.lineEdit.setText(cur_fact)
+
         if kind == "questions":
             cur_question = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
             self.lineEdit.setText(cur_question)
-        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-        with db:
-            cur = db.cursor()
-            
-            cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
-                                                 % (kind, ''.join(self.lineEdit.text()), version_id, 
-                                                  ''.join(self.origin_name)))
- 
-            db.commit()
-            QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
+
+        if kind == "facts":
+            with db:
+                cur = db.cursor()
+                cur.execute("UPDATE %s SET value = '%s', category = '%s', type = '%s', attribute = '%s' WHERE version_id = '%i' AND value = '%s'"
+                                                     % (kind, ''.join(self.lineEdit.text()), ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
+                                                     ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_name)))
+                db.commit()
+        else:
+            with db:
+                cur = db.cursor()
+                cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
+                                                     % (kind, ''.join(self.lineEdit.text()), version_id, 
+                                                      ''.join(self.origin_name)))
+                db.commit()
+     
+        
+        QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
 
     def retranslateUi(self, EditDatabaseItemWindow):
         _translate = QtCore.QCoreApplication.translate

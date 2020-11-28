@@ -108,7 +108,6 @@ class Ui_AddToDatabaseWindow(object):
         self.statusbar.setObjectName("statusbar")
         AddToDatabaseWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
-
         self.retranslateUi(AddToDatabaseWindow)
         QtCore.QMetaObject.connectSlotsByName(AddToDatabaseWindow)
 
@@ -253,8 +252,9 @@ class Ui_AddToDatabaseWindow(object):
             if (str(self.comboBox.currentText()) == "Fact"):
                 cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
                 self.lineEdit.setText(cur_fact)
-                cur.execute("INSERT INTO facts(version_id, value)"
-                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+                cur.execute("INSERT INTO facts(version_id, value, category, type, attribute)"
+                        "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id, ''.join(self.lineEdit.text()), ''.join(self.CatComboBox.currentText()), 
+                            ''.join(self.TypesComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))
             if (str(self.comboBox.currentText()) == "Question"):
                 cur_question = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
                 if (cur_question == "  ?"):
