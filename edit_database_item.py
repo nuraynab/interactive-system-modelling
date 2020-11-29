@@ -209,24 +209,46 @@ class Ui_EditDatabaseItemWindow(object):
                     facts = cur.fetchall()
                     for x in facts:
                         new_fact = str(self.lineEdit.text()) + ' ' + x[4] + ' ' + x[5]
-                        cur.execute("UPDATE facts SET categories = '%s', value = '%s' WHERE version_id = '%i' AND categories = '%s'" 
-                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
+                        cur.execute("UPDATE facts SET categories = '%s', value = '%s' WHERE version_id = '%i' AND categories = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name), x[2]))
+
+                    cur.execute("SELECT * FROM questions WHERE version_id = '%i' AND categories = '%s'" % (version_id, ''.join(self.origin_name)))
+                    questions = cur.fetchall()
+                    for q in questions:
+                        new_q = q[3] + " " + str(self.lineEdit.text()) + " " + q[5] + "?"
+                        cur.execute("UPDATE questions SET categories = '%s', value = '%s' WHERE version_id = '%i' AND categories = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_q, version_id, ''.join(self.origin_name), q[2]))
 
                 elif kind == "types":
                     cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND types = '%s'" % (version_id, ''.join(self.origin_name)))
                     facts = cur.fetchall()
                     for x in facts:
                         new_fact = x[3] + ' ' + str(self.lineEdit.text()) + ' ' + x[5]
-                        cur.execute("UPDATE facts SET types = '%s', value = '%s' WHERE version_id = '%i' AND types = '%s'" 
-                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
+                        cur.execute("UPDATE facts SET types = '%s', value = '%s' WHERE version_id = '%i' AND types = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name), x[2]))
+
+                    cur.execute("SELECT * FROM questions WHERE version_id = '%i' AND types = '%s'" % (version_id, ''.join(self.origin_name)))
+                    questions = cur.fetchall()
+                    for q in questions:
+                        new_q = str(self.lineEdit.text()) + " " + q[4] + " " + q[5] + "?"
+                        cur.execute("UPDATE questions SET types = '%s', value = '%s' WHERE version_id = '%i' AND types = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_q, version_id, ''.join(self.origin_name), q[2]))
 
                 elif kind == "attributes":
                     cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND attributes = '%s'" % (version_id, ''.join(self.origin_name)))
                     facts = cur.fetchall()
                     for x in facts:
                         new_fact = x[3] + ' ' + x[4] + ' ' + str(self.lineEdit.text())
-                        cur.execute("UPDATE facts SET attributes = '%s', value = '%s' WHERE version_id = '%i' AND attributes = '%s'" 
-                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
+                        cur.execute("UPDATE facts SET attributes = '%s', value = '%s' WHERE version_id = '%i' AND attributes = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name), x[2]))
+
+                    cur.execute("SELECT * FROM questions WHERE version_id = '%i' AND attributes = '%s'" % (version_id, ''.join(self.origin_name)))
+                    questions = cur.fetchall()
+                    for q in questions:
+                        new_q = q[3] + " " + q[4] + " " + str(self.lineEdit.text()) + "?"
+                        cur.execute("UPDATE questions SET attributes = '%s', value = '%s' WHERE version_id = '%i' AND attributes = '%s' AND value = '%s'" 
+                            % (''.join(self.lineEdit.text()), new_q, version_id, ''.join(self.origin_name), q[2]))
+
 
                 cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
                                                      % (kind, ''.join(self.lineEdit.text()), version_id, 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 29, 2020 at 01:14 PM
+-- Generation Time: Nov 29, 2020 at 02:51 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -118,7 +118,8 @@ CREATE TABLE `facts` (
 
 INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attributes`) VALUES
 (28, 10, 'animal can breathe', 'animal', 'can', 'breathe'),
-(30, 10, 'cat has tail', 'cat', 'has', 'tail');
+(32, 10, 'cat can breathe', 'cat', 'can', 'breathe'),
+(33, 10, 'cat is a animal', 'cat', 'is a', 'animal');
 
 -- --------------------------------------------------------
 
@@ -175,9 +176,9 @@ CREATE TABLE `questions` (
 --
 
 INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `attributes`) VALUES
-(28, 10, 'can cat breathe?', 'can', 'cat', 'breathe'),
-(29, 10, 'is a cat animal?', 'is a', 'cat', 'animal'),
-(30, 10, 'has cat tail?', 'has', 'cat', 'tail');
+(31, 10, 'can animal breathe?', 'can', 'animal', 'breathe'),
+(34, 10, 'can cat breathe?', 'can', 'cat', 'breathe'),
+(35, 10, 'is a cat animal?', 'is a', 'cat', 'animal');
 
 -- --------------------------------------------------------
 
@@ -351,7 +352,7 @@ ALTER TABLE `domains`
 -- AUTO_INCREMENT for table `facts`
 --
 ALTER TABLE `facts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `perceptions`
@@ -369,7 +370,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `sem_mem`
