@@ -195,19 +195,48 @@ class Ui_EditDatabaseItemWindow(object):
             self.lineEdit.setText(cur_question)
 
         if kind == "facts":
-            with db:
-                cur = db.cursor()
-                cur.execute("UPDATE %s SET value = '%s', category = '%s', type = '%s', attribute = '%s' WHERE version_id = '%i' AND value = '%s'"
+            with closing(db.cursor()) as cur:
+                cur.execute("UPDATE %s SET value = '%s', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND value = '%s'"
                                                      % (kind, ''.join(self.lineEdit.text()), ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
                                                      ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_name)))
                 db.commit()
-        else:
-            with db:
-                cur = db.cursor()
-                cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
-                                                     % (kind, ''.join(self.lineEdit.text()), version_id, 
-                                                      ''.join(self.origin_name)))
+
+        elif kind == "categories":
+            with closing(db.cursor()) as cur: 
+                cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND categories = '%s'" % (version_id, ''.join(self.origin_name)))
+                facts = cur.fetchall()
+                for x in facts:
+                    new_fact = str(self.lineEdit.text()) + ' ' + x[4] + ' ' + x[5]
+                    cur.execute("UPDATE facts SET categories = '%s', value = '%s' WHERE version_id = '%i' AND categories = '%s'" 
+                        % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
                 db.commit()
+
+        elif kind == "types":
+            with closing(db.cursor()) as cur: 
+                cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND types = '%s'" % (version_id, ''.join(self.origin_name)))
+                facts = cur.fetchall()
+                for x in facts:
+                    new_fact = x[3] + ' ' + str(self.lineEdit.text()) + ' ' + x[5]
+                    cur.execute("UPDATE facts SET types = '%s', value = '%s' WHERE version_id = '%i' AND types = '%s'" 
+                        % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
+                db.commit()
+
+        elif kind == "attributes":
+            with closing(db.cursor()) as cur:
+                cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND attributes = '%s'" % (version_id, ''.join(self.origin_name)))
+                facts = cur.fetchall()
+                for x in facts:
+                    new_fact = x[3] + ' ' + x[4] + ' ' + str(self.lineEdit.text())
+                    cur.execute("UPDATE facts SET attributes = '%s', value = '%s' WHERE version_id = '%i' AND attributes = '%s'" 
+                        % (''.join(self.lineEdit.text()), new_fact, version_id, ''.join(self.origin_name)))
+                db.commit()
+
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("UPDATE %s SET value = '%s' WHERE version_id = '%i' AND value = '%s'"
+                                                 % (kind, ''.join(self.lineEdit.text()), version_id, 
+                                                  ''.join(self.origin_name)))
+            db.commit()
      
         
         QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')

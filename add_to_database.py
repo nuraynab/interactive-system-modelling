@@ -252,7 +252,7 @@ class Ui_AddToDatabaseWindow(object):
             if (str(self.comboBox.currentText()) == "Fact"):
                 cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
                 self.lineEdit.setText(cur_fact)
-                cur.execute("INSERT INTO facts(version_id, value, category, type, attribute)"
+                cur.execute("INSERT INTO facts(version_id, value, categories, types, attributes)"
                         "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id, ''.join(self.lineEdit.text()), ''.join(self.CatComboBox.currentText()), 
                             ''.join(self.TypesComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))
             if (str(self.comboBox.currentText()) == "Question"):
