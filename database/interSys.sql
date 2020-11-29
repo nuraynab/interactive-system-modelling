@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 28, 2020 at 04:14 PM
+-- Generation Time: Nov 29, 2020 at 01:14 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `interSys`
 --
+CREATE DATABASE IF NOT EXISTS `interSys` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `interSys`;
 
 -- --------------------------------------------------------
 
@@ -51,7 +53,8 @@ CREATE TABLE `attributes` (
 
 INSERT INTO `attributes` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'breathe'),
-(25, 10, 'animal');
+(25, 10, 'animal'),
+(26, 10, 'tail');
 
 -- --------------------------------------------------------
 
@@ -71,7 +74,7 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'animal'),
-(25, 10, 'dog');
+(25, 10, 'cat');
 
 -- --------------------------------------------------------
 
@@ -91,7 +94,8 @@ CREATE TABLE `domains` (
 
 INSERT INTO `domains` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'animals'),
-(25, 10, 'dogs');
+(25, 10, 'dogs'),
+(27, 10, 'cats');
 
 -- --------------------------------------------------------
 
@@ -103,18 +107,18 @@ CREATE TABLE `facts` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
   `value` text NOT NULL,
-  `category` text NOT NULL,
-  `type` text NOT NULL,
-  `attribute` text NOT NULL
+  `categories` text NOT NULL,
+  `types` text NOT NULL,
+  `attributes` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `facts`
 --
 
-INSERT INTO `facts` (`id`, `version_id`, `value`, `category`, `type`, `attribute`) VALUES
-(25, 10, 'dog can breathe', 'dog', 'can', 'breathe'),
-(26, 10, 'dog is a animal', 'dog', 'is a', 'animal');
+INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attributes`) VALUES
+(28, 10, 'animal can breathe', 'animal', 'can', 'breathe'),
+(30, 10, 'cat has tail', 'cat', 'has', 'tail');
 
 -- --------------------------------------------------------
 
@@ -160,8 +164,20 @@ INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
-  `value` text NOT NULL
+  `value` text NOT NULL,
+  `types` text NOT NULL,
+  `categories` text NOT NULL,
+  `attributes` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `attributes`) VALUES
+(28, 10, 'can cat breathe?', 'can', 'cat', 'breathe'),
+(29, 10, 'is a cat animal?', 'is a', 'cat', 'animal'),
+(30, 10, 'has cat tail?', 'has', 'cat', 'tail');
 
 -- --------------------------------------------------------
 
@@ -206,7 +222,8 @@ CREATE TABLE `types` (
 
 INSERT INTO `types` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'can'),
-(25, 10, 'is a');
+(25, 10, 'is a'),
+(26, 10, 'has');
 
 -- --------------------------------------------------------
 
@@ -316,7 +333,7 @@ ALTER TABLE `actions`
 -- AUTO_INCREMENT for table `attributes`
 --
 ALTER TABLE `attributes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -328,13 +345,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `domains`
 --
 ALTER TABLE `domains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `facts`
 --
 ALTER TABLE `facts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `perceptions`
@@ -352,7 +369,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `sem_mem`
@@ -364,7 +381,7 @@ ALTER TABLE `sem_mem`
 -- AUTO_INCREMENT for table `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `versions`

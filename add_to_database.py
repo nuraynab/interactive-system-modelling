@@ -256,16 +256,21 @@ class Ui_AddToDatabaseWindow(object):
                         "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id, ''.join(self.lineEdit.text()), ''.join(self.CatComboBox.currentText()), 
                             ''.join(self.TypesComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))
             if (str(self.comboBox.currentText()) == "Question"):
+
                 cur_question = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
                 if (cur_question == "  ?"):
-                    cur_fact = str(self.FactsComboBox.currentText()).split()
-                    cur_cat = cur_fact[0]
-                    cur_type = cur_fact[1]
-                    cur_attr = cur_fact[2]
-                    cur_question = cur_type + " " + cur_cat + " " + cur_attr + "?"
-                self.lineEdit.setText(cur_question)
-                cur.execute("INSERT INTO questions(version_id, value)"
-                        "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
+                    cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND value = '%s'" % (version_id, ''.join(self.FactsComboBox.currentText())))
+                    facts = cur.fetchall()
+                    for fact in facts:
+                        cur_question = fact[4] + " " + fact[3] + " " + fact[5] + "?"
+
+                    self.lineEdit.setText(cur_question)
+                    cur.execute("INSERT INTO questions(version_id, value, types, categories, attributes)"
+                        "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id, ''.join(self.lineEdit.text()), fact[4], fact[3], fact[5]))
+                else:
+                    self.lineEdit.setText(cur_question)
+                    cur.execute("INSERT INTO questions(version_id, value, types, categories, attributes) VALUES('%i', '%s', '%s', '%s', '%s')" 
+                        % (version_id, ''.join(self.lineEdit.text()), ''.join(self.TypesComboBox.currentText()), ''.join(self.CatComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))
             if (str(self.comboBox.currentText()) == "Perception"):
                 cur.execute("INSERT INTO perceptions(version_id, value)"
                         "VALUES('%i', '%s')" % (version_id, ''.join(self.lineEdit.text())))
