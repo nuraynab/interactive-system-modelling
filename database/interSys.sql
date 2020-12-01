@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 29, 2020 at 02:51 PM
+-- Generation Time: Dec 01, 2020 at 09:29 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -152,7 +152,7 @@ CREATE TABLE `projects` (
 
 INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 (5, 'test', 'testetsetset', 'setestssssssssssssssssssssssss'),
-(6, 'aaaaaaaa', 'aaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaa'),
+(6, 'My project', 'aaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaa'),
 (8, 'test2', 'test', 'testing'),
 (12, 'Animal', 'short', 'long');
 
@@ -191,19 +191,20 @@ CREATE TABLE `sem_mem` (
   `version_id` int(11) NOT NULL,
   `domain` text NOT NULL,
   `fact` text NOT NULL,
-  `retr_time` int(11) NOT NULL
+  `retr_time` int(11) NOT NULL,
+  `categories` text NOT NULL,
+  `types` text NOT NULL,
+  `attributes` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sem_mem`
 --
 
-INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`) VALUES
-(26, 10, 'animals', 'animal can breathe', 1),
-(27, 10, 'dogs', 'dog is a animal', 1),
-(28, 10, 'animals', 'animal can breathe', 1),
-(29, 10, 'dogs', 'dog can breathe', 1),
-(30, 10, 'dogs', 'dog is a animal', 2);
+INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categories`, `types`, `attributes`) VALUES
+(34, 10, 'cats', 'cat can breathe', 1, 'cat', 'can', 'breathe'),
+(35, 10, 'animals', 'animal can breathe', 1, 'animal', 'can', 'breathe'),
+(36, 10, 'cats', 'cat is a animal', 1, 'cat', 'is a', 'animal');
 
 -- --------------------------------------------------------
 
@@ -246,7 +247,7 @@ CREATE TABLE `versions` (
 --
 
 INSERT INTO `versions` (`id`, `name`, `project_name`, `numb`, `short_descr`, `long_descr`) VALUES
-(10, 'old', 'aaaaaaaa', 1, 'bbb', 'ddddddd'),
+(10, 'old', 'My project', 1, 'bbb', 'ddddddd'),
 (14, 'old', 'test', 1.2, 'bbb', 'ddddddd'),
 (21, 'old New', 'test', 3, 'bbb', 'ddddddd');
 
@@ -376,7 +377,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `sem_mem`
 --
 ALTER TABLE `sem_mem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `types`

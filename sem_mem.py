@@ -98,7 +98,7 @@ class Ui_SemMemWindow(QWidget):
         self.label_3.setObjectName("label_3")
         self.label_3.setFont(font)
         self.updateBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.updateBtn.setGeometry(QtCore.QRect(420, 10, 191, 41))
+        self.updateBtn.setGeometry(QtCore.QRect(700, 10, 191, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.updateBtn.setFont(font)
@@ -245,10 +245,10 @@ class Ui_SemMemWindow(QWidget):
 
         with open('{}.csv'.format(newFileDir), 'w') as dbFile:
             wr = csv.writer(dbFile)
-            wr.writerow(("Representation", "Domain", "Category", "Delay", "Typed Attribute"))
-            for y in fact_repr:
-                fact = str(y[3]).split(" ", 1)
-                wr.writerow(("Fact", str(y[2]), fact[0], str(y[4]), fact[1]))
+            wr.writerow(("Representation", "Domain", "Category", "Delay", "Type", "Attribute"))
+
+            for fact in fact_repr:
+                wr.writerow(("Fact", str(fact[2]), str(fact[5]), str(fact[4]), str(fact[6]), str(fact[7])))
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Saved Successfully')
 
     def retranslateUi(self, SemMemWindow):

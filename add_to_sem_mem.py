@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import MySQLdb as mdb
 from contextlib import closing
-
+create_fact = False
 
 class Ui_AddToSemMemWindow(object):
     def setupUi(self, AddToSemMemWindow):
@@ -186,6 +186,8 @@ class Ui_AddToSemMemWindow(object):
         self.TypesComboBox.clear()
         self.AttrComboBox.clear()
         self.FactsComboBox.clear()
+        global create_fact
+        create_fact = True
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
@@ -226,15 +228,24 @@ class Ui_AddToSemMemWindow(object):
     def saveFact(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         version_id = int(self.version_id.text())
-        with db:
-            cur = db.cursor()
+        with closing(db.cursor()) as cur:
             cur_dom = str(self.DomComboBox.currentText())
-            cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
-            if (cur_fact == "  "):
-                cur_fact = str(self.FactsComboBox.currentText())
             cur_retr_time = int(str(self.lineEdit.text()))
-            cur.execute("INSERT INTO sem_mem(version_id, domain, fact, retr_time)"
-                        "VALUES('%i', '%s', '%s', '%i')" % (version_id, cur_dom, cur_fact, cur_retr_time))
+
+            if(create_fact):
+                cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
+                cur.execute("INSERT INTO sem_mem(version_id, domain, fact, retr_time, categories, types, attributes) VALUES('%i', '%s', '%s', '%i', '%s', '%s', '%s')" 
+                        % (version_id, cur_dom, cur_fact, cur_retr_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))
+            else:
+                cur_fact = str(self.FactsComboBox.currentText())
+                cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND value = '%s'" % (version_id, cur_fact))
+                facts = cur.fetchall()
+                for fact in facts:
+                    fact_cat = fact[3]
+                    fact_type = fact[4]
+                    fact_attr = fact[5]
+                cur.execute("INSERT INTO sem_mem(version_id, domain, fact, retr_time, categories, types, attributes)"
+                        "VALUES('%i', '%s', '%s', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_fact, cur_retr_time, fact_cat, fact_type, fact_attr))
             db.commit()
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
 

@@ -145,12 +145,11 @@ class Ui_EditFactReprInSemMemWindow(object):
         cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
         cur_time = int(self.lineEdit.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-        with db:
-            cur = db.cursor()
+        with closing(db.cursor()) as cur:
             
-            cur.execute("UPDATE sem_mem SET domain = '%s', fact = '%s', retr_time = '%i' WHERE version_id = '%i' AND domain = '%s' AND fact = '%s'"
-                                                 % (cur_dom, cur_fact, cur_time, version_id, 
-                                                  ''.join(self.origin_dom), ''.join(self.origin_fact)))
+            cur.execute("UPDATE sem_mem SET domain = '%s', fact = '%s', retr_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND fact = '%s'"
+                                                 % (cur_dom, cur_fact, cur_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
+                                                 ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_dom), ''.join(self.origin_fact)))
  
             db.commit()
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
@@ -161,10 +160,6 @@ class Ui_EditFactReprInSemMemWindow(object):
         self.TypesComboBox.clear()
         self.AttrComboBox.clear()
         cur_dom = self.origin_dom
-        cur_fact = self.origin_fact.split()
-        cur_cat = cur_fact[0]
-        cur_type = cur_fact[1]
-        cur_attr = cur_fact[2]
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
@@ -185,10 +180,18 @@ class Ui_EditFactReprInSemMemWindow(object):
             for x in attributes:
                 self.AttrComboBox.addItem(x[2])
 
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND value = '%s'" % (version_id, ''.join(self.origin_fact)))
+            facts = cur.fetchall()
+            for x in facts:
+                self.CatComboBox.setCurrentText(x[3])
+                self.TypesComboBox.setCurrentText(x[4])
+                self.AttrComboBox.setCurrentText(x[5])
+
         self.DomComboBox.setCurrentText(cur_dom)
-        self.CatComboBox.setCurrentText(cur_cat)
-        self.TypesComboBox.setCurrentText(cur_type)
-        self.AttrComboBox.setCurrentText(cur_attr)
+        # self.CatComboBox.setCurrentText(cur_cat)
+        # self.TypesComboBox.setCurrentText(cur_type)
+        # self.AttrComboBox.setCurrentText(cur_attr)
 
     def retranslateUi(self, EditFactReprInSemMemWindow):
         _translate = QtCore.QCoreApplication.translate
