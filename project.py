@@ -15,6 +15,8 @@ from save_version import Ui_SaveVersionWindow
 from create_version import Ui_CreateVersionInfoWindow
 from database import Ui_DatabaseWindow
 from sem_mem import Ui_SemMemWindow
+from short_term_mem import Ui_ShortTermMemWindow
+from environment import Ui_EnvironmentWindow
 
 import MySQLdb as mdb
 
@@ -144,6 +146,26 @@ class Ui_ProjectWindow(QWidget):
 
         self.editDatabaseBtn.clicked.connect(self.edit_database)
         self.SemMBtn.clicked.connect(self.sem_mem)
+        self.STMBtn.clicked.connect(self.short_term_mem)
+        self.EnvBtn.clicked.connect(self.env)
+
+    def env(self):
+        self.EnvironmentWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_EnvironmentWindow()
+        self.ui.setupUi(self.EnvironmentWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+        self.EnvironmentWindow.show()
+
+    def short_term_mem(self):
+        self.ShortTermMemWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ShortTermMemWindow()
+        self.ui.setupUi(self.ShortTermMemWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+        self.ShortTermMemWindow.show()
 
     def sem_mem(self):
         self.SemMemWindow = QtWidgets.QMainWindow()
