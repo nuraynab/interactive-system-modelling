@@ -10,6 +10,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
+
+import MySQLdb as mdb
+from contextlib import closing
+
+
+from add_to_env import Ui_AddToEnvWindow
+from edit_item_repr_in_env import Ui_EditItemReprInEnvWindow
+
 
 class Ui_EnvironmentWindow(object):
     def setupUi(self, EnvironmentWindow):
@@ -71,6 +80,7 @@ class Ui_EnvironmentWindow(object):
         font.setPointSize(14)
         item.setFont(font)
         self.factsTableWidget.setHorizontalHeaderItem(2, item)
+        self.factsTableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.factsTableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.factsTableWidget.horizontalHeader().setDefaultSectionSize(324)
         self.factsTableWidget.horizontalHeader().setMinimumSectionSize(71)
@@ -141,6 +151,7 @@ class Ui_EnvironmentWindow(object):
         font.setPointSize(14)
         item.setFont(font)
         self.questTableWidget.setHorizontalHeaderItem(2, item)
+        self.questTableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.questTableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.questTableWidget.horizontalHeader().setDefaultSectionSize(324)
         self.questTableWidget.horizontalHeader().setMinimumSectionSize(71)
@@ -150,6 +161,12 @@ class Ui_EnvironmentWindow(object):
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(520, 440, 151, 51))
         self.label_5.setObjectName("label_5")
+        self.updateBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.updateBtn.setGeometry(QtCore.QRect(700, 10, 191, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.updateBtn.setFont(font)
+        self.updateBtn.setObjectName("updateBtn")
         self.factsTableWidget.raise_()
         self.label.raise_()
         self.line.raise_()
@@ -180,6 +197,138 @@ class Ui_EnvironmentWindow(object):
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.version_id.setObjectName("version_id")
 
+        self.updateBtn.clicked.connect(self.getItems)
+        self.addBtn.clicked.connect(self.addItem)
+        self.editBtn.clicked.connect(self.editItem)
+        self.deleteBtn.clicked.connect(self.deleteItem)
+        self.factsTableWidget.itemClicked.connect(self.pressedFacts)
+        self.questTableWidget.itemClicked.connect(self.pressedQuestions)
+
+
+    def getItems(self):
+        version_id = int(self.version_id.text())
+        self.factsTableWidget.setRowCount(0)
+        self.questTableWidget.setRowCount(0)
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM environment WHERE version_id = '%i' ORDER BY id" % (version_id))
+            items = cur.fetchall()
+
+            i = 0
+            j = 0
+            for item in items:
+                if item[3] == "fact":
+                    self.factsTableWidget.setRowCount(i+1)
+                    self.factsTableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(item[2])))
+                    self.factsTableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(item[4])))
+                    self.factsTableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(item[5])))
+                    i+=1
+                elif item[3] == "question":
+                    self.questTableWidget.setRowCount(j+1)
+                    self.questTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(item[2])))
+                    self.questTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(str(item[4])))
+                    self.questTableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(str(item[5])))
+                    j+=1
+
+    def addItem(self):
+        self.AddToEnvWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_AddToEnvWindow()
+        self.ui.setupUi(self.AddToEnvWindow)
+        self.ui.version_id.setText(self.version_id.text())
+        self.AddToEnvWindow.show()
+
+    def editItem(self):
+
+        tableItems=self.factsTableWidget.selectedItems()
+        if tableItems:
+            curr_row = self.factsTableWidget.currentRow()
+            fact = True
+        else:
+            curr_row = self.questTableWidget.currentRow()
+            fact = False
+
+        curr_col = 0
+        if curr_row == -1 and curr_col == -1:
+            return 
+
+        if fact:
+            cur_dom = self.factsTableWidget.item(curr_row, curr_col).text()
+            cur_value = self.factsTableWidget.item(curr_row, curr_col+1).text()
+            cur_time = self.factsTableWidget.item(curr_row, curr_col+2).text()
+        else:
+            cur_dom = self.questTableWidget.item(curr_row, curr_col).text()
+            cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
+            cur_time = self.questTableWidget.item(curr_row, curr_col+2).text()            
+
+        self.EditItemReprInEnvWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_EditItemReprInEnvWindow()
+        self.ui.setupUi(self.EditItemReprInEnvWindow)
+        self.ui.lineEdit.setText(cur_time)
+        self.ui.version_id.setText(self.version_id.text())
+        self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_time)
+        self.ui.origin_dom = cur_dom
+        self.ui.origin_value = cur_value
+        if fact:
+            self.ui.item = "facts"
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.label_5.setGeometry(QtCore.QRect(20, 260, 121, 31))
+            self.ui.label_6.setGeometry(QtCore.QRect(20, 310, 121, 31))
+
+        else:
+            self.ui.item = "questions"
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.label_5.setGeometry(QtCore.QRect(20, 310, 121, 31))
+            self.ui.label_6.setGeometry(QtCore.QRect(20, 260, 121, 31))
+        self.EditItemReprInEnvWindow.show()
+
+    def deleteItem(self):
+        version_id = int(self.version_id.text())
+
+        tableItems=self.factsTableWidget.selectedItems()
+        if tableItems:
+            curr_row = self.factsTableWidget.currentRow()
+            fact = True
+        else:
+            curr_row = self.questTableWidget.currentRow()
+            fact = False
+
+        curr_col = 0
+        if curr_row == -1 and curr_col == -1:
+            return 
+        if fact:
+            cur_dom = self.factsTableWidget.item(curr_row, curr_col).text()
+            cur_value = self.factsTableWidget.item(curr_row, curr_col+1).text()
+        else:
+            cur_dom = self.questTableWidget.item(curr_row, curr_col).text()
+            cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
+
+        reply = QMessageBox.question(self.centralwidget, "Delete fact representation", "Are you sure you want to delete this fact representation?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            
+            db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+            with closing(db.cursor()) as cur:
+                cur.execute("DELETE FROM environment WHERE version_id = '%i' AND domain = '%s' AND value = '%s'" % (version_id, cur_dom, cur_value))
+                db.commit()
+                if fact:
+                    self.factsTableWidget.removeRow(curr_row)
+                else:
+                    self.questTableWidget.removeRow(curr_row)
+            db.close()
+            self.questTableWidget.clearSelection()
+            self.factsTableWidget.clearSelection()
+
+        else:
+            return
+
+    def pressedFacts(self):
+        self.questTableWidget.clearSelection()
+
+    def pressedQuestions(self):
+        self.factsTableWidget.clearSelection()
+
+
     def retranslateUi(self, EnvironmentWindow):
         _translate = QtCore.QCoreApplication.translate
         EnvironmentWindow.setWindowTitle(_translate("EnvironmentWindow", "MainWindow"))
@@ -205,6 +354,7 @@ class Ui_EnvironmentWindow(object):
         self.addBtn.setText(_translate("EnvironmentWindow", "Add"))
         self.editBtn.setText(_translate("EnvironmentWindow", "Edit"))
         self.deleteBtn.setText(_translate("EnvironmentWindow", "Delete"))
+        self.updateBtn.setText(_translate("ShortTermMemWindow", "Update"))
         item = self.questTableWidget.verticalHeaderItem(0)
         item.setText(_translate("EnvironmentWindow", "1"))
         item = self.questTableWidget.verticalHeaderItem(1)

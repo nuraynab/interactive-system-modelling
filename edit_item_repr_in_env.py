@@ -14,16 +14,16 @@ import MySQLdb as mdb
 from contextlib import closing
 
 
-class Ui_EditItemReprInShortTermMemWindow(object):
-    def setupUi(self, EditItemReprInShortTermMemWindow):
-        EditItemReprInShortTermMemWindow.setObjectName("EditItemReprInShortTermMemWindow")
-        EditItemReprInShortTermMemWindow.resize(513, 631)
+class Ui_EditItemReprInEnvWindow(object):
+    def setupUi(self, EditItemReprInEnvWindow):
+        EditItemReprInEnvWindow.setObjectName("EditItemReprInEnvWindow")
+        EditItemReprInEnvWindow.resize(513, 631)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(EditItemReprInShortTermMemWindow.sizePolicy().hasHeightForWidth())
-        EditItemReprInShortTermMemWindow.setSizePolicy(sizePolicy)
-        self.centralwidget = QtWidgets.QWidget(EditItemReprInShortTermMemWindow)
+        sizePolicy.setHeightForWidth(EditItemReprInEnvWindow.sizePolicy().hasHeightForWidth())
+        EditItemReprInEnvWindow.setSizePolicy(sizePolicy)
+        self.centralwidget = QtWidgets.QWidget(EditItemReprInEnvWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(40, 10, 591, 51))
@@ -114,20 +114,20 @@ class Ui_EditItemReprInShortTermMemWindow(object):
         font.setPointSize(14)
         self.label_7.setFont(font)
         self.label_7.setObjectName("label_7")
-        EditItemReprInShortTermMemWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(EditItemReprInShortTermMemWindow)
+        EditItemReprInEnvWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(EditItemReprInEnvWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 513, 22))
         self.menubar.setObjectName("menubar")
         self.menuInteractive_System_Modelling = QtWidgets.QMenu(self.menubar)
         self.menuInteractive_System_Modelling.setObjectName("menuInteractive_System_Modelling")
-        EditItemReprInShortTermMemWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(EditItemReprInShortTermMemWindow)
+        EditItemReprInEnvWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(EditItemReprInEnvWindow)
         self.statusbar.setObjectName("statusbar")
-        EditItemReprInShortTermMemWindow.setStatusBar(self.statusbar)
+        EditItemReprInEnvWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
 
-        self.retranslateUi(EditItemReprInShortTermMemWindow)
-        QtCore.QMetaObject.connectSlotsByName(EditItemReprInShortTermMemWindow)
+        self.retranslateUi(EditItemReprInEnvWindow)
+        QtCore.QMetaObject.connectSlotsByName(EditItemReprInEnvWindow)
 
         self.version_id = QtWidgets.QLabel(self.centralwidget)
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
@@ -136,7 +136,7 @@ class Ui_EditItemReprInShortTermMemWindow(object):
 
         self.editBtn.clicked.connect(self.startNow)
         self.saveBtn.clicked.connect(self.saveItem)
-        self.saveBtn.clicked.connect(EditItemReprInShortTermMemWindow.close)
+        self.saveBtn.clicked.connect(EditItemReprInEnvWindow.close)
 
 
     def saveItem(self):
@@ -151,7 +151,7 @@ class Ui_EditItemReprInShortTermMemWindow(object):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
             
-            cur.execute("UPDATE short_term_mem SET domain = '%s', value = '%s', decay = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
+            cur.execute("UPDATE environment SET domain = '%s', value = '%s', persist_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
                                                  % (cur_dom, cur_value, cur_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
                                                  ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_dom), ''.join(self.origin_value)))
  
@@ -202,18 +202,18 @@ class Ui_EditItemReprInShortTermMemWindow(object):
         # self.TypesComboBox.setCurrentText(cur_type)
         # self.AttrComboBox.setCurrentText(cur_attr)
 
-    def retranslateUi(self, EditItemReprInShortTermMemWindow):
+    def retranslateUi(self, EditItemReprInEnvWindow):
         _translate = QtCore.QCoreApplication.translate
-        EditItemReprInShortTermMemWindow.setWindowTitle(_translate("EditItemReprInShortTermMemWindow", "MainWindow"))
-        self.label.setText(_translate("EditItemReprInShortTermMemWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit</span></p></body></html>"))
-        self.label_2.setText(_translate("EditItemReprInShortTermMemWindow", "Current fact representation"))
-        self.label_3.setText(_translate("EditItemReprInShortTermMemWindow", "Animals - Animal can breath - 1 sec"))
-        self.editBtn.setText(_translate("EditItemReprInShortTermMemWindow", "Edit"))
-        self.label_8.setText(_translate("EditItemReprInShortTermMemWindow", "Retrieval time"))
-        self.saveBtn.setText(_translate("EditItemReprInShortTermMemWindow", "Save"))
-        self.label_4.setText(_translate("EditItemReprInShortTermMemWindow", "Domain"))
-        self.label_5.setText(_translate("EditItemReprInShortTermMemWindow", "Category"))
-        self.label_6.setText(_translate("EditItemReprInShortTermMemWindow", "Type"))
-        self.label_7.setText(_translate("EditItemReprInShortTermMemWindow", "Attribute"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("EditItemReprInShortTermMemWindow", "1"))
+        EditItemReprInEnvWindow.setWindowTitle(_translate("EditItemReprInEnvWindow", "MainWindow"))
+        self.label.setText(_translate("EditItemReprInEnvWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit</span></p></body></html>"))
+        self.label_2.setText(_translate("EditItemReprInEnvWindow", "Current fact representation"))
+        self.label_3.setText(_translate("EditItemReprInEnvWindow", "Animals - Animal can breath - 1 sec"))
+        self.editBtn.setText(_translate("EditItemReprInEnvWindow", "Edit"))
+        self.label_8.setText(_translate("EditItemReprInEnvWindow", "Retrieval time"))
+        self.saveBtn.setText(_translate("EditItemReprInEnvWindow", "Save"))
+        self.label_4.setText(_translate("EditItemReprInEnvWindow", "Domain"))
+        self.label_5.setText(_translate("EditItemReprInEnvWindow", "Category"))
+        self.label_6.setText(_translate("EditItemReprInEnvWindow", "Type"))
+        self.label_7.setText(_translate("EditItemReprInEnvWindow", "Attribute"))
+        self.menuInteractive_System_Modelling.setTitle(_translate("EditItemReprInEnvWindow", "1"))
 

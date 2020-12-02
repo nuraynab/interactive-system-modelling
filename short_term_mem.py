@@ -267,8 +267,16 @@ class Ui_ShortTermMemWindow(object):
         self.ui.origin_value = cur_value
         if fact:
             self.ui.item = "facts"
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.label_5.setGeometry(QtCore.QRect(20, 260, 121, 31))
+            self.ui.label_6.setGeometry(QtCore.QRect(20, 310, 121, 31))
         else:
             self.ui.item = "questions"
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.label_5.setGeometry(QtCore.QRect(20, 310, 121, 31))
+            self.ui.label_6.setGeometry(QtCore.QRect(20, 260, 121, 31))
         self.EditItemReprInShortTermMemWindow.show()
 
     def deleteItem(self):

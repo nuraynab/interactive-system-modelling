@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 02, 2020 at 09:12 AM
+-- Generation Time: Dec 02, 2020 at 06:29 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -74,7 +74,7 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'animal'),
-(25, 10, 'cat');
+(25, 10, 'dog');
 
 -- --------------------------------------------------------
 
@@ -100,6 +100,34 @@ INSERT INTO `domains` (`id`, `version_id`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `environment`
+--
+
+CREATE TABLE `environment` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `domain` text NOT NULL,
+  `item` text NOT NULL,
+  `value` text NOT NULL,
+  `persist_time` int(11) NOT NULL,
+  `categories` text NOT NULL,
+  `types` text NOT NULL,
+  `attributes` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `environment`
+--
+
+INSERT INTO `environment` (`id`, `version_id`, `domain`, `item`, `value`, `persist_time`, `categories`, `types`, `attributes`) VALUES
+(1, 10, 'animals', 'fact', 'animal can breathe', 20, 'animal', 'can', 'breathe'),
+(2, 10, 'animals', 'question', 'can animal breathe?', 20, 'can', 'animal', 'breathe'),
+(6, 10, 'dogs', 'question', 'can dog breathe?', 14, 'dog', 'can', 'breathe'),
+(9, 10, 'dogs', 'fact', 'dog can breathe', 20, 'dog', 'can', 'breathe');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `facts`
 --
 
@@ -118,8 +146,8 @@ CREATE TABLE `facts` (
 
 INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attributes`) VALUES
 (28, 10, 'animal can breathe', 'animal', 'can', 'breathe'),
-(32, 10, 'cat can breathe', 'cat', 'can', 'breathe'),
-(33, 10, 'cat is a animal', 'cat', 'is a', 'animal');
+(32, 10, 'dog can breathe', 'dog', 'can', 'breathe'),
+(33, 10, 'dog is a animal', 'dog', 'is a', 'animal');
 
 -- --------------------------------------------------------
 
@@ -177,8 +205,8 @@ CREATE TABLE `questions` (
 
 INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `attributes`) VALUES
 (31, 10, 'can animal breathe?', 'can', 'animal', 'breathe'),
-(34, 10, 'can cat breathe?', 'can', 'cat', 'breathe'),
-(35, 10, 'is a cat animal?', 'is a', 'cat', 'animal');
+(34, 10, 'can dog breathe?', 'can', 'dog', 'breathe'),
+(35, 10, 'is a dog animal?', 'is a', 'dog', 'animal');
 
 -- --------------------------------------------------------
 
@@ -229,9 +257,9 @@ CREATE TABLE `short_term_mem` (
 --
 
 INSERT INTO `short_term_mem` (`id`, `version_id`, `domain`, `item`, `value`, `decay`, `categories`, `types`, `attributes`) VALUES
-(6, 10, 'cats', 'question', 'is a cat animal?', 15, 'cat', 'is a', 'animal'),
-(27, 10, 'animals', 'fact', 'cat can breathe', 20, 'cat', 'can', 'breathe'),
-(28, 10, 'cats', 'fact', 'cat is a animal', 15, 'cat', 'is a', 'animal');
+(28, 10, 'cats', 'fact', 'cat is a animal', 15, 'cat', 'is a', 'animal'),
+(29, 10, 'dogs', 'question', 'can dog breathe?', 20, 'dog', 'can', 'breathe'),
+(30, 10, 'dogs', 'fact', 'dog can breathe', 20, 'dog', 'can', 'breathe');
 
 -- --------------------------------------------------------
 
@@ -307,6 +335,12 @@ ALTER TABLE `domains`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `environment`
+--
+ALTER TABLE `environment`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `facts`
 --
 ALTER TABLE `facts`
@@ -374,13 +408,19 @@ ALTER TABLE `attributes`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `domains`
 --
 ALTER TABLE `domains`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `environment`
+--
+ALTER TABLE `environment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `facts`
@@ -416,7 +456,7 @@ ALTER TABLE `sem_mem`
 -- AUTO_INCREMENT for table `short_term_mem`
 --
 ALTER TABLE `short_term_mem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `types`
