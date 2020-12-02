@@ -1,0 +1,72 @@
+		     \||||||||||||||||||/
+		   --- Welcome to Maude ---
+		     /||||||||||||||||||\
+	   Maude 2.7.1 built: Jun 27 2016 16:35:16
+	    Copyright 1997-2016 SRI International
+		   Thu Dec  3 03:16:43 2020
+
+	     Full Maude 2.3 `(February 12th`, 2007`)
+
+	  Real-Time Maude 2.3 extension February 4, 2010
+
+rewrites: 16342 in 8ms cpu (10ms real) (2042750 rewrites/second)
+
+Introduced timed module: INFORMATION
+
+rewrites: 13691 in 8ms cpu (7ms real) (1711375 rewrites/second)
+
+Introduced timed module: TIMED-ITEMS
+
+rewrites: 7354 in 4ms cpu (2ms real) (1838500 rewrites/second)
+
+Introduced timed module: SENSORY-MEMORY
+
+rewrites: 7354 in 0ms cpu (2ms real) (~ rewrites/second)
+
+Introduced timed module: PROCEDURAL-MEMORY
+
+rewrites: 11927 in 8ms cpu (6ms real) (1490875 rewrites/second)
+
+Introduced timed module: SEMANTIC-MEMORY
+
+rewrites: 8493 in 4ms cpu (3ms real) (2123250 rewrites/second)
+
+Introduced timed module: ENVIRONMENT
+
+rewrites: 12059 in 4ms cpu (5ms real) (3014750 rewrites/second)
+
+Introduced timed module: HUMAN
+
+rewrites: 59790 in 32ms cpu (30ms real) (1868437 rewrites/second)
+
+Introduced timed module: EVOLUTION
+
+rewrites: 25973 in 12ms cpu (13ms real) (2164416 rewrites/second)
+
+Introduced timed module: EXAMPLE-DOGS
+
+rewrites: 71380 in 28ms cpu (26ms real) (2549285 rewrites/second)
+
+Timed rewrite [1000]  {init-env} in EXAMPLE-DOGS with mode deterministic time
+    increase in time <= 100
+
+Result ClockedSystem :
+  {perc(a "dog" can "lay" for 17)perc(can a "dog" "track" ? for 17)< human :
+    Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,semanticMem :((
+    "animals" : "animal" |- 1 ->| can "breath")
+("animals" : "animal" |- 1 ->| can "move")
+("dogs" : "basenji" |- 1 ->| cannot "bark")
+("dogs" : "basenji" |- 1 ->| is a "hound")
+("dogs" : "bobby" |- 1 ->| can "lay")
+("dogs" : "bobby" |- 1 ->| is a "basenji")
+("dogs" : "dog" |- 1 ->| can "bark")
+("dogs" : "dog" |- 1 ->| is a "animal")
+("dogs" : "hound" |- 1 ->| can "track")
+"dogs" : "hound" |- 1 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
+    (a "animal" can "breath" < decay 98 >);
+(a "dog" can "lay" < decay 97 >);
+(a "dog" cannot "track" < decay 100 >);
+(can a "animal" "breath" ? < decay 98 >);
+can a "dog" "track" ? < decay 100 >)>} in time 3
+
+Bye.

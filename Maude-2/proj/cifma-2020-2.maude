@@ -173,9 +173,9 @@ endtom)
   including ENVIRONMENT .
 
   class Human | cognitiveLoad : Nat, --- size of short-time memory, maybe counting invisible "previous" stuff!
- 		shortTermMem : TimedItemSet,
- 		sensoryMem : SensoryMemory,
- 		proceduralMem : ProceduralMemory,
+    shortTermMem : TimedItemSet,
+    sensoryMem : SensoryMemory,
+    proceduralMem : ProceduralMemory,
                 semanticMem : SemanticMemory .
 
 endtom)
@@ -359,9 +359,18 @@ endtom)
 
 
 
-
-
-
+  eq initSemanticMem =  
+("animals" : "animal" |- 1 ->| (can "breath")) 
+("animals" : "animal" |- 1 ->| (can "move")) 
+("dogs" : "dog" |- 1 ->| (is a "animal")) 
+("dogs" : "dog" |- 1 ->| (can "bark")) 
+("dogs" : "hound" |- 1 ->| (is a "dog")) 
+("dogs" : "hound" |- 1 ->| (can "track")) 
+("dogs" : "basenji" |- 1 ->| (is a "hound")) 
+("dogs" : "basenji" |- 1 ->| (cannot "bark")) 
+("dogs" : "bobby" |- 1 ->| (is a "basenji")) 
+("dogs" : "bobby" |- 1 ->| (can "lay")) 
+.
 
   ops init experiment-setting init-env : -> Configuration .
 
@@ -369,17 +378,21 @@ endtom)
 
   op aHuman : -> Object .
 
-
   eq aHuman = < human : Human | cognitiveLoad : 0,
                   shortTermMem : emptyTIS,
                   sensoryMem : emptySensory,
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
 
-  eq init-env = (perc((can a "basenji" "breath" ?) for 20))
-                (perc((what can "bobby" do?) for 20))
-                aHuman .
 
+
+
+
+  eq init-env = 
+(perc((can a "dog" "track" ?) for 20)) 
+(perc((can a "animal" "breath" ?) for 3)) 
+(perc((a "dog" can "lay") for 20)) 
+aHuman .
   eq init = (exp(((can a "basenji" "breath" ?) for 20) in 7))
             (exp(((what can "bobby" do?) for 20) in 7))
             aHuman .

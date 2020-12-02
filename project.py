@@ -17,15 +17,18 @@ from database import Ui_DatabaseWindow
 from sem_mem import Ui_SemMemWindow
 from short_term_mem import Ui_ShortTermMemWindow
 from environment import Ui_EnvironmentWindow
+from results import Ui_ResultsWindow
 
 import MySQLdb as mdb
 from contextlib import closing
 
 import subprocess
+import re
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
-fact_repr_dict = {}
+sem_mem_dict = {}
+env_dict = {}
 
 class Ui_ProjectWindow(QWidget):
     def setupUi(self, ProjectWindow):
@@ -162,38 +165,162 @@ class Ui_ProjectWindow(QWidget):
             cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
             fact_repr = cur.fetchall()
 
-            i = 0
             for y in fact_repr:
-                fact_repr_dict[y[3]] = [y[2], y[4]]
-                #print (fact_repr_dict[y[3]][0])
-                i+=1
+                sem_mem_dict[y[3]] = [y[2], y[4], y[5], y[6], y[7]]
+
+            cur.execute("SELECT * FROM environment WHERE version_id = '%i' ORDER BY id" % (version_id))
+            perc_repr = cur.fetchall()
+
+            for y in perc_repr:
+                env_dict[y[4]] = [y[2], y[3], y[5], y[6], y[7], y[8]]
         db.close()
 
 
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
         list_of_lines = f.readlines()
         f.close()
-        i = 360
-        list_of_lines[i] = '  eq initSemanticMem =  '
-        for y in fact_repr_dict:
+        i = 361
+        list_of_lines[i] = '  eq initSemanticMem =  \n'
+        for y in sem_mem_dict:
             i+=1
-            domain = fact_repr_dict[y][0]
-            fact = y
-            cat = fact.split(' ', 1)[0]
-            typ_attr = fact.split(' ', 1)[1]
-            typ  = typ_attr.rsplit(' ', 1)[0]
-            attr = typ_attr.rsplit(' ', 1)[1]
-            time = str(fact_repr_dict[y][1])
+            domain = sem_mem_dict[y][0]
+            time = str(sem_mem_dict[y][1])
+            cat = sem_mem_dict[y][2]
+            typ = sem_mem_dict[y][3]
+            attr = sem_mem_dict[y][4]
             addition = '("'+domain+'" : "'+cat+'" |- '+time+' ->| ('+typ+' "'+attr+'")) \n'
             list_of_lines.insert(i, addition)
+        list_of_lines[i+1] = '.\n'
+        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        f.writelines(list_of_lines)
+        f.close()
 
-        list_of_lines[i] = '.\n\n'
+        i = 390
+        list_of_lines[i] = '  eq init-env = \n'
+        for y in env_dict:
+            i+=1
+            domain = env_dict[y][0]
+            item = env_dict[y][1]
+            time = str(env_dict[y][2])
+            cat = env_dict[y][3]
+            typ = env_dict[y][4]
+            attr = env_dict[y][5]
+            if item=="question":
+                addition = '(perc(('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+')) \n'
+            elif item=="fact":
+                addition = '(perc((a "'+cat+'" '+typ+' "'+attr+'") for '+time+')) \n'                
+            list_of_lines.insert(i, addition)
+        list_of_lines[i+1] = 'aHuman .\n'
+
         f = open("Maude-2/proj/cifma-2020-2.maude", "w")
         f.writelines(list_of_lines)
         f.close()
         subprocess.call("./start_maude.sh")
-        #file_ = open("ouput.txt", "w") 
-        #subprocess.Popen("./start_maude.sh", stdout=file_) 
+
+
+        # f = open("Maude-2/proj/cifma-2020-2.maude", "r")
+        # f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
+        # start_str = 'eq initSemanticMem ='
+        # end_str = '.'
+        # for line in f:
+        #     if start_str in line:
+        #         break
+        #     f2.write(line)
+        # for line in f:
+        #     if end_str in line:
+        #         break
+        # for line in f:
+        #     f2.write(line)
+        # f.close()
+        # f2.close()
+
+        # f = open("Maude-2/proj/cifma-2020-help.maude", "r")
+        # f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        # start_str = 'eq init-env ='
+        # end_str = 'aHuman .'
+        # for line in f:
+        #     if start_str in line:
+        #         break
+        #     f2.write(line)
+        # for line in f:
+        #     if end_str in line:
+        #         break
+        # for line in f:
+        #     f2.write(line)
+
+        # f.close()
+        # f2.close()
+        
+
+        self.ResultsWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ResultsWindow()
+        self.ui.setupUi(self.ResultsWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+
+        env_str = "perc"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        for line in f:
+            i += 1
+            if env_str in line:
+                j = 0
+                cur_line = str(line)
+                mid_line = cur_line.split("<")
+                new_line = mid_line[0].split("perc")
+                n = len(new_line)
+                for x in range(1, n):
+                    start = new_line[x].find("(")+len("(")
+                    end = new_line[x].find(" for")
+                    mid = new_line[x][start:end]
+                    start_t = new_line[x].find("for ")+len("for ")
+                    end_t = new_line[x].find(")")
+                    time = new_line[x][start_t:end_t]
+                    self.ui.envTableWidget.setRowCount(j+1)
+                    self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
+                    self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
+                    j+=1
+        f.close()
+
+        stm_str = "decay"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        j = 0
+        for line in f:
+            i += 1
+            if stm_str in line:
+                new_line = str(line)
+                start = new_line.find("(")+len("(")
+                end = new_line.find(" <")
+                mid = new_line[start:end]
+                start_t = new_line.find("decay ")+len("decay ")
+                end_t = new_line.find(" >")
+                time = new_line[start_t:end_t]
+                self.ui.stmTableWidget.setRowCount(j+1)
+                self.ui.stmTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
+                self.ui.stmTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
+                j+=1
+        f.close()
+
+        time_str = "in time"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        j = 0
+        for line in f:
+            i += 1
+            if time_str in line:
+                new_line = str(line)
+                start = new_line.find("} ")+len("} ")
+                end = new_line.find("\nBye")
+                mid = new_line[start:end]
+                self.ui.label_6.setText(mid)
+                j+=1
+        f.close()
+
+
+        self.ResultsWindow.show()
+
 
 
     def env(self):
