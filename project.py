@@ -19,8 +19,13 @@ from short_term_mem import Ui_ShortTermMemWindow
 from environment import Ui_EnvironmentWindow
 
 import MySQLdb as mdb
+from contextlib import closing
+
+import subprocess
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+
+fact_repr_dict = {}
 
 class Ui_ProjectWindow(QWidget):
     def setupUi(self, ProjectWindow):
@@ -148,6 +153,48 @@ class Ui_ProjectWindow(QWidget):
         self.SemMBtn.clicked.connect(self.sem_mem)
         self.STMBtn.clicked.connect(self.short_term_mem)
         self.EnvBtn.clicked.connect(self.env)
+        self.runBtn.clicked.connect(self.run)
+
+    def run(self):
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
+            fact_repr = cur.fetchall()
+
+            i = 0
+            for y in fact_repr:
+                fact_repr_dict[y[3]] = [y[2], y[4]]
+                #print (fact_repr_dict[y[3]][0])
+                i+=1
+        db.close()
+
+
+        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
+        list_of_lines = f.readlines()
+        f.close()
+        i = 360
+        list_of_lines[i] = '  eq initSemanticMem =  '
+        for y in fact_repr_dict:
+            i+=1
+            domain = fact_repr_dict[y][0]
+            fact = y
+            cat = fact.split(' ', 1)[0]
+            typ_attr = fact.split(' ', 1)[1]
+            typ  = typ_attr.rsplit(' ', 1)[0]
+            attr = typ_attr.rsplit(' ', 1)[1]
+            time = str(fact_repr_dict[y][1])
+            addition = '("'+domain+'" : "'+cat+'" |- '+time+' ->| ('+typ+' "'+attr+'")) \n'
+            list_of_lines.insert(i, addition)
+
+        list_of_lines[i] = '.\n\n'
+        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        f.writelines(list_of_lines)
+        f.close()
+        subprocess.call("./start_maude.sh")
+        #file_ = open("ouput.txt", "w") 
+        #subprocess.Popen("./start_maude.sh", stdout=file_) 
+
 
     def env(self):
         self.EnvironmentWindow = QtWidgets.QMainWindow()

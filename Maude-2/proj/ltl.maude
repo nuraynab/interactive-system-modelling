@@ -1,0 +1,42 @@
+load model-checker.maude .
+
+mod TEST is
+
+  protecting NAT .
+  including MODEL-CHECKER .
+
+  ops a b c d : -> State [ctor].
+
+  rl [ab] : a => b .
+
+  rl [aa] : a => a .
+  
+  rl [bc] : b => c .
+
+  rl [cd] : c => d .
+
+  rl [da] : d => a .
+
+  op init : -> State .
+  eq init = a .
+
+  subsort Configuration < State .
+
+  ops isA isB : -> Prop [ctor] .
+
+  sort Configuration .
+
+  vars C : Configuration .
+  var P : Prop .
+
+  eq a |= isA = true .
+  eq b |= isB = true .
+  eq C |= P = false [owise] .
+
+endm
+
+---frew [1] init .
+red modelCheck(init, [] <> isB) .
+red modelCheck(init, [] isA) .
+red modelCheck(init, [] <> isA) .
+red modelCheck(init, ([] <> ~ isA) -> [] <> isB) .
