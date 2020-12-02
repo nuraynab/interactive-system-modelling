@@ -358,16 +358,6 @@ endtom)
   op initSemanticMem : -> SemanticMemory .
 
 
-  eq initSemanticMem =  ("animals" : "animal" |- 1 ->| (can "breathe")) 
-("animals" : "animal" |- 1 ->| (can "move")) 
-("dogs" : "dog" |- 1 ->| (can "bark")) 
-("dogs" : "dog" |- 2 ->| (is a "animal")) 
-("dogs" : "hound" |- 1 ->| (can "track")) 
-("dogs" : "hound" |- 2 ->| (is a "dog")) 
-("dogs" : "basenji" |- 2 ->| (is a "hound")) 
-("dogs" : "basenji" |- 1 ->| (cannot "bark")) 
-("bobbies" : "bobby" |- 1 ->| (can "lay")) 
-.
 
 
 
