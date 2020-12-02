@@ -1,0 +1,68 @@
+		     \||||||||||||||||||/
+		   --- Welcome to Maude ---
+		     /||||||||||||||||||\
+	   Maude 2.7.1 built: Jun 27 2016 16:35:16
+	    Copyright 1997-2016 SRI International
+		   Wed Dec  2 14:56:50 2020
+
+	     Full Maude 2.3 `(February 12th`, 2007`)
+
+	  Real-Time Maude 2.3 extension February 4, 2010
+
+rewrites: 16342 in 16ms cpu (15ms real) (1021375 rewrites/second)
+
+Introduced timed module: INFORMATION
+
+rewrites: 13691 in 12ms cpu (12ms real) (1140916 rewrites/second)
+
+Introduced timed module: TIMED-ITEMS
+
+rewrites: 7354 in 4ms cpu (3ms real) (1838500 rewrites/second)
+
+Introduced timed module: SENSORY-MEMORY
+
+rewrites: 7354 in 4ms cpu (4ms real) (1838500 rewrites/second)
+
+Introduced timed module: PROCEDURAL-MEMORY
+
+rewrites: 11927 in 8ms cpu (10ms real) (1490875 rewrites/second)
+
+Introduced timed module: SEMANTIC-MEMORY
+
+rewrites: 8493 in 8ms cpu (6ms real) (1061625 rewrites/second)
+
+Introduced timed module: ENVIRONMENT
+
+rewrites: 12059 in 8ms cpu (7ms real) (1507375 rewrites/second)
+
+Introduced timed module: HUMAN
+
+rewrites: 59790 in 48ms cpu (49ms real) (1245625 rewrites/second)
+
+Introduced timed module: EVOLUTION
+
+rewrites: 25481 in 16ms cpu (17ms real) (1592562 rewrites/second)
+
+Introduced timed module: EXAMPLE-DOGS
+
+rewrites: 70946 in 48ms cpu (48ms real) (1478041 rewrites/second)
+
+Timed rewrite [1000]  {init-env} in EXAMPLE-DOGS with mode deterministic time
+    increase in time <= 100
+
+Result ClockedSystem :
+  {perc(what can "bobby" do? for 20)perc(can a "basenji" "breath" ? for 20)<
+    human : Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,
+    semanticMem :(("animals" : "animal" |- 1 ->| can "breathe")
+("animals" : "animal" |- 1 ->| can "move")
+("bobbies" : "bobby" |- 1 ->| can "lay")
+("dogs" : "basenji" |- 1 ->| cannot "bark")
+("dogs" : "basenji" |- 2 ->| is a "hound")
+("dogs" : "dog" |- 1 ->| can "bark")
+("dogs" : "dog" |- 2 ->| is a "animal")
+("dogs" : "hound" |- 1 ->| can "track")
+"dogs" : "hound" |- 2 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
+    (what can "bobby" do? < decay 100 >);
+can a "basenji" "breath" ? < decay 100 >)>} in time 0
+
+Bye.
