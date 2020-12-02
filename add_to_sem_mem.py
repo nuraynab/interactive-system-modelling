@@ -231,8 +231,9 @@ class Ui_AddToSemMemWindow(object):
         with closing(db.cursor()) as cur:
             cur_dom = str(self.DomComboBox.currentText())
             cur_retr_time = int(str(self.lineEdit.text()))
-
+            global create_fact
             if(create_fact):
+                create_fact = False
                 cur_fact = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
                 cur.execute("INSERT INTO sem_mem(version_id, domain, fact, retr_time, categories, types, attributes) VALUES('%i', '%s', '%s', '%i', '%s', '%s', '%s')" 
                         % (version_id, cur_dom, cur_fact, cur_retr_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()), ''.join(self.AttrComboBox.currentText())))

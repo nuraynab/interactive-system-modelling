@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 01, 2020 at 09:29 PM
+-- Generation Time: Dec 02, 2020 at 09:12 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -209,6 +209,33 @@ INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categ
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `short_term_mem`
+--
+
+CREATE TABLE `short_term_mem` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `domain` text NOT NULL,
+  `item` text NOT NULL,
+  `value` text NOT NULL,
+  `decay` int(11) NOT NULL,
+  `categories` text NOT NULL,
+  `types` text NOT NULL,
+  `attributes` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `short_term_mem`
+--
+
+INSERT INTO `short_term_mem` (`id`, `version_id`, `domain`, `item`, `value`, `decay`, `categories`, `types`, `attributes`) VALUES
+(6, 10, 'cats', 'question', 'is a cat animal?', 15, 'cat', 'is a', 'animal'),
+(27, 10, 'animals', 'fact', 'cat can breathe', 20, 'cat', 'can', 'breathe'),
+(28, 10, 'cats', 'fact', 'cat is a animal', 15, 'cat', 'is a', 'animal');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `types`
 --
 
@@ -310,6 +337,12 @@ ALTER TABLE `sem_mem`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `short_term_mem`
+--
+ALTER TABLE `short_term_mem`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `types`
 --
 ALTER TABLE `types`
@@ -378,6 +411,12 @@ ALTER TABLE `questions`
 --
 ALTER TABLE `sem_mem`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
+-- AUTO_INCREMENT for table `short_term_mem`
+--
+ALTER TABLE `short_term_mem`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `types`
