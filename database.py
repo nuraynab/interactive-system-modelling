@@ -381,14 +381,26 @@ class Ui_DatabaseWindow(QWidget):
                                                   ''.join(item)))
             for i, item in df.Facts.dropna().iteritems():
                 facts.append(item)
-                cur.execute("INSERT INTO facts(version_id, value)"
-                        "VALUES('%i', '%s')" % (version_id,
-                                                  ''.join(item)))
+                cur_str = str(item)
+                mid_str = cur_str.split(' ', 1)
+                cat = mid_str[0]
+                new_str = mid_str[1].rsplit(' ', 1)
+                typ = new_str[0]
+                attr = new_str[1]
+                cur.execute("INSERT INTO facts(version_id, value, categories, types, attributes)"
+                        "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id,
+                                                  ''.join(item), cat, typ, attr))
             for i, item in df.Questions.dropna().iteritems():
                 questions.append(item)
-                cur.execute("INSERT INTO questions(version_id, value)"
-                        "VALUES('%i', '%s')" % (version_id,
-                                                  ''.join(item)))
+                cur_str = str(item)
+                mid_str = cur_str.rsplit(' ', 1)
+                attr = mid_str[1][:-1]
+                new_str = mid_str[0].rsplit(' ', 1)
+                cat = new_str[1]
+                typ = new_str[0]
+                cur.execute("INSERT INTO questions(version_id, value, categories, types, attributes)"
+                        "VALUES('%i', '%s', '%s', '%s', '%s')" % (version_id,
+                                                  ''.join(item), cat, typ, attr))
             for i, item in df.Perceptions.dropna().iteritems():
                 perceptions.append(item)
                 cur.execute("INSERT INTO perceptions(version_id, value)"
