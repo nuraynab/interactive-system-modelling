@@ -179,7 +179,13 @@ class Ui_ProjectWindow(QWidget):
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
         list_of_lines = f.readlines()
         f.close()
-        i = 361
+        start_str = "op initSemanticMem : -> SemanticMemory ."
+        i=0
+        for line in list_of_lines:
+            i+=1
+            if start_str in line:
+                i+=1
+                break
         list_of_lines[i] = '  eq initSemanticMem =  \n'
         for y in sem_mem_dict:
             i+=1
@@ -195,7 +201,13 @@ class Ui_ProjectWindow(QWidget):
         f.writelines(list_of_lines)
         f.close()
 
-        i = 390
+        start_str = "semanticMem : initSemanticMem > ."
+        i=0
+        for line in list_of_lines:
+            i+=1
+            if start_str in line:
+                i+=1
+                break
         list_of_lines[i] = '  eq init-env = \n'
         for y in env_dict:
             i+=1
@@ -218,38 +230,7 @@ class Ui_ProjectWindow(QWidget):
         subprocess.call("./start_maude.sh")
 
 
-        # f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        # f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
-        # start_str = 'eq initSemanticMem ='
-        # end_str = '.'
-        # for line in f:
-        #     if start_str in line:
-        #         break
-        #     f2.write(line)
-        # for line in f:
-        #     if end_str in line:
-        #         break
-        # for line in f:
-        #     f2.write(line)
-        # f.close()
-        # f2.close()
 
-        # f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        # f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        # start_str = 'eq init-env ='
-        # end_str = 'aHuman .'
-        # for line in f:
-        #     if start_str in line:
-        #         break
-        #     f2.write(line)
-        # for line in f:
-        #     if end_str in line:
-        #         break
-        # for line in f:
-        #     f2.write(line)
-
-        # f.close()
-        # f2.close()
         
 
         self.ResultsWindow = QtWidgets.QMainWindow()
@@ -317,6 +298,41 @@ class Ui_ProjectWindow(QWidget):
                 self.ui.label_6.setText(mid)
                 j+=1
         f.close()
+
+        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
+        f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
+        start_str = 'eq initSemanticMem ='
+        end_str = '.'
+        for line in f:
+            if start_str in line:
+                break
+            f2.write(line)
+        for line in f:
+            if end_str in line:
+                f2.write("\n\n")
+                break
+        for line in f:
+            f2.write(line)
+        f.close()
+        f2.close()
+
+        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
+        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        start_str = 'eq init-env ='
+        end_str = 'aHuman .'
+        for line in f:
+            if start_str in line:
+                break
+            f2.write(line)
+        for line in f:
+            if end_str in line:
+                f2.write("\n\n")
+                break
+        for line in f:
+            f2.write(line)
+
+        f.close()
+        f2.close()
 
 
         self.ResultsWindow.show()

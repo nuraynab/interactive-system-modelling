@@ -372,8 +372,11 @@ endtom)
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
 
-
-
+  eq init-env = 
+(perc((can a "dog" "track" ?) for 20)) 
+(perc((can a "basenji" "breath" ?) for 3)) 
+(perc((a "dog" can "lay") for 20)) 
+aHuman .
 
   eq init = (exp(((can a "basenji" "breath" ?) for 20) in 7))
             (exp(((what can "bobby" do?) for 20) in 7))

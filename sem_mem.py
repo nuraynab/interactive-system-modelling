@@ -215,7 +215,7 @@ class Ui_SemMemWindow(QWidget):
             for y in fact_repr:
                 self.tableWidget.setRowCount(i+1)
                 self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(y[2])))
-                self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
+                self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem("a "+str(y[3])))
                 self.tableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(y[4])))
                 #fact_repr_dict[y[3]] = [y[2], y[4]]
                 i+=1
