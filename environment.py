@@ -220,13 +220,13 @@ class Ui_EnvironmentWindow(object):
                 if item[3] == "fact":
                     self.factsTableWidget.setRowCount(i+1)
                     self.factsTableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(item[2])))
-                    self.factsTableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem("a "+str(item[4])))
+                    self.factsTableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(item[4])))
                     self.factsTableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(item[5])))
                     i+=1
                 elif item[3] == "question":
                     self.questTableWidget.setRowCount(j+1)
                     self.questTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(item[2])))
-                    self.questTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(str(item[7])+" a "+str(item[6])+" "+str(item[8])+"?"))
+                    self.questTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(str(item[7])+" "+str(item[6])+" "+str(item[8])+"?"))
                     self.questTableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(str(item[5])))
                     j+=1
 
