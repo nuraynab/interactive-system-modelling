@@ -17,6 +17,7 @@ from database import Ui_DatabaseWindow
 from sem_mem import Ui_SemMemWindow
 from short_term_mem import Ui_ShortTermMemWindow
 from environment import Ui_EnvironmentWindow
+from experiment import Ui_ExperimentWindow
 from results import Ui_ResultsWindow
 
 import MySQLdb as mdb
@@ -157,6 +158,7 @@ class Ui_ProjectWindow(QWidget):
         self.STMBtn.clicked.connect(self.short_term_mem)
         self.EnvBtn.clicked.connect(self.env)
         self.runBtn.clicked.connect(self.run)
+        self.ExpBtn.clicked.connect(self.exp)
 
     def run(self):
         version_id = int(self.version_id.text())
@@ -338,6 +340,14 @@ class Ui_ProjectWindow(QWidget):
         self.ResultsWindow.show()
 
 
+    def exp(self):
+        self.ExperimentWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ExperimentWindow()
+        self.ui.setupUi(self.ExperimentWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+        self.ExperimentWindow.show()
 
     def env(self):
         self.EnvironmentWindow = QtWidgets.QMainWindow()

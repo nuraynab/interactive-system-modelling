@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 02, 2020 at 06:29 PM
+-- Generation Time: Feb 08, 2021 at 07:21 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -29,6 +29,7 @@ USE `interSys`;
 -- Table structure for table `actions`
 --
 
+DROP TABLE IF EXISTS `actions`;
 CREATE TABLE `actions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -41,6 +42,7 @@ CREATE TABLE `actions` (
 -- Table structure for table `attributes`
 --
 
+DROP TABLE IF EXISTS `attributes`;
 CREATE TABLE `attributes` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -62,6 +64,7 @@ INSERT INTO `attributes` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -74,7 +77,7 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `version_id`, `value`) VALUES
 (24, 10, 'animal'),
-(25, 10, 'dog');
+(25, 10, 'cat');
 
 -- --------------------------------------------------------
 
@@ -82,6 +85,7 @@ INSERT INTO `categories` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `domains`
 --
 
+DROP TABLE IF EXISTS `domains`;
 CREATE TABLE `domains` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -103,6 +107,7 @@ INSERT INTO `domains` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `environment`
 --
 
+DROP TABLE IF EXISTS `environment`;
 CREATE TABLE `environment` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -122,8 +127,38 @@ CREATE TABLE `environment` (
 INSERT INTO `environment` (`id`, `version_id`, `domain`, `item`, `value`, `persist_time`, `categories`, `types`, `attributes`) VALUES
 (1, 10, 'animals', 'fact', 'animal can breathe', 20, 'animal', 'can', 'breathe'),
 (2, 10, 'animals', 'question', 'can animal breathe?', 20, 'can', 'animal', 'breathe'),
-(6, 10, 'dogs', 'question', 'can dog breathe?', 14, 'dog', 'can', 'breathe'),
-(9, 10, 'dogs', 'fact', 'dog can breathe', 20, 'dog', 'can', 'breathe');
+(6, 10, 'dogs', 'question', 'is a dog animal?', 14, 'dog', 'is a', 'animal'),
+(9, 10, 'dogs', 'fact', 'dog is a animal', 20, 'dog', 'is a', 'animal'),
+(12, 10, 'cats', 'question', 'can cat breathe?', 15, 'can', 'cat', 'breathe');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experiment`
+--
+
+DROP TABLE IF EXISTS `experiment`;
+CREATE TABLE `experiment` (
+  `id` int(11) NOT NULL,
+  `version_id` int(11) NOT NULL,
+  `domain` text NOT NULL,
+  `item` text NOT NULL,
+  `value` text NOT NULL,
+  `future_time` int(11) NOT NULL,
+  `persist_time` int(11) NOT NULL,
+  `categories` text NOT NULL,
+  `types` text NOT NULL,
+  `attributes` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `experiment`
+--
+
+INSERT INTO `experiment` (`id`, `version_id`, `domain`, `item`, `value`, `future_time`, `persist_time`, `categories`, `types`, `attributes`) VALUES
+(1, 10, 'animals', 'fact', 'animal can breathe', 10, 15, 'animal', 'can', 'breathe'),
+(7, 10, 'cats', 'fact', 'cat can breathe', 2, 14, 'cat', 'can', 'breathe'),
+(9, 10, 'cats', 'question', 'is a cat animal?', 30, 15, 'cat', 'is a', 'animal');
 
 -- --------------------------------------------------------
 
@@ -131,6 +166,7 @@ INSERT INTO `environment` (`id`, `version_id`, `domain`, `item`, `value`, `persi
 -- Table structure for table `facts`
 --
 
+DROP TABLE IF EXISTS `facts`;
 CREATE TABLE `facts` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -146,8 +182,8 @@ CREATE TABLE `facts` (
 
 INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attributes`) VALUES
 (28, 10, 'animal can breathe', 'animal', 'can', 'breathe'),
-(32, 10, 'dog can breathe', 'dog', 'can', 'breathe'),
-(33, 10, 'dog is a animal', 'dog', 'is a', 'animal');
+(32, 10, 'cat can breathe', 'cat', 'can', 'breathe'),
+(33, 10, 'cat is a animal', 'cat', 'is a', 'animal');
 
 -- --------------------------------------------------------
 
@@ -155,6 +191,7 @@ INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attrib
 -- Table structure for table `perceptions`
 --
 
+DROP TABLE IF EXISTS `perceptions`;
 CREATE TABLE `perceptions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -167,6 +204,7 @@ CREATE TABLE `perceptions` (
 -- Table structure for table `projects`
 --
 
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -190,6 +228,7 @@ INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 -- Table structure for table `questions`
 --
 
+DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -205,8 +244,8 @@ CREATE TABLE `questions` (
 
 INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `attributes`) VALUES
 (31, 10, 'can animal breathe?', 'can', 'animal', 'breathe'),
-(34, 10, 'can dog breathe?', 'can', 'dog', 'breathe'),
-(35, 10, 'is a dog animal?', 'is a', 'dog', 'animal');
+(34, 10, 'can cat breathe?', 'can', 'cat', 'breathe'),
+(35, 10, 'is a cat animal?', 'is a', 'cat', 'animal');
 
 -- --------------------------------------------------------
 
@@ -214,6 +253,7 @@ INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `at
 -- Table structure for table `sem_mem`
 --
 
+DROP TABLE IF EXISTS `sem_mem`;
 CREATE TABLE `sem_mem` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -231,8 +271,7 @@ CREATE TABLE `sem_mem` (
 
 INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categories`, `types`, `attributes`) VALUES
 (34, 10, 'cats', 'cat can breathe', 1, 'cat', 'can', 'breathe'),
-(35, 10, 'animals', 'animal can breathe', 1, 'animal', 'can', 'breathe'),
-(36, 10, 'cats', 'cat is a animal', 1, 'cat', 'is a', 'animal');
+(35, 10, 'animals', 'animal can breathe', 1, 'animal', 'can', 'breathe');
 
 -- --------------------------------------------------------
 
@@ -240,6 +279,7 @@ INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categ
 -- Table structure for table `short_term_mem`
 --
 
+DROP TABLE IF EXISTS `short_term_mem`;
 CREATE TABLE `short_term_mem` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -257,9 +297,8 @@ CREATE TABLE `short_term_mem` (
 --
 
 INSERT INTO `short_term_mem` (`id`, `version_id`, `domain`, `item`, `value`, `decay`, `categories`, `types`, `attributes`) VALUES
-(28, 10, 'cats', 'fact', 'cat is a animal', 15, 'cat', 'is a', 'animal'),
-(29, 10, 'dogs', 'question', 'can dog breathe?', 20, 'dog', 'can', 'breathe'),
-(30, 10, 'dogs', 'fact', 'dog can breathe', 20, 'dog', 'can', 'breathe');
+(28, 10, 'animals', 'fact', 'animal can breathe', 15, 'animal', 'can', 'breathe'),
+(29, 10, 'dogs', 'question', 'can dog breathe?', 15, 'dog', 'can', 'breathe');
 
 -- --------------------------------------------------------
 
@@ -267,6 +306,7 @@ INSERT INTO `short_term_mem` (`id`, `version_id`, `domain`, `item`, `value`, `de
 -- Table structure for table `types`
 --
 
+DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -288,6 +328,7 @@ INSERT INTO `types` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `versions`
 --
 
+DROP TABLE IF EXISTS `versions`;
 CREATE TABLE `versions` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -338,6 +379,12 @@ ALTER TABLE `domains`
 -- Indexes for table `environment`
 --
 ALTER TABLE `environment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `experiment`
+--
+ALTER TABLE `experiment`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -420,7 +467,13 @@ ALTER TABLE `domains`
 -- AUTO_INCREMENT for table `environment`
 --
 ALTER TABLE `environment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `experiment`
+--
+ALTER TABLE `experiment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `facts`

@@ -14,17 +14,17 @@ import MySQLdb as mdb
 from contextlib import closing
 add_fact = False
 
-class Ui_AddToEnvWindow(object):
-    def setupUi(self, AddToEnvWindow):
-        AddToEnvWindow.setObjectName("AddToEnvWindow")
-        AddToEnvWindow.resize(513, 500)
-        AddToEnvWindow.setFixedSize(600, 500)
+class Ui_AddToExpWindow(object):
+    def setupUi(self, AddToExpWindow):
+        AddToExpWindow.setObjectName("AddToExpWindow")
+        AddToExpWindow.resize(513, 500)
+        AddToExpWindow.setFixedSize(600, 500)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(AddToEnvWindow.sizePolicy().hasHeightForWidth())
-        AddToEnvWindow.setSizePolicy(sizePolicy)
-        self.centralwidget = QtWidgets.QWidget(AddToEnvWindow)
+        sizePolicy.setHeightForWidth(AddToExpWindow.sizePolicy().hasHeightForWidth())
+        AddToExpWindow.setSizePolicy(sizePolicy)
+        self.centralwidget = QtWidgets.QWidget(AddToExpWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(30, 10, 591, 51))
@@ -35,7 +35,7 @@ class Ui_AddToEnvWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(190, 380, 241, 25))
+        self.saveBtn.setGeometry(QtCore.QRect(190, 420, 241, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
@@ -64,7 +64,7 @@ class Ui_AddToEnvWindow(object):
         font.setPointSize(14)
         self.factBtn.setFont(font)
         self.factBtn.setObjectName("factBtn")
-        self.buttonGroup = QtWidgets.QButtonGroup(AddToEnvWindow)
+        self.buttonGroup = QtWidgets.QButtonGroup(AddToExpWindow)
         self.buttonGroup.setObjectName("buttonGroup")
         self.buttonGroup.addButton(self.factBtn)
         self.questBtn = QtWidgets.QRadioButton(self.centralwidget)
@@ -74,15 +74,24 @@ class Ui_AddToEnvWindow(object):
         self.questBtn.setFont(font)
         self.questBtn.setObjectName("questBtn")
         self.buttonGroup.addButton(self.questBtn)
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(220, 310, 311, 41))
-        self.lineEdit.setObjectName("lineEdit")
+        self.for_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.for_lineEdit.setGeometry(QtCore.QRect(220, 310, 311, 41))
+        self.for_lineEdit.setObjectName("for_lineEdit")
+        self.in_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.in_lineEdit.setGeometry(QtCore.QRect(220, 360, 311, 41))
+        self.in_lineEdit.setObjectName("in_lineEdit")
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setGeometry(QtCore.QRect(30, 310, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
+        self.label_11 = QtWidgets.QLabel(self.centralwidget)
+        self.label_11.setGeometry(QtCore.QRect(30, 360, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_11.setFont(font)
+        self.label_11.setObjectName("label_8")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(30, 210, 121, 31))
         font = QtGui.QFont()
@@ -107,27 +116,29 @@ class Ui_AddToEnvWindow(object):
         font.setPointSize(14)
         self.startBtn.setFont(font)
         self.startBtn.setObjectName("startBtn")
-        AddToEnvWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(AddToEnvWindow)
+        AddToExpWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(AddToExpWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 513, 22))
         self.menubar.setObjectName("menubar")
         self.menuInteractive_System_Modelling = QtWidgets.QMenu(self.menubar)
         self.menuInteractive_System_Modelling.setObjectName("menuInteractive_System_Modelling")
-        AddToEnvWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(AddToEnvWindow)
+        AddToExpWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(AddToExpWindow)
         self.statusbar.setObjectName("statusbar")
-        AddToEnvWindow.setStatusBar(self.statusbar)
+        AddToExpWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
 
-        self.retranslateUi(AddToEnvWindow)
-        QtCore.QMetaObject.connectSlotsByName(AddToEnvWindow)
+        self.retranslateUi(AddToExpWindow)
+        QtCore.QMetaObject.connectSlotsByName(AddToExpWindow)
 
-        self.lineEdit.hide()
+        self.for_lineEdit.hide()
+        self.in_lineEdit.hide()
         self.FactsComboBox.hide()
         self.QuestComboBox.hide()
         self.DomComboBox.hide()
 
         self.label_8.hide()
+        self.label_11.hide()
         self.label_9.hide()
         self.label_10.hide()
         self.label_4.hide()
@@ -138,7 +149,7 @@ class Ui_AddToEnvWindow(object):
 
         self.startBtn.clicked.connect(self.startNow)
         self.saveBtn.clicked.connect(self.saveItem)
-        self.saveBtn.clicked.connect(AddToEnvWindow.close)
+        self.saveBtn.clicked.connect(AddToExpWindow.close)
 
     def startNow(self):
         version_id = int(self.version_id.text())
@@ -154,12 +165,14 @@ class Ui_AddToEnvWindow(object):
     def addFact(self):
         self.QuestComboBox.hide()
         self.DomComboBox.show()
-        self.lineEdit.show()
+        self.for_lineEdit.show()
+        self.in_lineEdit.show()
         self.FactsComboBox.show()        
         self.label_10.hide()
         self.label_9.show()
         self.label_4.show()
         self.label_8.show()
+        self.label_11.show()
         self.FactsComboBox.clear()
         self.QuestComboBox.clear()
         global add_fact
@@ -175,12 +188,14 @@ class Ui_AddToEnvWindow(object):
     def addQuestion(self):
         self.FactsComboBox.hide()
         self.DomComboBox.show()
-        self.lineEdit.show()
+        self.for_lineEdit.show()
+        self.in_lineEdit.show()
         self.QuestComboBox.show()
         self.label_9.hide()
         self.label_10.show()
         self.label_4.show()
         self.label_8.show()
+        self.label_11.show()
         self.FactsComboBox.clear()
         self.QuestComboBox.clear()
         version_id = int(self.version_id.text())
@@ -196,7 +211,8 @@ class Ui_AddToEnvWindow(object):
         version_id = int(self.version_id.text())
         with closing(db.cursor()) as cur:
             cur_dom = str(self.DomComboBox.currentText())
-            cur_decay = int(str(self.lineEdit.text()))
+            cur_for_time = int(str(self.for_lineEdit.text()))
+            cur_in_time = int(str(self.in_lineEdit.text()))
             global add_fact
             if(add_fact):
                 add_fact = False
@@ -207,8 +223,8 @@ class Ui_AddToEnvWindow(object):
                     fact_cat = fact[3]
                     fact_type = fact[4]
                     fact_attr = fact[5]
-                cur.execute("INSERT INTO environment(version_id, domain, item, value, persist_time, categories, types, attributes)"
-                        "VALUES('%i', '%s', 'fact', '%s', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_fact, cur_decay, fact_cat, fact_type, fact_attr))
+                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes)"
+                        "VALUES('%i', '%s', 'fact', '%s', '%i', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_fact, cur_in_time, cur_for_time, fact_cat, fact_type, fact_attr))
             else:
                 cur_quest = str(self.QuestComboBox.currentText())
                 cur.execute("SELECT * FROM questions WHERE version_id = '%i' AND value = '%s'" % (version_id, cur_quest))
@@ -217,8 +233,8 @@ class Ui_AddToEnvWindow(object):
                     quest_cat = quest[4]
                     quest_type = quest[3]
                     quest_attr = quest[5]
-                cur.execute("INSERT INTO environment(version_id, domain, item, value, persist_time, categories, types, attributes)"
-                        "VALUES('%i', '%s', 'question', '%s', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_quest, cur_decay, quest_cat, quest_type, quest_attr))
+                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes)"
+                        "VALUES('%i', '%s', 'question', '%s', '%i', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_quest, cur_in_time, cur_for_time, quest_cat, quest_type, quest_attr))
             
 
             db.commit()
@@ -226,22 +242,23 @@ class Ui_AddToEnvWindow(object):
 
 
 
-    def retranslateUi(self, AddToEnvWindow):
+    def retranslateUi(self, AddToExpWindow):
         _translate = QtCore.QCoreApplication.translate
-        AddToEnvWindow.setWindowTitle(_translate("AddToEnvWindow", "MainWindow"))
-        self.label.setText(_translate("AddToEnvWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Add Item Representation</span></p></body></html>"))
-        self.saveBtn.setText(_translate("AddToEnvWindow", "Save"))
-        self.DomComboBox.setItemText(0, _translate("AddToEnvWindow", "Animals"))
-        self.DomComboBox.setItemText(1, _translate("AddToEnvWindow", "Dogs"))
-        self.FactsComboBox.setItemText(0, _translate("AddToEnvWindow", "Animal can breath"))
-        self.FactsComboBox.setItemText(1, _translate("AddToEnvWindow", "Animal can move"))
-        self.factBtn.setText(_translate("AddToEnvWindow", "Add fact"))
-        self.questBtn.setText(_translate("AddToEnvWindow", "Add question"))
-        self.label_4.setText(_translate("AddToEnvWindow", "Domain"))
-        self.label_8.setText(_translate("AddToEnvWindow", "Persistence time"))
-        self.label_9.setText(_translate("AddToEnvWindow", "Fact"))
-        self.label_10.setText(_translate("AddToEnvWindow", "Question"))
+        AddToExpWindow.setWindowTitle(_translate("AddToExpWindow", "MainWindow"))
+        self.label.setText(_translate("AddToExpWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Add Item Representation</span></p></body></html>"))
+        self.saveBtn.setText(_translate("AddToExpWindow", "Save"))
+        self.DomComboBox.setItemText(0, _translate("AddToExpWindow", "Animals"))
+        self.DomComboBox.setItemText(1, _translate("AddToExpWindow", "Dogs"))
+        self.FactsComboBox.setItemText(0, _translate("AddToExpWindow", "Animal can breath"))
+        self.FactsComboBox.setItemText(1, _translate("AddToExpWindow", "Animal can move"))
+        self.factBtn.setText(_translate("AddToExpWindow", "Add fact"))
+        self.questBtn.setText(_translate("AddToExpWindow", "Add question"))
+        self.label_4.setText(_translate("AddToExpWindow", "Domain"))
+        self.label_8.setText(_translate("AddToExpWindow", "Persistence time"))
+        self.label_11.setText(_translate("AddToExpWindow", "Future time"))
+        self.label_9.setText(_translate("AddToExpWindow", "Fact"))
+        self.label_10.setText(_translate("AddToExpWindow", "Question"))
 
         self.startBtn.setText(_translate("EditDatabaseItemWindow", "Start"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("AddToEnvWindow", "1"))
+        self.menuInteractive_System_Modelling.setTitle(_translate("AddToExpWindow", "1"))
 
