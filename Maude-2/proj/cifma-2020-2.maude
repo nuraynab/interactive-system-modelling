@@ -198,7 +198,7 @@ endtom)
   vars TA TA1 : TypedAttribute .
   var BI : BasicItem .
   var I : Item .
-  var TBI : TimedBasicItem .
+  var TBI TBI1 : TimedBasicItem .
   var FBI : FutureBasicItem .
   var IS : ItemSet .
   var TIS : TimedItemSet .
@@ -259,6 +259,19 @@ endtom)
   eq noPerceptionAvailable((exp(FBI)) REST) = noPerceptionAvailable(REST) .
   eq noPerceptionAvailable(REST) = true [owise] .
   eq noPerceptionAvailable(< H : Human | >  REST) = noPerceptionAvailable(REST) .
+
+  op isPerceptionIn : Configuration Configuration -> Bool .
+  eq isPerceptionIn((perc(TBI)), none) = false .
+  eq isPerceptionIn((perc(TBI)), (perc(TBI1)) REST) = if TBI == TBI1 then true else isPerceptionIn((perc(TBI)), REST) fi .
+
+  crl [step] :
+    {< H : Human | shortTermMem : (BI < decay T >) ; TIS >
+     REST}
+  =>
+    {< H : Human | shortTermMem : (BI < decay T >) ; TIS >
+     (perc (BI for INF))
+     REST}
+   if not isPerceptionIn((perc (BI for INF)), REST) .
 
 crl [tick] :
     {< H : Human | shortTermMem : TIS >
