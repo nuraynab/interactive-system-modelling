@@ -385,15 +385,11 @@ endtom)
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
 
-  eq init-env = 
-(perc((can a "dog" "track" ?) for 20)) 
-(perc((can a "basenji" "breath" ?) for 3)) 
-(perc((a "dog" can "lay") for 20)) 
+  eq init = 
+(exp(((a "dog" can "breath") for 20) in 5)) 
+(exp(((can a "dog" "track" ?) for 20) in 2)) 
+(exp(((can a "hound" "move" ?) for 7) in 4)) 
 aHuman .
-
-  eq init = (exp(((can a "basenji" "breath" ?) for 20) in 7))
-            (exp(((what can "bobby" do?) for 20) in 7))
-            aHuman .
 
   eq experiment-setting = (exp(((can a "basenji" "breath" ?) for 1) in 100))
                           (exp(((can a "dog" "move" ?) for 1) in 200))
@@ -402,8 +398,8 @@ aHuman .
 
 endtom)
 
----(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
-(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
+(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
+---(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
 ---(trew [1000] in EXAMPLE-DOGS : {experiment-setting} in time <= 302 .)
 
 ---(red not questionFound(can a "basenji" "breath" ? decay 100) .)

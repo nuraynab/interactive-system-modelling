@@ -30,6 +30,7 @@ db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
 sem_mem_dict = {}
 env_dict = {}
+exp_dict = {}
 
 class Ui_ProjectWindow(QWidget):
     def setupUi(self, ProjectWindow):
@@ -175,6 +176,12 @@ class Ui_ProjectWindow(QWidget):
 
             for y in perc_repr:
                 env_dict[y[4]] = [y[2], y[3], y[5], y[6], y[7], y[8]]
+
+            cur.execute("SELECT * FROM experiment WHERE version_id = '%i' ORDER BY id" % (version_id))
+            perc_repr = cur.fetchall()
+
+            for y in perc_repr:
+                exp_dict[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5]]
         db.close()
 
 
@@ -210,21 +217,49 @@ class Ui_ProjectWindow(QWidget):
             if start_str in line:
                 i+=1
                 break
-        list_of_lines[i] = '  eq init-env = \n'
-        for y in env_dict:
+        list_of_lines[i] = '  eq init = \n'
+        for y in exp_dict:
             i+=1
-            domain = env_dict[y][0]
-            item = env_dict[y][1]
-            time = str(env_dict[y][2])
-            cat = env_dict[y][3]
-            typ = env_dict[y][4]
-            attr = env_dict[y][5]
+            domain = exp_dict[y][0]
+            item = exp_dict[y][1]
+            time = str(exp_dict[y][2])
+            cat = exp_dict[y][3]
+            typ = exp_dict[y][4]
+            attr = exp_dict[y][5]
+            time_in = str(exp_dict[y][6])
             if item=="question":
-                addition = '(perc(('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+')) \n'
+                if typ=="is a":
+                    addition = '(exp((('+typ+' "'+cat+'" "'+attr+'" ?) for '+time+') in '+time_in+')) \n'
+                else:
+                    addition = '(exp((('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+') in '+time_in+')) \n'
             elif item=="fact":
-                addition = '(perc((a "'+cat+'" '+typ+' "'+attr+'") for '+time+')) \n'                
+                addition = '(exp(((a "'+cat+'" '+typ+' "'+attr+'") for '+time+') in '+time_in+')) \n' 
+            print (addition)               
             list_of_lines.insert(i, addition)
         list_of_lines[i+1] = 'aHuman .\n'
+
+        # start_str = "semanticMem : initSemanticMem > ."
+        # i=0
+        # for line in list_of_lines:
+        #     i+=1
+        #     if start_str in line:
+        #         i+=1
+        #         break
+        # list_of_lines[i] = '  eq init-env = \n'
+        # for y in env_dict:
+        #     i+=1
+        #     domain = env_dict[y][0]
+        #     item = env_dict[y][1]
+        #     time = str(env_dict[y][2])
+        #     cat = env_dict[y][3]
+        #     typ = env_dict[y][4]
+        #     attr = env_dict[y][5]
+        #     if item=="question":
+        #         addition = '(perc(('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+')) \n'
+        #     elif item=="fact":
+        #         addition = '(perc((a "'+cat+'" '+typ+' "'+attr+'") for '+time+')) \n'                
+        #     list_of_lines.insert(i, addition)
+        # list_of_lines[i+1] = 'aHuman .\n'
 
         f = open("Maude-2/proj/cifma-2020-2.maude", "w")
         f.writelines(list_of_lines)
@@ -322,7 +357,7 @@ class Ui_ProjectWindow(QWidget):
 
         f = open("Maude-2/proj/cifma-2020-help.maude", "r")
         f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        start_str = 'eq init-env ='
+        start_str = 'eq init ='
         end_str = 'aHuman .'
         for line in f:
             if start_str in line:
@@ -334,9 +369,25 @@ class Ui_ProjectWindow(QWidget):
                 break
         for line in f:
             f2.write(line)
-
         f.close()
         f2.close()
+
+        # f = open("Maude-2/proj/cifma-2020-help.maude", "r")
+        # f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        # start_str = 'eq init-env ='
+        # end_str = 'aHuman .'
+        # for line in f:
+        #     if start_str in line:
+        #         break
+        #     f2.write(line)
+        # for line in f:
+        #     if end_str in line:
+        #         f2.write("\n\n")
+        #         break
+        # for line in f:
+        #     f2.write(line)
+        # f.close()
+        # f2.close()
 
 
         self.ResultsWindow.show()

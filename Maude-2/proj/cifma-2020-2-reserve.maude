@@ -413,8 +413,8 @@ aHuman .
 
 endtom)
 
----(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
-(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
+(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
+---(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
 ---(trew [1000] in EXAMPLE-DOGS : {experiment-setting} in time <= 302 .)
 
 ---(red not questionFound(can a "basenji" "breath" ? decay 100) .)
