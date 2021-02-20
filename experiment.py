@@ -233,15 +233,15 @@ class Ui_ExperimentWindow(object):
                     self.factsTableWidget.setRowCount(i+1)
                     self.factsTableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(item[2])))
                     self.factsTableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(item[4])))
-                    self.factsTableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(item[6])))
-                    self.factsTableWidget.setItem(i, 3, QtWidgets.QTableWidgetItem(str(item[5])))
+                    self.factsTableWidget.setItem(i, 2, QtWidgets.QTableWidgetItem(str(item[5])))
+                    self.factsTableWidget.setItem(i, 3, QtWidgets.QTableWidgetItem(str(item[6])))
                     i+=1
                 elif item[3] == "question":
                     self.questTableWidget.setRowCount(j+1)
                     self.questTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(item[2])))
                     self.questTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(str(item[8])+" "+str(item[7])+" "+str(item[9])+"?"))
-                    self.questTableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(str(item[6])))
-                    self.questTableWidget.setItem(j, 3, QtWidgets.QTableWidgetItem(str(item[5])))
+                    self.questTableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(str(item[5])))
+                    self.questTableWidget.setItem(j, 3, QtWidgets.QTableWidgetItem(str(item[6])))
                     j+=1
 
     def addItem(self):
@@ -268,13 +268,14 @@ class Ui_ExperimentWindow(object):
         if fact:
             cur_dom = self.factsTableWidget.item(curr_row, curr_col).text()
             cur_value = self.factsTableWidget.item(curr_row, curr_col+1).text()
-            cur_for_time = self.factsTableWidget.item(curr_row, curr_col+2).text()
-            cur_in_time = self.factsTableWidget.item(curr_row, curr_col+3).text()
+            cur_in_time = self.factsTableWidget.item(curr_row, curr_col+2).text()
+            cur_for_time = self.factsTableWidget.item(curr_row, curr_col+3).text()
         else:
             cur_dom = self.questTableWidget.item(curr_row, curr_col).text()
             cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
-            cur_for_time = self.questTableWidget.item(curr_row, curr_col+2).text()
-            cur_in_time = self.questTableWidget.item(curr_row, curr_col+3).text()            
+            cur_in_time = self.questTableWidget.item(curr_row, curr_col+2).text()
+            cur_for_time = self.questTableWidget.item(curr_row, curr_col+3).text()
+                        
 
         self.EditItemReprInExpWindow = QtWidgets.QMainWindow()
         self.ui = Ui_EditItemReprInExpWindow()
@@ -282,7 +283,7 @@ class Ui_ExperimentWindow(object):
         self.ui.for_lineEdit.setText(cur_for_time)
         self.ui.in_lineEdit.setText(cur_in_time)
         self.ui.version_id.setText(self.version_id.text())
-        self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_for_time + " - " + cur_in_time)
+        self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_in_time + " - "  + cur_for_time)
         self.ui.origin_dom = cur_dom
         self.ui.origin_value = cur_value
         if fact:
@@ -362,9 +363,9 @@ class Ui_ExperimentWindow(object):
         item = self.factsTableWidget.horizontalHeaderItem(1)
         item.setText(_translate("ExperimentWindow", "Fact"))
         item = self.factsTableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("ExperimentWindow", "For"))
+        item.setText(_translate("ExperimentWindow", "Starting In"))
         item = self.factsTableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("ExperimentWindow", "In"))
+        item.setText(_translate("ExperimentWindow", "Available For"))
         __sortingEnabled = self.factsTableWidget.isSortingEnabled()
         self.factsTableWidget.setSortingEnabled(False)
         self.factsTableWidget.setSortingEnabled(__sortingEnabled)
@@ -385,9 +386,9 @@ class Ui_ExperimentWindow(object):
         item = self.questTableWidget.horizontalHeaderItem(1)
         item.setText(_translate("ExperimentWindow", "Question"))
         item = self.questTableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("ExperimentWindow", "For"))
+        item.setText(_translate("ExperimentWindow", "Starting In"))
         item = self.questTableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("ExperimentWindow", "In"))
+        item.setText(_translate("ExperimentWindow", "Available For"))
         __sortingEnabled = self.questTableWidget.isSortingEnabled()
         self.questTableWidget.setSortingEnabled(False)
         self.questTableWidget.setSortingEnabled(__sortingEnabled)
