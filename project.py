@@ -293,13 +293,12 @@ class Ui_ProjectWindow(QWidget):
         env_str = "perc"
         f = open("Maude-2/results.txt", "r")
         i = 0
+        j = 0
         for line in f:
             i += 1
             if env_str in line:
-                j = 0
                 cur_line = str(line)
                 mid_line = cur_line.split("<")
-                # print (mid_line)
                 new_line = mid_line[0].split("perc")
                 n = len(new_line)
                 for x in range(1, n):
@@ -312,7 +311,6 @@ class Ui_ProjectWindow(QWidget):
                     self.ui.envTableWidget.setRowCount(j+1)
                     self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
                     self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-                    # print (mid)
                     j+=1
         f.close()
 
