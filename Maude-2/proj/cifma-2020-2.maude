@@ -313,7 +313,7 @@ crl [tick] :
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C can A) < decay DECAY-TIME >) ; idle(TIS, T),
+       shortTermMem : ((a C can A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : S >
@@ -333,7 +333,7 @@ crl [tick] :
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS, M),
+       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), M),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : (D : C |- M ->| (cannot A)) S >
@@ -352,7 +352,7 @@ crl [tick] :
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS, T),
+       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : (D : C1 |- M ->| (can A)) S >

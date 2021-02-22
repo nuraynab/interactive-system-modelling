@@ -313,7 +313,7 @@ endtom)
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C can A) < decay DECAY-TIME >) ; idle(TIS, T),
+       shortTermMem : ((a C can A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : S >
@@ -333,7 +333,7 @@ endtom)
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS, M),
+       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), M),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : (D : C |- M ->| (cannot A)) S >
@@ -352,7 +352,7 @@ endtom)
      REST}
   =>
     {< H : Human | cognitiveLoad : N,
-       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS, T),
+       shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
                semanticMem : (D : C1 |- M ->| (can A)) S >
@@ -399,7 +399,8 @@ endtom)
   eq init-env = 
 (perc((can a "dog" "track" ?) for 20)) 
 (perc((can a "animal" "breath" ?) for 3)) 
-(perc((a "dog" can "lay") for 20)) 
+(perc((a "dog" can "lay") for 20))
+(perc((can a "hound" "move" ?) for 20)) 
 aHuman .
 
   eq init = (exp(((can a "basenji" "breath" ?) for 20) in 7))
@@ -416,8 +417,8 @@ aHuman .
 
 endtom)
 
-(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
----(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
+---(trew [1000] in EXAMPLE-DOGS : {init} in time <= 100 .)
+(trew [1000] in EXAMPLE-DOGS : {init-env} in time <= 100 .)
 ---(trew [1000] in EXAMPLE-DOGS : {experiment-setting} in time <= 302 .)
 
 ---(red not questionFound(can a "basenji" "breath" ? decay 100) .)
