@@ -234,7 +234,20 @@ class Ui_ProjectWindow(QWidget):
                     addition = '(exp((('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+') in '+time_in+')) \n'
             elif item=="fact":
                 addition = '(exp(((a "'+cat+'" '+typ+' "'+attr+'") for '+time+') in '+time_in+')) \n' 
-            print (addition)               
+            # print (addition)               
+            list_of_lines.insert(i, addition)
+        for y in env_dict:
+            i+=1
+            domain = env_dict[y][0]
+            item = env_dict[y][1]
+            time = str(env_dict[y][2])
+            cat = env_dict[y][3]
+            typ = env_dict[y][4]
+            attr = env_dict[y][5]
+            if item=="question":
+                addition = '(perc(('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+')) \n'
+            elif item=="fact":
+                addition = '(perc((a "'+cat+'" '+typ+' "'+attr+'") for '+time+')) \n'                
             list_of_lines.insert(i, addition)
         list_of_lines[i+1] = 'aHuman .\n'
 
@@ -286,7 +299,7 @@ class Ui_ProjectWindow(QWidget):
                 j = 0
                 cur_line = str(line)
                 mid_line = cur_line.split("<")
-                print (mid_line)
+                # print (mid_line)
                 new_line = mid_line[0].split("perc")
                 n = len(new_line)
                 for x in range(1, n):
@@ -299,7 +312,7 @@ class Ui_ProjectWindow(QWidget):
                     self.ui.envTableWidget.setRowCount(j+1)
                     self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
                     self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-                    print (mid)
+                    # print (mid)
                     j+=1
         f.close()
 

@@ -154,9 +154,9 @@ endtom)
   sorts Perception Experiment .
   subsorts Perception Experiment < Msg .
 
-  op perc : TimedBasicItem -> Perception [ctor] .
+  op perc : TimedBasicItem -> Perception [ctor format (n o)] .
 
-  op exp : FutureBasicItem -> Experiment [ctor] .
+  op exp : FutureBasicItem -> Experiment [ctor format (n o)] .
 
   var BI : BasicItem .
   
@@ -265,13 +265,13 @@ endtom)
   eq isPerceptionIn((perc(TBI)), (perc(TBI1)) REST) = if TBI == TBI1 then true else isPerceptionIn((perc(TBI)), REST) fi .
 
   crl [step] :
-    {< H : Human | shortTermMem : (BI < decay T >) ; TIS >
+    {< H : Human | shortTermMem : (F < decay T >) ; TIS >
      REST}
   =>
-    {< H : Human | shortTermMem : (BI < decay T >) ; TIS >
-     (perc (BI for INF))
+    {< H : Human | shortTermMem : (F < decay T >) ; TIS >
+     (perc (F for INF))
      REST}
-   if not isPerceptionIn((perc (BI for INF)), REST) .
+   if not isPerceptionIn((perc (F for INF)), REST) .
 
 
   crl [tick] :
@@ -404,6 +404,9 @@ aHuman .
 
   eq init = (exp(((can a "basenji" "breath" ?) for 20) in 7))
             (exp(((what can "bobby" do?) for 20) in 7))
+            (perc((can a "dog" "track" ?) for 20)) 
+(perc((can a "animal" "breath" ?) for 3)) 
+(perc((a "dog" can "lay") for 20)) 
             aHuman .
 
   eq experiment-setting = (exp(((can a "basenji" "breath" ?) for 1) in 100))
