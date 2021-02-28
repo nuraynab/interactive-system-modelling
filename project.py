@@ -19,6 +19,7 @@ from short_term_mem import Ui_ShortTermMemWindow
 from environment import Ui_EnvironmentWindow
 from experiment import Ui_ExperimentWindow
 from results import Ui_ResultsWindow
+from question_answer import Ui_QAResWindow
 
 import MySQLdb as mdb
 from contextlib import closing
@@ -73,13 +74,18 @@ class Ui_ProjectWindow(QWidget):
         self.openBtn.setFont(font)
         self.openBtn.setObjectName("openBtn")
         self.editDatabaseBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.editDatabaseBtn.setGeometry(QtCore.QRect(490, 10, 191, 41))
+        self.editDatabaseBtn.setGeometry(QtCore.QRect(390, 10, 191, 41))
         self.editDatabaseBtn.setFont(font)
         self.editDatabaseBtn.setObjectName("editDatabaseBtn")
         self.runBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.runBtn.setGeometry(QtCore.QRect(690, 10, 91, 41))
+        self.runBtn.setGeometry(QtCore.QRect(590, 10, 91, 41))
         self.runBtn.setFont(font)
         self.runBtn.setObjectName("runBtn")
+        self.resultsBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.resultsBtn.setGeometry(QtCore.QRect(690, 10, 91, 41))
+        self.resultsBtn.setFont(font)
+        self.resultsBtn.setObjectName("resultsBtn")
+        self.resultsBtn.setEnabled(False)
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(100, 230, 941, 451))
         self.textBrowser.setObjectName("textBrowser")
@@ -160,6 +166,72 @@ class Ui_ProjectWindow(QWidget):
         self.EnvBtn.clicked.connect(self.env)
         self.runBtn.clicked.connect(self.run)
         self.ExpBtn.clicked.connect(self.exp)
+        self.resultsBtn.clicked.connect(self.show_res)
+
+    def get_questions(self):
+        version_id = int(self.version_id.text())
+        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
+        with closing(db.cursor()) as cur:
+            cur.execute("""SELECT version_id, domain, item, value, categories, types, attributes FROM experiment WHERE version_id = '%i' AND item = 'question' 
+                UNION SELECT version_id, domain, item, value, categories, types, attributes FROM environment WHERE version_id = '%i' AND item = 'question' """ % (version_id, version_id))
+            questions = cur.fetchall()
+        return questions
+
+    def get_res_perc(self):
+        perc = {}
+        env_str = "perc"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        for line in f:
+            i += 1
+            if env_str in line:
+                cur_line = str(line)
+                mid_line = cur_line.split("<")
+                new_line = mid_line[0].split("perc")
+                n = len(new_line)
+                for x in range(1, n):
+                    start = new_line[x].find("(")+len("(")
+                    end = new_line[x].find(" for")
+                    mid = new_line[x][start:end]
+                    start_t = new_line[x].find("for ")+len("for ")
+                    end_t = new_line[x].find(")")
+                    time = new_line[x][start_t:end_t]
+                    perc[mid] = time
+        f.close()
+        return perc
+
+    def get_res_stm(self):
+        stm = {}
+        stm_str = "decay"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        for line in f:
+            i += 1
+            if stm_str in line:
+                new_line = str(line)
+                start = new_line.find("(")+len("(")
+                end = new_line.find(" <")
+                mid = new_line[start:end]
+                start_t = new_line.find("decay ")+len("decay ")
+                end_t = new_line.find(" >")
+                time = new_line[start_t:end_t]
+                stm[mid] = time
+        f.close()
+        return stm
+
+    def get_res_time(self):
+        time_str = "in time"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        for line in f:
+            i += 1
+            if time_str in line:
+                new_line = str(line)
+                start = new_line.find("} ")+len("} ")
+                end = new_line.find("\nBye")
+                mid = new_line[start:end]
+        f.close()
+        return mid
 
     def run(self):
         version_id = int(self.version_id.text())
@@ -279,10 +351,6 @@ class Ui_ProjectWindow(QWidget):
         f.close()
         subprocess.call("./start_maude.sh")
 
-
-
-        
-
         self.ResultsWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ResultsWindow()
         self.ui.setupUi(self.ResultsWindow)
@@ -290,64 +358,24 @@ class Ui_ProjectWindow(QWidget):
         self.ui.label_3.setText(self.label_2.text())
         self.ui.version_id.setText(self.version_id.text())
 
-        env_str = "perc"
-        f = open("Maude-2/results.txt", "r")
-        i = 0
+        perc = self.get_res_perc()
         j = 0
-        for line in f:
-            i += 1
-            if env_str in line:
-                cur_line = str(line)
-                mid_line = cur_line.split("<")
-                new_line = mid_line[0].split("perc")
-                n = len(new_line)
-                for x in range(1, n):
-                    start = new_line[x].find("(")+len("(")
-                    end = new_line[x].find(" for")
-                    mid = new_line[x][start:end]
-                    start_t = new_line[x].find("for ")+len("for ")
-                    end_t = new_line[x].find(")")
-                    time = new_line[x][start_t:end_t]
-                    self.ui.envTableWidget.setRowCount(j+1)
-                    self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
-                    self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-                    j+=1
-        f.close()
+        for item, time in perc.items():
+            self.ui.envTableWidget.setRowCount(j+1)
+            self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+            self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
+            j+=1
 
-        stm_str = "decay"
-        f = open("Maude-2/results.txt", "r")
-        i = 0
+        stm = self.get_res_stm()
         j = 0
-        for line in f:
-            i += 1
-            if stm_str in line:
-                new_line = str(line)
-                start = new_line.find("(")+len("(")
-                end = new_line.find(" <")
-                mid = new_line[start:end]
-                start_t = new_line.find("decay ")+len("decay ")
-                end_t = new_line.find(" >")
-                time = new_line[start_t:end_t]
-                self.ui.stmTableWidget.setRowCount(j+1)
-                self.ui.stmTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(mid))
-                self.ui.stmTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-                j+=1
-        f.close()
+        for item, time in stm.items():
+            self.ui.stmTableWidget.setRowCount(j+1)
+            self.ui.stmTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+            self.ui.stmTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
+            j+=1
 
-        time_str = "in time"
-        f = open("Maude-2/results.txt", "r")
-        i = 0
-        j = 0
-        for line in f:
-            i += 1
-            if time_str in line:
-                new_line = str(line)
-                start = new_line.find("} ")+len("} ")
-                end = new_line.find("\nBye")
-                mid = new_line[start:end]
-                self.ui.label_6.setText(mid)
-                j+=1
-        f.close()
+        in_time = self.get_res_time()
+        self.ui.label_6.setText(in_time)
 
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
         f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
@@ -400,9 +428,36 @@ class Ui_ProjectWindow(QWidget):
         # f.close()
         # f2.close()
 
-
+        self.resultsBtn.setDisabled(False)
         self.ResultsWindow.show()
 
+    def show_res(self):
+        self.QAResultsWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_QAResWindow()
+        self.ui.setupUi(self.QAResultsWindow)
+        self.ui.label_2.setText(self.label.text())
+        self.ui.label_3.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+
+        questions = self.get_questions()
+        perc = self.get_res_perc()
+        res_stm = self.get_res_stm()
+        in_time = self.get_res_time()
+        self.ui.label_6.setText(in_time)
+        j=0
+        for question in questions:
+            self.ui.tableWidget.setRowCount(j+1)
+            for item, time in res_stm.items():
+                if "?" in item and question[4] in item and question[5] in item and question[6] in item:
+                    self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+                    self.ui.tableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(time))
+
+            for item, time in perc.items():
+                if time == "INF": 
+                    if question[4] in item and question[5] in item and question[6] in item:
+                        self.ui.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(item))
+            j += 1
+        self.QAResultsWindow.show()
 
     def exp(self):
         self.ExperimentWindow = QtWidgets.QMainWindow()
@@ -498,6 +553,7 @@ class Ui_ProjectWindow(QWidget):
         self.openBtn.setText(_translate("ProjectWindow", "Open Component"))
         self.editDatabaseBtn.setText(_translate("ProjectWindow", "Edit Database"))
         self.runBtn.setText(_translate("ProjectWindow", "Run"))
+        self.resultsBtn.setText(_translate("ProjectWindow", "Results"))
         self.textBrowser.setHtml(_translate("ProjectWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
