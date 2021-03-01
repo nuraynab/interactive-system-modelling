@@ -5,11 +5,11 @@ load real-time-maude.maude
   protecting NAT .
   protecting STRING .
 
-  sorts Fact Question .
+  sorts Fact Question Answer .
   sorts Domain BasicItem Item Goal .     --- an 'Item' can be either a 'BasicItem' or'Goal'
   subsort BasicItem < Item .        
   subsort Goal < Item .
-  subsorts Fact Question < BasicItem .
+  subsorts Fact Question Answer < BasicItem .
 
   sorts BasicItemSet ItemSet EmptyItemSet .
   subsort BasicItem < BasicItemSet .
@@ -36,6 +36,8 @@ load real-time-maude.maude
   
   ops I`dont`know`if`a_can_ I`dont`know`if`a_is_ : Category Attribute -> Fact [ctor] .
   op I`dont`know`what`a_can`do : Category -> Fact [ctor] .
+
+  op __ : Fact Nat -> Answer [ctor] .
 
   op _is`negative`of_ : TypedAttribute TypedAttribute -> Bool .
 
@@ -151,12 +153,14 @@ endtom)
 
   including TIMED-ITEMS .
 
-  sorts Perception Experiment .
-  subsorts Perception Experiment < Msg .
+  sorts Perception Experiment Answered .
+  subsorts Perception Experiment Answered < Msg .
 
   op perc : TimedBasicItem -> Perception [ctor format (n o)] .
 
   op exp : FutureBasicItem -> Experiment [ctor format (n o)] .
+
+  op ans : TimedBasicItem -> Answered [ctor format (n o)] .
 
   var BI : BasicItem .
   
@@ -216,6 +220,7 @@ endtom)
   eq idle(< H : Human | >  REST, T) = < H : Human | >  idle(REST, T) .
   eq idle(perc(TBI) REST, T) = perc(idle(TBI, T))  idle(REST, T) .
   eq idle(exp(FBI) REST, T) = exp(idle(FBI, T))  idle(REST, T) .
+  eq idle(ans(TBI) REST, T) = ans(idle(TBI, T))  idle(REST, T) .
 
   eq idle(emptyTIS, T) = emptyTIS .
   eq idle((I < decay T1 >) ; TIS , T) = (I < decay (T1 monus T) >) ; idle(TIS, T) .
@@ -265,13 +270,22 @@ endtom)
   eq isPerceptionIn((perc(TBI)), (perc(TBI1)) REST) = if TBI == TBI1 then true else isPerceptionIn((perc(TBI)), REST) fi .
 
   crl [step] :
-    {< H : Human | shortTermMem : (F < decay T >) ; TIS >
+    {< H : Human | shortTermMem : ((can a C A ?) < decay T1 >) ; ((a C can A) < decay T >) ; TIS >
      REST}
   =>
-    {< H : Human | shortTermMem : (F < decay T >) ; TIS >
-     (perc (F for INF))
+    {< H : Human | shortTermMem : ((can a C A ?) < decay T1 >) ; ((a C can A) < decay T >) ; TIS >
+     (ans ((a C can A T monus T1) for INF)) (perc ((a C can A) for INF))
      REST}
-   if not isPerceptionIn((perc (F for INF)), REST) .
+   if not isPerceptionIn((perc ((a C can A) for INF)), REST) .
+
+  crl [step-not] :
+    {< H : Human | shortTermMem : ((can a C A ?) < decay T1 >) ; ((a C cannot A) < decay T >) ; TIS >
+     REST}
+  =>
+    {< H : Human | shortTermMem : ((can a C A ?) < decay T1 >) ; ((a C cannot A) < decay T >) ; TIS >
+     (ans ((a C cannot A T monus T1) for INF)) (perc ((a C cannot A) for INF))
+     REST}
+   if not isPerceptionIn((perc ((a C cannot A) for INF)), REST) .
 
 
   crl [tick] :
