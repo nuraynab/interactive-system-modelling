@@ -233,6 +233,25 @@ class Ui_ProjectWindow(QWidget):
         f.close()
         return mid
 
+    def get_res_ans(self):
+        ans = {}
+        ans_str = "ans"
+        f = open("Maude-2/results.txt", "r")
+        i = 0
+        for line in f:
+            i += 1
+            if ans_str in line:
+                cur_line = str(line)
+                start = cur_line.find("(")+len("(")
+                end = cur_line.rfind("\"")
+                item = cur_line[start:end+1]
+                start_t = cur_line.rfind("\" ") + len("\" ")
+                end_t = cur_line.find("for")
+                time = cur_line[start_t:end_t]
+                ans[item] = time
+        f.close()
+        return ans
+
     def run(self):
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
@@ -440,22 +459,27 @@ class Ui_ProjectWindow(QWidget):
         self.ui.version_id.setText(self.version_id.text())
 
         questions = self.get_questions()
-        perc = self.get_res_perc()
+        # perc = self.get_res_perc()
         res_stm = self.get_res_stm()
         in_time = self.get_res_time()
+        ans = self.get_res_ans()
         self.ui.label_6.setText(in_time)
         j=0
         for question in questions:
             self.ui.tableWidget.setRowCount(j+1)
-            for item, time in res_stm.items():
-                if "?" in item and question[4] in item and question[5] in item and question[6] in item:
-                    self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+            
+            for item, time in ans.items():
+                if question[4] in item and question[5] in item and question[6] in item:
+                    self.ui.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(item))
                     self.ui.tableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(time))
 
-            for item, time in perc.items():
-                if time == "INF": 
-                    if question[4] in item and question[5] in item and question[6] in item:
-                        self.ui.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(item))
+            q = self.ui.tableWidget.item(j,1);
+            for item, time in res_stm.items():
+                if q:
+                    if "?" in item and question[4] in item and question[5] in item and question[6] in item:
+                        self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+            if not q:
+                continue
             j += 1
         self.QAResultsWindow.show()
 

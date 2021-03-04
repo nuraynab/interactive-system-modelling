@@ -3,17 +3,17 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Wed Mar  3 20:56:02 2021
+		   Thu Mar  4 14:07:46 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 16611 in 12ms cpu (10ms real) (1384250 rewrites/second)
+rewrites: 16611 in 16ms cpu (13ms real) (1038187 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 13697 in 8ms cpu (7ms real) (1712125 rewrites/second)
+rewrites: 13697 in 8ms cpu (6ms real) (1712125 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
@@ -25,7 +25,7 @@ rewrites: 7354 in 4ms cpu (2ms real) (1838500 rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 11933 in 4ms cpu (5ms real) (2983250 rewrites/second)
+rewrites: 11933 in 8ms cpu (8ms real) (1491625 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
@@ -37,28 +37,31 @@ rewrites: 12059 in 4ms cpu (3ms real) (3014750 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 65706 in 36ms cpu (33ms real) (1825166 rewrites/second)
+rewrites: 65706 in 40ms cpu (39ms real) (1642650 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 26877 in 12ms cpu (13ms real) (2239750 rewrites/second)
+rewrites: 27506 in 16ms cpu (17ms real) (1719125 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 72622 in 28ms cpu (26ms real) (2593642 rewrites/second)
+rewrites: 74888 in 36ms cpu (34ms real) (2080222 rewrites/second)
 
 Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 100
 
 Result ClockedSystem :
   {
+ans(a "animal" can "breath" 1 for INF)
+ans(a "animal" cannot "breath" 1 for INF)
 ans(a "basenji" can "breath" 7 for INF)
 ans(a "dog" cannot "track" 3 for INF)
 ans(a "hound" can "move" 5 for INF)
-perc(a "dog" can "breath" for 12)
-perc(a "dog" can "lay" for 5)
+perc(a "dog" can "breath" for 10)
+perc(a "dog" can "lay" for 3)
 perc(can a "dog" "track" ? for 12)
-perc(can a "hound" "move" ? for 15)< human : Human | cognitiveLoad : 0,
+perc(can a "hound" "move" ? for 2)
+perc(is a "dog" "animal" ? for 6)< human : Human | cognitiveLoad : 0,
     proceduralMem : emptyProcedural,semanticMem :(("animals" : "animal" |- 1
     ->| can "breath")
 ("animals" : "animal" |- 1 ->| can "move")
@@ -70,13 +73,17 @@ perc(can a "hound" "move" ? for 15)< human : Human | cognitiveLoad : 0,
 ("dogs" : "dog" |- 2 ->| is a "animal")
 ("dogs" : "hound" |- 1 ->| can "track")
 "dogs" : "hound" |- 2 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
-    (a "basenji" can "breath" < decay 92 >);
-(a "dog" can "breath" < decay 92 >);
-(a "dog" can "lay" < decay 85 >);
+    (a "animal" can "breath" < decay 92 >);
+(a "animal" cannot "breath" < decay 91 >);
+(a "basenji" can "breath" < decay 90 >);
+(a "dog" can "breath" < decay 90 >);
+(a "dog" can "lay" < decay 83 >);
 (a "dog" cannot "track" < decay 95 >);
 (a "hound" can "move" < decay 100 >);
-(can a "basenji" "breath" ? < decay 85 >);
+(can a "animal" "breath" ? < decay 90 >);
+(can a "basenji" "breath" ? < decay 83 >);
 (can a "dog" "track" ? < decay 92 >);
-can a "hound" "move" ? < decay 95 >)>} in time 15
+(can a "hound" "move" ? < decay 95 >);
+is a "dog" "animal" ? < decay 100 >)>} in time 17
 
 Bye.
