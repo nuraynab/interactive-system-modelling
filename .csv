@@ -1,10 +1,4 @@
-Domains,Categories,Types,Attributes,Facts,Questions,Perceptions,Actions
-animals,animal,can,breath,,can basenji breath?,,
-dogs,dog,is a,move,,can dog track?,,
-,basenji,cannot,track,,,,
-,hound,,lay,,,,
-,bobby,,bark,,,,
-,,,animal,,,,
-,,,dog,,,,
-,,,hound,,,,
-,,,basenji,,,,
+Question,Answer,Time taken
+"can a ""dog"" ""track"" ?","a ""dog"" cannot ""track""",3 
+"can a ""hound"" ""move"" ?","a ""hound"" can ""move""",5 
+"can a ""basenji"" ""breath"" ?","a ""basenji"" can ""breath""",7 

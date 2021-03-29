@@ -70,6 +70,9 @@ endtom)
    eq DECAY-TIME = 100 .
    eq MAX-RETRIEVAL-TIME = 20 .
 
+   op stmCapacity : -> Nat .
+   eq stmCapacity = 7 .
+
    sorts TimedItem TimedItemSet TimedBasicItem FutureBasicItem .
    subsort TimedItem < TimedItemSet .
 
@@ -265,6 +268,16 @@ endtom)
   eq noPerceptionAvailable(REST) = true [owise] .
   eq noPerceptionAvailable(< H : Human | >  REST) = noPerceptionAvailable(REST) .
 
+crl [forgetSomethingIfSTMfull] :
+    {< H : Human | shortTermMem : (BI < decay T >) ; TIS,
+                    cognitiveLoad : N >
+     REST}
+  =>
+    {< H : Human | shortTermMem : TIS, 
+                    cognitiveLoad : sd(N, 1) >
+     REST}
+  if N > stmCapacity .
+
 
 crl [tick] :
     {< H : Human | shortTermMem : TIS >
@@ -287,14 +300,17 @@ crl [tick] :
 
   crl [perceive] :
     {(perc (BI for T))
-     < H : Human | shortTermMem : TIS >
+     < H : Human | cognitiveLoad : N,
+      shortTermMem : TIS >
      REST}
   =>
-    {< H : Human | shortTermMem : (BI < decay DECAY-TIME >) ; TIS >
+    {< H : Human | cognitiveLoad : N + 1,
+      shortTermMem : (BI < decay DECAY-TIME >) ; TIS >
      (perc (BI for T))
      REST}
    if IS := removeTime(TIS) /\
-     not isItemIn(BI, IS) .
+     not isItemIn(BI, IS) /\
+     N + 1 <= stmCapacity .
 
   crl [can] :
     {< H : Human | cognitiveLoad : N,
@@ -304,7 +320,7 @@ crl [tick] :
                semanticMem : S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N,
+    {< H : Human | cognitiveLoad : N + 1,
        shortTermMem : ((a C can A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
@@ -314,7 +330,8 @@ crl [tick] :
   in time T
   if IS := removeTime(TIS) /\
      not isItemIn(a C can A, IS) /\ T := canRetrievalTime(C, A, S) /\ T <= MAX-RETRIEVAL-TIME /\
-     not ( ( a C can A ) is negated in S ) .
+     not ( ( a C can A ) is negated in S ) /\
+     N + 1 <= stmCapacity .
 
 
   crl [cannot-explicit] :
@@ -325,7 +342,7 @@ crl [tick] :
                semanticMem : (D : C |- M ->| (cannot A)) S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N,
+    {< H : Human | cognitiveLoad : N + 1,
        shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), M),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
@@ -334,7 +351,8 @@ crl [tick] :
     idle(REST,M)}
   in time M
   if IS := removeTime(TIS) /\ 
-     not isItemIn(a C cannot A, IS) .
+     not isItemIn(a C cannot A, IS) /\
+     N + 1 <= stmCapacity .
 
 
   crl [cannot-implicit] :
@@ -345,7 +363,7 @@ crl [tick] :
                semanticMem : (D : C1 |- M ->| (can A)) S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N,
+    {< H : Human | cognitiveLoad : N + 1,
        shortTermMem : ((a C cannot A) < decay DECAY-TIME >) ; idle(TIS ; ((can a C A ?) < decay T1 >), T),
        sensoryMem : emptySensory,
        proceduralMem : emptyProcedural,
@@ -355,7 +373,8 @@ crl [tick] :
   in time T
   if IS := removeTime(TIS) /\
      not isItemIn(a C cannot A, IS) /\ not isItemIn(a C can A, IS) /\ T := timeToSuper(C1, C, S) + M /\
-     T <= MAX-RETRIEVAL-TIME .
+     T <= MAX-RETRIEVAL-TIME /\
+     N + 1 <= stmCapacity .
 
 endtom)
 
@@ -365,6 +384,7 @@ endtom)
   including EVOLUTION .
 
   op initSemanticMem : -> SemanticMemory .
+
 
 
 
@@ -380,6 +400,7 @@ endtom)
                   sensoryMem : emptySensory,
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
+
 
 
 

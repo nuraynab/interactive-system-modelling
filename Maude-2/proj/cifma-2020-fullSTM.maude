@@ -71,7 +71,7 @@ endtom)
    eq MAX-RETRIEVAL-TIME = 20 .
 
    op stmCapacity : -> Nat .
-   eq stmCapacity = 10 .
+   eq stmCapacity = 7 .
 
    sorts TimedItem TimedItemSet TimedBasicItem FutureBasicItem .
    subsort TimedItem < TimedItemSet .
@@ -385,8 +385,18 @@ endtom)
 
   op initSemanticMem : -> SemanticMemory .
 
-
-
+  eq initSemanticMem =  
+("animals" : "animal" |- 1 ->| (can "breath")) 
+("animals" : "animal" |- 1 ->| (can "move")) 
+("dogs" : "dog" |- 2 ->| (is a "animal")) 
+("dogs" : "dog" |- 1 ->| (can "bark")) 
+("dogs" : "hound" |- 2 ->| (is a "dog")) 
+("dogs" : "hound" |- 1 ->| (can "track")) 
+("dogs" : "basenji" |- 2 ->| (is a "hound")) 
+("dogs" : "basenji" |- 3 ->| (cannot "bark")) 
+("dogs" : "bobby" |- 2 ->| (is a "basenji")) 
+("dogs" : "bobby" |- 1 ->| (can "lay")) 
+.
 
 
   ops init experiment-setting init-env : -> Configuration .
@@ -401,15 +411,12 @@ endtom)
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
 
-  eq init = 
-(exp(((can a "dog" "track" ?) for 3) in 3)) 
-(exp(((can a "hound" "move" ?) for 2) in 6)) 
-(exp(((a "dog" can "breath") for 7) in 14)) 
-(perc((can a "basenji" "breath" ?) for 1)) 
-(perc((a "dog" can "breath") for 1)) 
-(perc((a "animal" can "breath") for 10)) 
-(perc((a "bobby" can "lay") for 1)) 
-aHuman .
+  eq init = (exp(((can a "dog" "track" ?) for 3) in 3))
+            (exp(((can a "hound" "move" ?) for 2) in 6))
+            (exp(((a "dog" can "breath") for 7) in 14))
+            (perc((can a "basenji" "breath" ?) for 2))
+            (perc((a "bobby" can "lay") for 1))
+            aHuman .
 
 
   eq experiment-setting = (exp(((can a "basenji" "breath" ?) for 1) in 100))
