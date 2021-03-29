@@ -20,6 +20,8 @@ from environment import Ui_EnvironmentWindow
 from experiment import Ui_ExperimentWindow
 from results import Ui_ResultsWindow
 from question_answer import Ui_QAResWindow
+from run_project import Ui_RunProjectWindow
+
 
 import MySQLdb as mdb
 from contextlib import closing
@@ -164,9 +166,19 @@ class Ui_ProjectWindow(QWidget):
         self.SemMBtn.clicked.connect(self.sem_mem)
         self.STMBtn.clicked.connect(self.short_term_mem)
         self.EnvBtn.clicked.connect(self.env)
-        self.runBtn.clicked.connect(self.run)
+        self.runBtn.clicked.connect(self.run_project)
         self.ExpBtn.clicked.connect(self.exp)
         self.resultsBtn.clicked.connect(self.show_res)
+
+    def run_project(self):
+        self.resultsBtn.setDisabled(False)
+        self.RunProjectWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_RunProjectWindow()
+        self.ui.setupUi(self.RunProjectWindow)
+        self.ui.project_name.setText(self.label.text())
+        self.ui.version_name.setText(self.label_2.text())
+        self.ui.version_id.setText(self.version_id.text())
+        self.RunProjectWindow.show()
 
     def get_questions(self):
         version_id = int(self.version_id.text())

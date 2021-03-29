@@ -3,7 +3,7 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Mon Mar 29 22:39:44 2021
+		   Tue Mar 30 02:06:55 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
@@ -25,7 +25,7 @@ rewrites: 7382 in 0ms cpu (2ms real) (~ rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 11961 in 8ms cpu (5ms real) (1495125 rewrites/second)
+rewrites: 11961 in 8ms cpu (6ms real) (1495125 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
@@ -37,15 +37,15 @@ rewrites: 12087 in 4ms cpu (3ms real) (3021750 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 64747 in 36ms cpu (34ms real) (1798527 rewrites/second)
+rewrites: 64747 in 36ms cpu (33ms real) (1798527 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 27294 in 12ms cpu (14ms real) (2274500 rewrites/second)
+rewrites: 27154 in 12ms cpu (13ms real) (2262833 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 72884 in 28ms cpu (26ms real) (2603000 rewrites/second)
+rewrites: 71885 in 28ms cpu (26ms real) (2567321 rewrites/second)
 
 Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 100
@@ -53,9 +53,11 @@ Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
 Result ClockedSystem :
   {
 ans(a "basenji" can "breath" 7 for INF)
-ans(a "dog" cannot "track" 3 for INF)
-ans(a "hound" can "move" 5 for INF)
-perc(a "dog" can "breath" for 7)< human : Human | cognitiveLoad : 9,
+perc(a "dog" can "breath" for 20)
+perc(a "dog" can "lay" for 13)
+perc(can a "dog" "track" ? for 20)
+perc(can a "hound" "move" ? for 7)
+perc(is a "dog" "animal" ? for 6)< human : Human | cognitiveLoad : 5,
     proceduralMem : emptyProcedural,semanticMem :(("animals" : "animal" |- 1
     ->| can "breath")
 ("animals" : "animal" |- 1 ->| can "move")
@@ -67,14 +69,8 @@ perc(a "dog" can "breath" for 7)< human : Human | cognitiveLoad : 9,
 ("dogs" : "dog" |- 2 ->| is a "animal")
 ("dogs" : "hound" |- 1 ->| can "track")
 "dogs" : "hound" |- 2 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
-    (a "animal" can "breath" < decay 85 >);
-(a "basenji" can "breath" < decay 92 >);
-(a "bobby" can "lay" < decay 85 >);
-(a "dog" can "breath" < decay 85 >);
-(a "dog" cannot "track" < decay 95 >);
-(a "hound" can "move" < decay 100 >);
-(can a "basenji" "breath" ? < decay 85 >);
-(can a "dog" "track" ? < decay 92 >);
-can a "hound" "move" ? < decay 95 >)>} in time 15
+    (a "basenji" can "breath" < decay 100 >);
+(a "dog" can "lay" < decay 93 >);
+can a "basenji" "breath" ? < decay 93 >)>} in time 7
 
 Bye.

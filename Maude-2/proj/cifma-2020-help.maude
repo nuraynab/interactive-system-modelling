@@ -71,7 +71,7 @@ endtom)
    eq MAX-RETRIEVAL-TIME = 20 .
 
    op stmCapacity : -> Nat .
-   eq stmCapacity = 10 .
+   eq stmCapacity = 5 .
 
    sorts TimedItem TimedItemSet TimedBasicItem FutureBasicItem .
    subsort TimedItem < TimedItemSet .
@@ -395,20 +395,19 @@ endtom)
 
   op aHuman : -> Object .
 
-  eq aHuman = < human : Human | cognitiveLoad : 0,
+  eq aHuman = < human : Human | cognitiveLoad : 2,
                   shortTermMem : emptyTIS,
                   sensoryMem : emptySensory,
                   proceduralMem : emptyProcedural,
                               semanticMem : initSemanticMem > .   
 
   eq init = 
-(exp(((can a "dog" "track" ?) for 3) in 3)) 
-(exp(((can a "hound" "move" ?) for 2) in 6)) 
-(exp(((a "dog" can "breath") for 7) in 14)) 
-(perc((can a "basenji" "breath" ?) for 1)) 
-(perc((a "dog" can "breath") for 1)) 
-(perc((a "animal" can "breath") for 10)) 
-(perc((a "bobby" can "lay") for 1)) 
+(exp(((a "dog" can "breath") for 20) in 5)) 
+(exp(((can a "dog" "track" ?) for 20) in 2)) 
+(exp(((can a "hound" "move" ?) for 7) in 4)) 
+(exp(((is a "dog" "animal" ?) for 6) in 2)) 
+(perc((can a "basenji" "breath" ?) for 3)) 
+(perc((a "dog" can "lay") for 20)) 
 aHuman .
 
 
