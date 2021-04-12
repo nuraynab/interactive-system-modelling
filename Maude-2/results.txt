@@ -3,29 +3,29 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Mon Apr 12 01:29:34 2021
+		   Tue Apr 13 01:11:58 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 16611 in 12ms cpu (11ms real) (1384250 rewrites/second)
+rewrites: 16611 in 12ms cpu (10ms real) (1384250 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 14281 in 8ms cpu (7ms real) (1785125 rewrites/second)
+rewrites: 14281 in 8ms cpu (6ms real) (1785125 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
-rewrites: 7382 in 4ms cpu (2ms real) (1845500 rewrites/second)
+rewrites: 7382 in 0ms cpu (2ms real) (~ rewrites/second)
 
 Introduced timed module: SENSORY-MEMORY
 
-rewrites: 7382 in 0ms cpu (2ms real) (~ rewrites/second)
+rewrites: 7382 in 4ms cpu (2ms real) (1845500 rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 11961 in 8ms cpu (6ms real) (1495125 rewrites/second)
+rewrites: 11961 in 4ms cpu (6ms real) (2990250 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
@@ -37,15 +37,15 @@ rewrites: 12087 in 4ms cpu (3ms real) (3021750 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 64747 in 32ms cpu (34ms real) (2023343 rewrites/second)
+rewrites: 64747 in 36ms cpu (33ms real) (1798527 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 28178 in 16ms cpu (15ms real) (1761125 rewrites/second)
+rewrites: 27154 in 12ms cpu (13ms real) (2262833 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 72014 in 28ms cpu (26ms real) (2571928 rewrites/second)
+rewrites: 71885 in 24ms cpu (24ms real) (2995208 rewrites/second)
 
 Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 100
@@ -53,14 +53,11 @@ Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
 Result ClockedSystem :
   {
 ans(a "basenji" can "breath" 7 for INF)
-ans(a "dog" cannot "track" 3 for INF)
-exp(a "dog" can "breath" for 7 in 56)
-exp(can a "animal" "bark" ? for 7 in 22)
-exp(can a "animal" "lay" ? for 5 in 3)
-exp(can a "animal" "track" ? for 8 in 31)
-exp(can a "bobby" "track" ? for 10 in 10)
-exp(can a "dog" "breath" ? for 13 in 41)
-perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 7,
+perc(a "dog" can "breath" for 20)
+perc(a "dog" can "lay" for 13)
+perc(can a "dog" "track" ? for 20)
+perc(can a "hound" "move" ? for 7)
+perc(is a "dog" "animal" ? for 6)< human : Human | cognitiveLoad : 5,
     proceduralMem : emptyProcedural,semanticMem :(("animals" : "animal" |- 1
     ->| can "breath")
 ("animals" : "animal" |- 1 ->| can "move")
@@ -72,10 +69,8 @@ perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 7,
 ("dogs" : "dog" |- 2 ->| is a "animal")
 ("dogs" : "hound" |- 1 ->| can "track")
 "dogs" : "hound" |- 2 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
-    (a "basenji" can "breath" < decay 97 >);
-(a "dog" cannot "track" < decay 100 >);
-(can a "basenji" "breath" ? < decay 90 >);
-(can a "dog" "track" ? < decay 97 >);
-can a "hound" "move" ? < decay 100 >)>} in time 10
+    (a "basenji" can "breath" < decay 100 >);
+(a "dog" can "lay" < decay 93 >);
+can a "basenji" "breath" ? < decay 93 >)>} in time 7
 
 Bye.

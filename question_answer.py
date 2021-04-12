@@ -16,6 +16,8 @@ import pandas
 import io
 import MySQLdb as mdb
 from contextlib import closing
+from result_semantic_memory import Ui_ResultsSemanticMemoryWindow
+
 
 class Ui_QAResWindow(QWidget):
     def setupUi(self, QAResWindow):
@@ -96,12 +98,16 @@ class Ui_QAResWindow(QWidget):
         self.label_6.setGeometry(QtCore.QRect(900, 750, 241, 51))
         self.label_6.setObjectName("label_6")
         self.label_6.setFont(font)
-        self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(900, 10, 191, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
+        self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.saveBtn.setGeometry(QtCore.QRect(900, 10, 191, 41))
         self.saveBtn.setFont(font)
         self.saveBtn.setObjectName("saveBtn")
+        self.semanticMemBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.semanticMemBtn.setGeometry(QtCore.QRect(680, 10, 200, 41))
+        self.semanticMemBtn.setFont(font)
+        self.semanticMemBtn.setObjectName("semanticMemBtn")
         self.tableWidget.raise_()
         self.label.raise_()
         self.line.raise_()
@@ -128,6 +134,16 @@ class Ui_QAResWindow(QWidget):
         self.version_id.setObjectName("version_id")
 
         self.saveBtn.clicked.connect(self.saveFile)
+        self.semanticMemBtn.clicked.connect(self.openSemanticMem)
+
+    def openSemanticMem(self):
+        self.ResultsSemanticMemoryWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_ResultsSemanticMemoryWindow()
+        self.ui.setupUi(self.ResultsSemanticMemoryWindow)
+        self.ui.label_2.setText(self.label_2.text())
+        self.ui.label_3.setText(self.label_3.text())
+        self.ui.version_id.setText(self.version_id.text())
+        self.ResultsSemanticMemoryWindow.show()
 
 
     def saveFile(self):
@@ -161,4 +177,5 @@ class Ui_QAResWindow(QWidget):
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.saveBtn.setText(_translate("DatabaseWindow", "Save"))
+        self.semanticMemBtn.setText(_translate("DatabaseWindow", "Semantic Memory"))
         self.menuInteractive_System_Modelling.setTitle(_translate("QAResWindow", "1"))
