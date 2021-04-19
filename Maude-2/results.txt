@@ -3,74 +3,84 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Tue Apr 13 01:11:58 2021
+		   Tue Apr 20 04:12:56 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 16611 in 12ms cpu (10ms real) (1384250 rewrites/second)
+rewrites: 22405 in 12ms cpu (12ms real) (1867083 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 14281 in 8ms cpu (6ms real) (1785125 rewrites/second)
+rewrites: 17641 in 8ms cpu (8ms real) (2205125 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
-rewrites: 7382 in 0ms cpu (2ms real) (~ rewrites/second)
+rewrites: 8160 in 4ms cpu (2ms real) (2040000 rewrites/second)
 
 Introduced timed module: SENSORY-MEMORY
 
-rewrites: 7382 in 4ms cpu (2ms real) (1845500 rewrites/second)
+rewrites: 3232 in 4ms cpu (3ms real) (808000 rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 11961 in 4ms cpu (6ms real) (2990250 rewrites/second)
+rewrites: 12745 in 4ms cpu (6ms real) (3186250 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 8868 in 4ms cpu (3ms real) (2217000 rewrites/second)
+rewrites: 14356 in 8ms cpu (5ms real) (1794500 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
-rewrites: 12087 in 4ms cpu (3ms real) (3021750 rewrites/second)
+rewrites: 12367 in 4ms cpu (3ms real) (3091750 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 64747 in 36ms cpu (33ms real) (1798527 rewrites/second)
+rewrites: 83678 in 60ms cpu (59ms real) (1394633 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 27154 in 12ms cpu (13ms real) (2262833 rewrites/second)
+rewrites: 31334 in 16ms cpu (15ms real) (1958375 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 71885 in 24ms cpu (24ms real) (2995208 rewrites/second)
+rewrites: 64177 in 28ms cpu (27ms real) (2292035 rewrites/second)
 
-Timed rewrite [1000]  {init} in EXAMPLE-DOGS with mode deterministic time
+Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 100
 
 Result ClockedSystem :
   {
+ans(a "animal" can "move" 1 for INF)
 ans(a "basenji" can "breath" 7 for INF)
-perc(a "dog" can "breath" for 20)
-perc(a "dog" can "lay" for 13)
-perc(can a "dog" "track" ? for 20)
-perc(can a "hound" "move" ? for 7)
-perc(is a "dog" "animal" ? for 6)< human : Human | cognitiveLoad : 5,
-    proceduralMem : emptyProcedural,semanticMem :(("animals" : "animal" |- 1
-    ->| can "breath")
+perc(can a "basenji" "breath" ? for 41)
+perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 7,
+    proceduralMem : emptyProcedural,semanticMem :(
+("animals" : "animal" |- 1 ->| can "breath")
+
 ("animals" : "animal" |- 1 ->| can "move")
+
+("animals" : "hound" |- 1 ->| can "track")
+
 ("dogs" : "basenji" |- 2 ->| is a "hound")
+
 ("dogs" : "basenji" |- 3 ->| cannot "bark")
+
 ("dogs" : "bobby" |- 1 ->| can "lay")
+
 ("dogs" : "bobby" |- 2 ->| is a "basenji")
+
 ("dogs" : "dog" |- 1 ->| can "bark")
+
 ("dogs" : "dog" |- 2 ->| is a "animal")
-("dogs" : "hound" |- 1 ->| can "track")
+
+("dogs" : "hound" |- 1 ->| can "bark")
 "dogs" : "hound" |- 2 ->| is a "dog"),sensoryMem : emptySensory,shortTermMem :(
-    (a "basenji" can "breath" < decay 100 >);
-(a "dog" can "lay" < decay 93 >);
-can a "basenji" "breath" ? < decay 93 >)>} in time 7
+    (chunk a "basenji" can "breath" decay 98 of 100);
+(chunk can a "basenji" "breath" ? decay 99 of 100);
+(chunk can a "hound" "move" ? decay 100 of 100);
+(chunk goal("animals",foundAnswer,0,5)decay 75 of 100);
+chunk goal("animals",foundAnswer,0,5)decay 75 of 100)>} in time 25
 
 Bye.

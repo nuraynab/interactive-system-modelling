@@ -133,6 +133,19 @@ endtom)
 endtom)
 
 
+(tomod SENSORY-MEMORY is
+
+  protecting NAT .
+  protecting STRING .
+  including TIMED-ITEMS .
+
+  sorts SensoryMemory .
+
+  op emptySensory : -> SensoryMemory [ctor] .
+
+endtom)
+
+
 (tomod PROCEDURAL-MEMORY is
 
   protecting NAT .
@@ -157,7 +170,7 @@ endtom)
 
   op emptySemantic : -> SemanticMemory .
   op _:_|-_->|_ : Domain Category Time TypedAttribute -> FactRepresentation [ctor format (!r o b o r o b o)] .
-  op __ : SemanticMemory SemanticMemory -> SemanticMemory [ctor assoc comm id: emptySemantic format (o n o)] .
+  op __ : SemanticMemory SemanticMemory -> SemanticMemory [ctor assoc comm id: emptySemantic format (n n o)] .
 
   op _is`negated`in_ : Fact SemanticMemory -> Bool .
 
@@ -182,14 +195,14 @@ endtom)
   subsorts Perception SingleExperiment < Experiment < Msg .
   subsort Answered < Msg .
 
-  op perc : TimedBasicItem -> Perception [ctor] .
+  op perc : TimedBasicItem -> Perception [ctor format (n o)] .
 
-  op exp : FutureBasicItem -> SingleExperiment [ctor] .
+  op exp : FutureBasicItem -> SingleExperiment [ctor format (n o)] .
 
   op ans : TimedBasicItem -> Answered [ctor format (n o)] .
 
 
-  op noExp : -> Experiment [ctor].
+  op noExp : -> Experiment [ctor format (n o)].
   op repeat_times`starting`in_:_ : Nat Time SingleExperiment
                                              -> Experiment .
 
@@ -218,12 +231,14 @@ endtom)
 
 (tomod HUMAN is
 
+  including SENSORY-MEMORY .
   including PROCEDURAL-MEMORY .
   including SEMANTIC-MEMORY .
   including ENVIRONMENT .
 
   class Human | cognitiveLoad : Nat, --- size of short-time memory, maybe counting invisible "previous" stuff!
     shortTermMem : ShortTermMemory,
+    sensoryMem : SensoryMemory,
     proceduralMem : ProceduralMemory,
                 semanticMem : SemanticMemory .
 
@@ -440,7 +455,7 @@ crl [tick] :
   crl [cannot-explicit] :
     {< H : Human | cognitiveLoad : N,
        shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
-                      (chunk (can a C A ?) decay T3 of 4) ; STM,
+                      (chunk (can a C A ?) decay T3 of T4) ; STM,
        semanticMem : (D : C |- M ->| (cannot A)) S >
      REST}
   =>
@@ -461,7 +476,7 @@ crl [tick] :
   crl [cannot-implicit] :
     {< H : Human | cognitiveLoad : N,
        shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
-                      (chunk (can a C A ?) decay T3 of 4) ; STM,
+                      (chunk (can a C A ?) decay T3 of T4) ; STM,
        semanticMem : (D : C1 |- M ->| (can A)) S >
      REST}
   =>
@@ -470,7 +485,7 @@ crl [tick] :
                       (chunk (a C cannot A) decay DECAY-TIME of DECAY-TIME) ;
                       idle(STM, M),
        semanticMem : (D : C1 |- M ->| (can A)) S >
-       (ans ((a C cannot A M) for INF))
+       (ans ((a C cannot A T) for INF))
     idle(REST,T)}
   in time T
   if IS := removeTime(STM) /\
@@ -510,30 +525,44 @@ endtom)
   ops theHuman-question theHuman-rote : -> Object .
   ops init-STM-question init-STM-rote : -> ShortTermMemory .
   
-  eq init-STM-question = chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME .
+  eq init-STM-question = (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
+                         (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
+                         (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) .
+
+                     
   eq init-STM-rote = (chunk a "animal" can "breathe" decay 10 of DECAY-TIME) ;
+                     (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
+                     (chunk a "animal" can "talk" decay 10 of DECAY-TIME) ;
+                     (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
+                     (chunk a "animal" can "sleep" decay 10 of DECAY-TIME) ;
                      (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) .
 
   eq theHuman-question = < human : Human | cognitiveLoad : 0,
                                shortTermMem : init-STM-question,
+                               sensoryMem : emptySensory,
                                proceduralMem : emptyProcedural,
                                            semanticMem : init-SemanticMem > .
   
   eq theHuman-rote = < human : Human | cognitiveLoad : 0,
                            shortTermMem : init-STM-rote,
+                           sensoryMem : emptySensory,
                            proceduralMem : emptyProcedural,
                                        semanticMem : init-SemanticMem > .
   
   eq init-question = (exp(((can a "hound" "move" ?) for 2) in 7))
                      theHuman-question .
 
-  eq init = (exp(((can a "dog" "track" ?) for 3) in 3))
-            (exp(((can a "hound" "move" ?) for 2) in 6))
-            (exp(((can a "dog" "breath" ?) for 7) in 14))
+  eq init = (exp(((can a "hound" "move" ?) for 3) in 3))
+            (exp(((can a "animal" "move" ?) for 2) in 6))
+            (exp(((can a "basenji" "move" ?) for 7) in 14))
             theHuman-question .
 
   eq init-rote = (repeat 20 times starting in 3 :
                      exp(((a "animal" can "breathe") for 10) in 20))
+                     (repeat 20 times starting in 3 :
+                     exp(((a "animal" can "talk") for 10) in 20))
+                     (repeat 20 times starting in 3 :
+                     exp(((a "animal" can "sleep") for 10) in 20))
                  theHuman-rote .
 
   eq experiment-setting = (exp(((can a "hound" "breathe" ?) for 1) in 100))
@@ -544,6 +573,6 @@ endtom)
 endtom)
 
 
-(trew [10000] in EXAMPLE-DOGS : {init-rote} in time <= 100 .)
+(trew [10000] in EXAMPLE-DOGS : {init-rote} in time <= 1000 .)
 
 quit

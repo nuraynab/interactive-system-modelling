@@ -414,7 +414,7 @@ endtom)
   eq init = (exp(((can a "dog" "track" ?) for 3) in 3))
             (exp(((can a "hound" "move" ?) for 2) in 6))
             (exp(((a "dog" can "breath") for 7) in 14))
-            (perc((can a "basenji" "breath" ?) for 2))
+            (perc((can a "basenji" "bark" ?) for 2))
             (perc((a "bobby" can "lay") for 1))
             aHuman .
 

@@ -144,11 +144,15 @@ class Ui_ResultsSemanticMemoryWindow(object):
         self.label_5.setGeometry(QtCore.QRect(520, 440, 151, 51))
         self.label_5.setObjectName("label_5")
         self.updateBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.updateBtn.setGeometry(QtCore.QRect(700, 10, 191, 41))
+        self.updateBtn.setGeometry(QtCore.QRect(500, 10, 200, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.updateBtn.setFont(font)
         self.updateBtn.setObjectName("updateBtn")
+        self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.saveBtn.setGeometry(QtCore.QRect(750, 10, 200, 41))
+        self.saveBtn.setFont(font)
+        self.saveBtn.setObjectName("saveBtn")
         self.oldTableWidget.raise_()
         self.label.raise_()
         self.line.raise_()
@@ -175,11 +179,18 @@ class Ui_ResultsSemanticMemoryWindow(object):
         self.version_id = QtWidgets.QLabel(self.centralwidget)
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.version_id.setObjectName("version_id")
+        self.version_name = QtWidgets.QLabel(self.centralwidget)
+        self.version_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_name.setObjectName("version_name")
+        self.project_name = QtWidgets.QLabel(self.centralwidget)
+        self.project_name.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.project_name.setObjectName("project_name")
+        self.version_number = QtWidgets.QLabel(self.centralwidget)
+        self.version_number.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.version_number.setObjectName("version_number")
 
         self.updateBtn.clicked.connect(self.getItems)
         
-
-
     def getItems(self):
         version_id = int(self.version_id.text())
         self.oldTableWidget.setRowCount(0)
@@ -237,5 +248,6 @@ class Ui_ResultsSemanticMemoryWindow(object):
         self.newTableWidget.setSortingEnabled(False)
         self.newTableWidget.setSortingEnabled(__sortingEnabled)
         self.label_5.setText(_translate("ResultsSemanticMemoryWindow", "<html><head/><body><p><span style=\" font-size:20pt; width:1000px;\">Current</span></p></body></html>"))
+        self.saveBtn.setText(_translate("ResultsSemanticMemoryWindow", "Save"))
         self.menuInteractive_System_Modelling.setTitle(_translate("ResultsSemanticMemoryWindow", "1"))
 
