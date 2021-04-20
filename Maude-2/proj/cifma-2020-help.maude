@@ -33,10 +33,10 @@ load real-time-maude.maude
   subsort String < Category < Attribute .
   subsort String < Domain .
 
-  ops can_ is`a_ has_ : Attribute -> TypedAttribute [ctor] .
-  ops cannot_ is`not`a_ has`not_ has_ : Attribute -> TypedAttribute [ctor] .
+  ops can_ is`a_ has_ is_ : Attribute -> TypedAttribute [ctor] .
+  ops cannot_ is`not`a_ has`not_ is`not_ : Attribute -> TypedAttribute [ctor] .
   op what`can_do? : Category -> Question [ctor] .
-  ops can`a__? is`a__? has`a__? : Category Attribute -> Question [ctor] .
+  ops can`a__? is`a__? has`a__? is__? : Category Attribute -> Question [ctor] .
   op a__ : Category TypedAttribute -> Fact [ctor] .
   
   ops I`dont`know`if`a_can_ I`dont`know`if`a_is_ : Category Attribute -> Fact [ctor] .
@@ -53,6 +53,7 @@ load real-time-maude.maude
   eq (cannot A) is negative of (can A) = true .
   eq (is not a A) is negative of (is a A) = true .
   eq (has not A) is negative of (has A) = true .
+  eq (is not A) is negative of (is A) = true .
   eq TA1 is negative of TA2 = false [owise] .
 
   op isItemIn : Item ItemSet -> Bool .
@@ -307,6 +308,12 @@ endtom)
   ceq canRetrievalTime(C, A, (D : C1 |- M ->| (can A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
   eq canRetrievalTime(C, A, S, IS) = INF [owise] .
 
+  op hasRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
+  ceq hasRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C has A, IS) .
+  ceq hasRetrievalTime(C, A, (D : C |- M ->| (has A)) S, IS) = M if not isItemIn(a C has A, IS) .
+  ceq hasRetrievalTime(C, A, (D : C1 |- M ->| (has A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
+  eq hasRetrievalTime(C, A, S, IS) = INF [owise] .
+
   op questionFound : ShortTermMemory -> Bool .
   eq questionFound(emptySTM) = false .
   eq questionFound((chunk Q decay T1 of T2) ; STM) = true .
@@ -423,6 +430,31 @@ crl [tick] :
      REST}
    if T4 >= STM-TO-LTM-THRESHOLD .
 
+  crl [from-STM-to-LTM-fact-has] :
+    {< H : Human | cognitiveLoad : N,
+                   shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
+                                  (chunk (a C has A) decay T3 of T4) ; STM,
+                   semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+                   shortTermMem : STM,
+                   semanticMem : (D : C |- 1 ->| (has A)) S >
+     REST}
+   if T4 >= STM-TO-LTM-THRESHOLD .
+
+  crl [from-STM-to-LTM-fact-is] :
+    {< H : Human | cognitiveLoad : N,
+                   shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
+                                  (chunk (a C is A) decay T3 of T4) ; STM,
+                   semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+                   shortTermMem : STM,
+                   semanticMem : (D : C |- 1 ->| (is A)) S >
+     REST}
+   if T4 >= STM-TO-LTM-THRESHOLD .
 
     var NEW-GOAL-CHUNK : ShortTermMemory .
 
@@ -451,6 +483,28 @@ crl [tick] :
                          then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
                          else emptySTM fi .
 
+  crl [has] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N + 1,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, T),
+       semanticMem : S >
+       (ans ((a C has A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C has A, IS) /\ T := hasRetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
+     not ( ( a C has A ) is negated in S ) /\ not isItemIn(a C has not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
 
   crl [cannot-explicit] :
     {< H : Human | cognitiveLoad : N,
@@ -520,7 +574,7 @@ endtom)
 
 
 
-  eq theHuman = < human : Human | cognitiveLoad : 2,
+  eq theHuman = < human : Human | cognitiveLoad : 1,
                                shortTermMem : init-STM,
                                sensoryMem : emptySensory,
                                proceduralMem : emptyProcedural,
@@ -539,6 +593,6 @@ endtom)
 endtom)
 
 
-(trew [10000] in EXAMPLE-DOGS : {init} in time <= 100 .)
+(trew [10000] in EXAMPLE-DOGS : {init} in time <= 1000 .)
 
 quit

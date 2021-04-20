@@ -21,7 +21,6 @@ from experiment import Ui_ExperimentWindow
 from results import Ui_ResultsWindow
 from question_answer import Ui_QAResWindow
 from run_project import Ui_RunProjectWindow
-from learning_process import Ui_LearningWindow
 from result_semantic_memory import Ui_ResultsSemanticMemoryWindow
 
 
