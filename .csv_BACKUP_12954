@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+Question,Answer,Time taken
+=======
 Domains,Categories,Types,Attributes,Facts,Questions,Perceptions,Actions
 Animals,animal,can,skin,animal has skin,is a canary canary?,,
 Birds,bird,is,move,animal can move,is a ostrich ostrich?,,
@@ -33,3 +36,4 @@ Fish,fish,is a,eat,animal can eat,is a shark shark?,,
 ,,,,,can ostrich move?,,
 ,,,,,can shark eat?,,
 ,,,,,can shark breathe?,,
+>>>>>>> origin/master

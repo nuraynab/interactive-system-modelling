@@ -250,7 +250,7 @@ endtom)
   including HUMAN .
 
   var H : Oid .
-  vars N N1 N2 : Nat .
+  vars N N1 N2 N3 : Nat .
   vars M M1 FT IT : Time .
   vars T T1 T2 T3 T4 TP : TimeInf .
   vars D D1 D2 : Domain .
@@ -306,6 +306,12 @@ endtom)
   ceq canRetrievalTime(C, A, (D : C |- M ->| (can A)) S, IS) = M if not isItemIn(a C can A, IS) .
   ceq canRetrievalTime(C, A, (D : C1 |- M ->| (can A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
   eq canRetrievalTime(C, A, S, IS) = INF [owise] .
+
+  op hasRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
+  ceq hasRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C has A, IS) .
+  ceq hasRetrievalTime(C, A, (D : C |- M ->| (has A)) S, IS) = M if not isItemIn(a C has A, IS) .
+  ceq hasRetrievalTime(C, A, (D : C1 |- M ->| (has A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
+  eq hasRetrievalTime(C, A, S, IS) = INF [owise] .
 
   op questionFound : ShortTermMemory -> Bool .
   eq questionFound(emptySTM) = false .
@@ -411,7 +417,8 @@ crl [tick] :
 
 
   crl [from-STM-to-LTM-fact-can] :
-    {< H : Human | cognitiveLoad : N,
+    {(repeat N3 times starting in TP : (exp ((a C can A for T) in FT)))
+    < H : Human | cognitiveLoad : N,
                    shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
                                   (chunk (a C can A) decay T3 of T4) ; STM,
                    semanticMem : S >
@@ -477,14 +484,14 @@ crl [tick] :
     {< H : Human | cognitiveLoad : N,
        shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
                       (chunk (can a C A ?) decay T3 of T4) ; STM,
-       semanticMem : (D : C1 |- M ->| (can A)) S >
+       semanticMem : (D1 : C1 |- M ->| (can A)) S >
      REST}
   =>
     {< H : Human | cognitiveLoad : N + 1,
        shortTermMem : NEW-GOAL-CHUNK ;
                       (chunk (a C cannot A) decay DECAY-TIME of DECAY-TIME) ;
                       idle(STM, M),
-       semanticMem : (D : C1 |- M ->| (can A)) S >
+       semanticMem : (D1 : C1 |- M ->| (can A)) S >
        (ans ((a C cannot A T) for INF))
     idle(REST,T)}
   in time T
@@ -495,6 +502,75 @@ crl [tick] :
      NEW-GOAL-CHUNK := if N1 > 0
                          then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
                          else emptySTM fi .
+
+  crl [has] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N + 1,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, T),
+       semanticMem : S >
+       (ans ((a C has A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C has A, IS) /\ T := hasRetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
+     not ( ( a C has A ) is negated in S ) /\ not isItemIn(a C has not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [hasnot-explicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D : C |- M ->| (has not A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N + 1,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D : C |- M ->| (has not A)) S >
+       (ans ((a C has not A M) for INF))
+    idle(REST,M)}
+  in time M
+  if IS := removeTime(STM) /\  not isItemIn(a C cannot A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [hasnot-implicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D1 : C1 |- M ->| (has A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N + 1,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D1 : C1 |- M ->| (has A)) S >
+       (ans ((a C has not A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C has not A, IS) /\ not isItemIn(a C has A, IS) /\
+     T := timeToSuper(C1, C, S, IS) + M /\ T <= MAX-RETRIEVAL-TIME /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+
 
 endtom)
 
@@ -508,6 +584,7 @@ endtom)
 
   eq init-SemanticMem =  
 ("animals" : "animal" |- 1 ->| (can "move")) 
+("animals" : "dog" |- 1 ->| (has "tail")) 
 ("dogs" : "dog" |- 2 ->| (is a "animal")) 
 ("dogs" : "dog" |- 1 ->| (can "bark")) 
 ("dogs" : "hound" |- 2 ->| (is a "dog")) 
@@ -525,17 +602,15 @@ endtom)
   ops theHuman-question theHuman-rote : -> Object .
   ops init-STM-question init-STM-rote : -> ShortTermMemory .
   
-  eq init-STM-question = (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
-                         (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
-                         (chunk goal("animals", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) .
+  eq init-STM-question = (chunk goal("animals", foundAnswer, 0, 100) decay DECAY-TIME of DECAY-TIME) .
 
                      
   eq init-STM-rote = (chunk a "animal" can "breathe" decay 10 of DECAY-TIME) ;
                      (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
-                     (chunk a "animal" can "talk" decay 10 of DECAY-TIME) ;
-                     (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) ;
-                     (chunk a "animal" can "sleep" decay 10 of DECAY-TIME) ;
-                     (chunk goal("animals", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) .
+                     (chunk a "animal" can "talk" decay 200 of DECAY-TIME) ;
+                     (chunk goal("animals", rehearsed, 0, 5) decay 200 of DECAY-TIME) ;
+                     (chunk a "animal" can "sleep" decay 200 of DECAY-TIME) ;
+                     (chunk goal("animals", rehearsed, 0, 5) decay 200 of DECAY-TIME) .
 
   eq theHuman-question = < human : Human | cognitiveLoad : 0,
                                shortTermMem : init-STM-question,
@@ -549,7 +624,7 @@ endtom)
                            proceduralMem : emptyProcedural,
                                        semanticMem : init-SemanticMem > .
   
-  eq init-question = (exp(((can a "hound" "move" ?) for 2) in 7))
+  eq init-question = (exp(((has a "animal" "tail" ?) for 2) in 4))
                      theHuman-question .
 
   eq init = (exp(((can a "hound" "move" ?) for 3) in 3))
@@ -557,11 +632,11 @@ endtom)
             (exp(((can a "basenji" "move" ?) for 7) in 14))
             theHuman-question .
 
-  eq init-rote = (repeat 20 times starting in 3 :
+  eq init-rote = (repeat 5 times starting in 3 :
                      exp(((a "animal" can "breathe") for 10) in 20))
-                     (repeat 20 times starting in 3 :
+                     (repeat 5 times starting in 10 :
                      exp(((a "animal" can "talk") for 10) in 20))
-                     (repeat 20 times starting in 3 :
+                     (repeat 5 times starting in 30 :
                      exp(((a "animal" can "sleep") for 10) in 20))
                  theHuman-rote .
 
@@ -573,6 +648,6 @@ endtom)
 endtom)
 
 
-(trew [10000] in EXAMPLE-DOGS : {init-rote} in time <= 1000 .)
+(trew [10000] in EXAMPLE-DOGS : {init-question} in time <= 100 .)
 
 quit

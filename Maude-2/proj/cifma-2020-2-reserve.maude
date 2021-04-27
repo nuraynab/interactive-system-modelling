@@ -412,7 +412,7 @@ endtom)
 
   eq init-env = 
 (perc((can a "dog" "track" ?) for 20)) 
-(perc((can a "animal" "breath" ?) for 3)) 
+(perc((can a "basenji" "bark" ?) for 3)) 
 (perc((a "dog" can "lay") for 20))
 (perc((can a "hound" "move" ?) for 20)) 
 aHuman .
