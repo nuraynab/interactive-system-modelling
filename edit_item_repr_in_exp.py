@@ -169,22 +169,28 @@ class Ui_EditItemReprInExpWindow(object):
     def saveItem(self):
         version_id = int(self.version_id.text())
         cur_dom = str(self.DomComboBox.currentText())
+
         if str(self.item) == "facts":
+            repeat = int(str(self.repeat_lineEdit.text()))
+            repeat_in_time = int(str(self.in_time_lineEdit.text()))
             cur_value = str(self.CatComboBox.currentText()) + " " + str(self.TypesComboBox.currentText()) + " " + str(self.AttrComboBox.currentText())
         else:
             cur_value = str(self.TypesComboBox.currentText()) + " " + str(self.CatComboBox.currentText()) + " " + str(self.AttrComboBox.currentText()) + "?"
 
         cur_for_time = int(self.for_lineEdit.text())
         cur_in_time = int(self.in_lineEdit.text())
-        repeat = int(str(self.repeat_lineEdit.text()))
-        repeat_in_time = int(str(self.in_time_lineEdit.text()))
+        
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
-            
-            cur.execute("UPDATE experiment SET domain = '%s', value = '%s', future_time = '%i', persist_time = '%i', repeat_num = '%i', in_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
+            if str(self.item) == "facts":
+                cur.execute("UPDATE experiment SET domain = '%s', value = '%s', future_time = '%i', persist_time = '%i', repeat_num = '%i', in_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
                                                  % (cur_dom, cur_value, cur_in_time, cur_for_time, repeat, repeat_in_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
                                                  ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_dom), ''.join(self.origin_value)))
- 
+            else:
+                cur.execute("UPDATE experiment SET domain = '%s', value = '%s', future_time = '%i', persist_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
+                                                 % (cur_dom, cur_value, cur_in_time, cur_for_time,''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
+                                                 ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_dom), ''.join(self.origin_value)))
+            
             db.commit()
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
 

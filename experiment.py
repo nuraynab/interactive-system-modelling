@@ -142,7 +142,7 @@ class Ui_ExperimentWindow(object):
         self.questTableWidget.setWordWrap(True)
         self.questTableWidget.setCornerButtonEnabled(True)
         self.questTableWidget.setObjectName("questTableWidget")
-        self.questTableWidget.setColumnCount(6)
+        self.questTableWidget.setColumnCount(4)
         self.questTableWidget.setRowCount(3)
         item = QtWidgets.QTableWidgetItem()
         self.questTableWidget.setVerticalHeaderItem(0, item)
@@ -175,21 +175,9 @@ class Ui_ExperimentWindow(object):
         font.setPointSize(14)
         item.setFont(font)
         self.questTableWidget.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignCenter)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.questTableWidget.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        item.setTextAlignment(QtCore.Qt.AlignCenter)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        item.setFont(font)
-        self.questTableWidget.setHorizontalHeaderItem(5, item)
         self.questTableWidget.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.questTableWidget.horizontalHeader().setCascadingSectionResizes(False)
-        self.questTableWidget.horizontalHeader().setDefaultSectionSize(162)
+        self.questTableWidget.horizontalHeader().setDefaultSectionSize(243)
         self.questTableWidget.horizontalHeader().setMinimumSectionSize(71)
         self.questTableWidget.horizontalHeader().setSortIndicatorShown(False)
         self.questTableWidget.verticalHeader().setCascadingSectionResizes(False)
@@ -268,8 +256,6 @@ class Ui_ExperimentWindow(object):
                     self.questTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(str(item[8])+" "+str(item[7])+" "+str(item[9])+"?"))
                     self.questTableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(str(item[5])))
                     self.questTableWidget.setItem(j, 3, QtWidgets.QTableWidgetItem(str(item[6])))
-                    self.questTableWidget.setItem(i, 4, QtWidgets.QTableWidgetItem(str(item[10])))
-                    self.questTableWidget.setItem(i, 5, QtWidgets.QTableWidgetItem(str(item[11])))
                     j+=1
 
     def addItem(self):
@@ -305,8 +291,6 @@ class Ui_ExperimentWindow(object):
             cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
             cur_in_time = self.questTableWidget.item(curr_row, curr_col+2).text()
             cur_for_time = self.questTableWidget.item(curr_row, curr_col+3).text()
-            repeat = self.factsTableWidget.item(curr_row, curr_col+4).text()
-            repeat_in_time = self.factsTableWidget.item(curr_row, curr_col+5).text()
                         
 
         self.EditItemReprInExpWindow = QtWidgets.QMainWindow()
@@ -314,8 +298,9 @@ class Ui_ExperimentWindow(object):
         self.ui.setupUi(self.EditItemReprInExpWindow)
         self.ui.for_lineEdit.setText(cur_for_time)
         self.ui.in_lineEdit.setText(cur_in_time)
-        self.ui.repeat_lineEdit.setText(repeat)
-        self.ui.in_time_lineEdit.setText(repeat_in_time)
+        if fact:
+            self.ui.repeat_lineEdit.setText(repeat)
+            self.ui.in_time_lineEdit.setText(repeat_in_time)
         self.ui.version_id.setText(self.version_id.text())
         self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_in_time + " - "  + cur_for_time)
         self.ui.origin_dom = cur_dom
@@ -333,6 +318,10 @@ class Ui_ExperimentWindow(object):
             self.ui.TypesComboBox.setGeometry(QtCore.QRect(200, 260, 311, 41))
             self.ui.label_5.setGeometry(QtCore.QRect(20, 310, 121, 31))
             self.ui.label_6.setGeometry(QtCore.QRect(20, 260, 121, 31))
+            self.ui.repeat_lineEdit.hide()
+            self.ui.in_time_lineEdit.hide()
+            self.ui.label_repeat.hide()
+            self.ui.label_in_time.hide()
         self.EditItemReprInExpWindow.show()
 
     def deleteItem(self):
@@ -427,10 +416,6 @@ class Ui_ExperimentWindow(object):
         item.setText(_translate("ExperimentWindow", "Starting In"))
         item = self.questTableWidget.horizontalHeaderItem(3)
         item.setText(_translate("ExperimentWindow", "Available For"))
-        item = self.questTableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("ExperimentWindow", "Repeat"))
-        item = self.questTableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("ExperimentWindow", "In time"))
         __sortingEnabled = self.questTableWidget.isSortingEnabled()
         self.questTableWidget.setSortingEnabled(False)
         self.questTableWidget.setSortingEnabled(__sortingEnabled)

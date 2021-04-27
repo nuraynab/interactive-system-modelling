@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 27, 2021 at 07:49 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: Apr 28, 2021 at 12:01 AM
+-- Server version: 10.4.13-MariaDB
+-- PHP Version: 7.4.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,6 +29,7 @@ USE `interSys`;
 -- Table structure for table `actions`
 --
 
+DROP TABLE IF EXISTS `actions`;
 CREATE TABLE `actions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -41,6 +42,7 @@ CREATE TABLE `actions` (
 -- Table structure for table `attributes`
 --
 
+DROP TABLE IF EXISTS `attributes`;
 CREATE TABLE `attributes` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -119,6 +121,7 @@ INSERT INTO `attributes` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `categories`
 --
 
+DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -165,6 +168,7 @@ INSERT INTO `categories` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `domains`
 --
 
+DROP TABLE IF EXISTS `domains`;
 CREATE TABLE `domains` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -194,6 +198,7 @@ INSERT INTO `domains` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `environment`
 --
 
+DROP TABLE IF EXISTS `environment`;
 CREATE TABLE `environment` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -212,6 +217,7 @@ CREATE TABLE `environment` (
 -- Table structure for table `experiment`
 --
 
+DROP TABLE IF EXISTS `experiment`;
 CREATE TABLE `experiment` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -222,55 +228,58 @@ CREATE TABLE `experiment` (
   `persist_time` int(11) NOT NULL,
   `categories` text NOT NULL,
   `types` text NOT NULL,
-  `attributes` text NOT NULL
+  `attributes` text NOT NULL,
+  `repeat_num` int(11) DEFAULT NULL,
+  `in_time` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `experiment`
 --
 
-INSERT INTO `experiment` (`id`, `version_id`, `domain`, `item`, `value`, `future_time`, `persist_time`, `categories`, `types`, `attributes`) VALUES
-(27, 10, 'animals', 'question', 'can hound move?', 3, 3, 'hound', 'can', 'move'),
-(28, 10, 'animals', 'question', 'can animal move?', 6, 2, 'animal', 'can', 'move'),
-(29, 10, 'animals', 'question', 'can basenji breath?', 14, 50, 'basenji', 'can', 'breath'),
-(32, 10, 'animals', 'fact', 'animal can breath', 10, 20, 'animal', 'can', 'breath'),
-(33, 36, 'Birds', 'question', 'is a canary canary?', 0, 2, 'canary', 'is a', 'canary'),
-(34, 36, 'Birds', 'question', 'is a ostrich ostrich?', 4, 2, 'ostrich', 'is a', 'ostrich'),
-(35, 36, 'Fish', 'question', 'is a shark shark?', 8, 2, 'shark', 'is a', 'shark'),
-(36, 36, 'Fish', 'question', 'is a salmon salmon?', 12, 2, 'salmon', 'is a', 'salmon'),
-(37, 36, 'Birds', 'question', 'is a bird bird?', 16, 2, 'bird', 'is a', 'bird'),
-(38, 36, 'Fish', 'question', 'is a fish fish?', 20, 2, 'fish', 'is a', 'fish'),
-(39, 36, 'Animals', 'question', 'is a animal animal?', 24, 2, 'animal', 'is a', 'animal'),
-(40, 36, 'Birds', 'question', 'is a canary bird?', 28, 2, 'canary', 'is a', 'bird'),
-(41, 36, 'Birds', 'question', 'is a ostrich bird?', 32, 2, 'ostrich', 'is a', 'bird'),
-(42, 36, 'Fish', 'question', 'is a shark fish?', 36, 2, 'shark', 'is a', 'fish'),
-(43, 36, 'Fish', 'question', 'is a salmon fish?', 40, 2, 'salmon', 'is a', 'fish'),
-(44, 36, 'Birds', 'question', 'is a bird animal?', 44, 2, 'bird', 'is a', 'animal'),
-(45, 36, 'Fish', 'question', 'is a fish animal?', 48, 2, 'fish', 'is a', 'animal'),
-(46, 36, 'Birds', 'question', 'is a canary animal?', 52, 2, 'canary', 'is a', 'animal'),
-(47, 36, 'Birds', 'question', 'is a ostrich animal?', 56, 2, 'ostrich', 'is a', 'animal'),
-(48, 36, 'Fish', 'question', 'is a shark animal?', 60, 2, 'shark', 'is a', 'animal'),
-(49, 36, 'Fish', 'question', 'is a salmon animal?', 64, 2, 'salmon', 'is a', 'animal'),
-(50, 36, 'Birds', 'question', 'can canary sing?', 68, 2, 'canary', 'can', 'sing'),
-(51, 36, 'Birds', 'question', 'is ostrich tall?', 72, 2, 'ostrich', 'is', 'tall'),
-(52, 36, 'Fish', 'question', 'is shark dangerous?', 76, 2, 'shark', 'is', 'dangerous'),
-(53, 36, 'Fish', 'question', 'is salmon edible?', 80, 2, 'salmon', 'is', 'edible'),
-(54, 36, 'Birds', 'question', 'can bird fly?', 84, 2, 'bird', 'can', 'fly'),
-(55, 36, 'Fish', 'question', 'can fish swim?', 88, 2, 'fish', 'can', 'swim'),
-(56, 36, 'Animals', 'question', 'can animal move?', 92, 2, 'animal', 'can', 'move'),
-(57, 36, 'Birds', 'question', 'can canary fly?', 96, 2, 'canary', 'can', 'fly'),
-(58, 36, 'Birds', 'question', 'has canary wings?', 100, 2, 'canary', 'has', 'wings'),
-(59, 36, 'Birds', 'question', 'has canary feathers?', 104, 2, 'canary', 'has', 'feathers'),
-(60, 36, 'Fish', 'question', 'has shark fins?', 108, 2, 'shark', 'has', 'fins'),
-(61, 36, 'Fish', 'question', 'can shark swim?', 112, 2, 'shark', 'can', 'swim'),
-(62, 36, 'Fish', 'question', 'has shark gills?', 116, 2, 'shark', 'has', 'gills'),
-(63, 36, 'Birds', 'question', 'has canary skin?', 120, 2, 'canary', 'has', 'skin'),
-(64, 36, 'Birds', 'question', 'can ostrich move?', 124, 2, 'ostrich', 'can', 'move'),
-(65, 36, 'Fish', 'question', 'can shark eat?', 128, 2, 'shark', 'can', 'eat'),
-(66, 36, 'Fish', 'question', 'can shark breathe?', 132, 2, 'shark', 'can', 'breathe'),
-(71, 36, 'Fish', 'fact', 'salmon is pink', 0, 2, 'salmon', 'is', 'pink'),
-(72, 36, 'Fish', 'fact', 'salmon is edible', 2, 2, 'salmon', 'is', 'edible'),
-(73, 36, 'Fish', 'fact', 'shark can bite', 4, 2, 'shark', 'can', 'bite');
+INSERT INTO `experiment` (`id`, `version_id`, `domain`, `item`, `value`, `future_time`, `persist_time`, `categories`, `types`, `attributes`, `repeat_num`, `in_time`) VALUES
+(27, 10, 'animals', 'question', 'can hound move?', 3, 3, 'hound', 'can', 'move', 5, 4),
+(33, 36, 'Birds', 'question', 'is a canary canary?', 0, 2, 'canary', 'is a', 'canary', 0, 0),
+(34, 36, 'Birds', 'question', 'is a ostrich ostrich?', 4, 2, 'ostrich', 'is a', 'ostrich', 0, 0),
+(35, 36, 'Fish', 'question', 'is a shark shark?', 8, 2, 'shark', 'is a', 'shark', 0, 0),
+(36, 36, 'Fish', 'question', 'is a salmon salmon?', 12, 2, 'salmon', 'is a', 'salmon', 0, 0),
+(37, 36, 'Birds', 'question', 'is a bird bird?', 16, 2, 'bird', 'is a', 'bird', 0, 0),
+(38, 36, 'Fish', 'question', 'is a fish fish?', 20, 2, 'fish', 'is a', 'fish', 0, 0),
+(39, 36, 'Animals', 'question', 'is a animal animal?', 24, 2, 'animal', 'is a', 'animal', 0, 0),
+(40, 36, 'Birds', 'question', 'is a canary bird?', 28, 2, 'canary', 'is a', 'bird', 0, 0),
+(41, 36, 'Birds', 'question', 'is a ostrich bird?', 32, 2, 'ostrich', 'is a', 'bird', 0, 0),
+(42, 36, 'Fish', 'question', 'is a shark fish?', 36, 2, 'shark', 'is a', 'fish', 0, 0),
+(43, 36, 'Fish', 'question', 'is a salmon fish?', 40, 2, 'salmon', 'is a', 'fish', 0, 0),
+(44, 36, 'Birds', 'question', 'is a bird animal?', 44, 2, 'bird', 'is a', 'animal', 0, 0),
+(45, 36, 'Fish', 'question', 'is a fish animal?', 48, 2, 'fish', 'is a', 'animal', 0, 0),
+(46, 36, 'Birds', 'question', 'is a canary animal?', 52, 2, 'canary', 'is a', 'animal', 0, 0),
+(47, 36, 'Birds', 'question', 'is a ostrich animal?', 56, 2, 'ostrich', 'is a', 'animal', 0, 0),
+(48, 36, 'Fish', 'question', 'is a shark animal?', 60, 2, 'shark', 'is a', 'animal', 0, 0),
+(49, 36, 'Fish', 'question', 'is a salmon animal?', 64, 2, 'salmon', 'is a', 'animal', 0, 0),
+(50, 36, 'Birds', 'question', 'can canary sing?', 68, 2, 'canary', 'can', 'sing', 0, 0),
+(51, 36, 'Birds', 'question', 'is ostrich tall?', 72, 2, 'ostrich', 'is', 'tall', 0, 0),
+(52, 36, 'Fish', 'question', 'is shark dangerous?', 76, 2, 'shark', 'is', 'dangerous', 0, 0),
+(53, 36, 'Fish', 'question', 'is salmon edible?', 80, 2, 'salmon', 'is', 'edible', 0, 0),
+(54, 36, 'Birds', 'question', 'can bird fly?', 84, 2, 'bird', 'can', 'fly', 0, 0),
+(55, 36, 'Fish', 'question', 'can fish swim?', 88, 2, 'fish', 'can', 'swim', 0, 0),
+(56, 36, 'Animals', 'question', 'can animal move?', 92, 2, 'animal', 'can', 'move', 0, 0),
+(57, 36, 'Birds', 'question', 'can canary fly?', 96, 2, 'canary', 'can', 'fly', 0, 0),
+(58, 36, 'Birds', 'question', 'has canary wings?', 100, 2, 'canary', 'has', 'wings', 0, 0),
+(59, 36, 'Birds', 'question', 'has canary feathers?', 104, 2, 'canary', 'has', 'feathers', 0, 0),
+(60, 36, 'Fish', 'question', 'has shark fins?', 108, 2, 'shark', 'has', 'fins', 0, 0),
+(61, 36, 'Fish', 'question', 'can shark swim?', 112, 2, 'shark', 'can', 'swim', 0, 0),
+(62, 36, 'Fish', 'question', 'has shark gills?', 116, 2, 'shark', 'has', 'gills', 0, 0),
+(63, 36, 'Birds', 'question', 'has canary skin?', 120, 2, 'canary', 'has', 'skin', 0, 0),
+(64, 36, 'Birds', 'question', 'can ostrich move?', 124, 2, 'ostrich', 'can', 'move', 0, 0),
+(65, 36, 'Fish', 'question', 'can shark eat?', 128, 2, 'shark', 'can', 'eat', 0, 0),
+(66, 36, 'Fish', 'question', 'can shark breathe?', 132, 2, 'shark', 'can', 'breathe', 0, 0),
+(71, 36, 'Fish', 'fact', 'salmon is pink', 0, 2, 'salmon', 'is', 'pink', 0, 0),
+(72, 36, 'Fish', 'fact', 'salmon is edible', 2, 2, 'salmon', 'is', 'edible', 0, 0),
+(73, 36, 'Fish', 'fact', 'shark can bite', 4, 2, 'shark', 'can', 'bite', 0, 0),
+(77, 10, 'animals', 'fact', 'animal can breath', 1, 2, 'animal', 'can', 'breath', 3, 4),
+(78, 10, 'dogs', 'fact', 'dog can breath', 4, 4, 'dog', 'can', 'breath', 2, 2),
+(79, 10, 'animals', 'question', 'can animal breath?', 5, 5, 'animal', 'can', 'breath', NULL, NULL),
+(80, 10, 'animals', 'fact', 'dog is a animal', 1, 1, 'dog', 'is a', 'animal', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -278,6 +287,7 @@ INSERT INTO `experiment` (`id`, `version_id`, `domain`, `item`, `value`, `future
 -- Table structure for table `facts`
 --
 
+DROP TABLE IF EXISTS `facts`;
 CREATE TABLE `facts` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -335,6 +345,7 @@ INSERT INTO `facts` (`id`, `version_id`, `value`, `categories`, `types`, `attrib
 -- Table structure for table `perceptions`
 --
 
+DROP TABLE IF EXISTS `perceptions`;
 CREATE TABLE `perceptions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -347,6 +358,7 @@ CREATE TABLE `perceptions` (
 -- Table structure for table `projects`
 --
 
+DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -372,6 +384,7 @@ INSERT INTO `projects` (`id`, `name`, `short_descr`, `long_descr`) VALUES
 -- Table structure for table `questions`
 --
 
+DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -444,6 +457,7 @@ INSERT INTO `questions` (`id`, `version_id`, `value`, `types`, `categories`, `at
 -- Table structure for table `sem_mem`
 --
 
+DROP TABLE IF EXISTS `sem_mem`;
 CREATE TABLE `sem_mem` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -471,28 +485,29 @@ INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categ
 (8860, 10, 'dogs', 'dog is a animal', 1, 'dog', 'is a', 'animal'),
 (8861, 10, 'dogs', 'hound can bark', 1, 'hound', 'can', 'bark'),
 (8862, 10, 'dogs', 'hound is a dog', 1, 'hound', 'is a', 'dog'),
-(9113, 36, 'Animals', 'animal can breathe', 1, 'animal', 'can', 'breathe'),
-(9114, 36, 'Animals', 'animal can eat', 1, 'animal', 'can', 'eat'),
-(9115, 36, 'Animals', 'animal can move', 1, 'animal', 'can', 'move'),
-(9116, 36, 'Animals', 'animal has skin', 1, 'animal', 'has', 'skin'),
-(9117, 36, 'Birds', 'bird is a animal', 1, 'bird', 'is a', 'animal'),
-(9118, 36, 'Birds', 'bird can fly', 1, 'bird', 'can', 'fly'),
-(9119, 36, 'Birds', 'bird has feathers', 1, 'bird', 'has', 'feathers'),
-(9120, 36, 'Birds', 'bird has wings', 1, 'bird', 'has', 'wings'),
-(9121, 36, 'Birds', 'canary is a bird', 1, 'canary', 'is a', 'bird'),
-(9122, 36, 'Birds', 'canary can sing', 1, 'canary', 'can', 'sing'),
-(9123, 36, 'Birds', 'canary is yellow', 1, 'canary', 'is', 'yellow'),
-(9124, 36, 'Birds', 'ostrich is a bird', 1, 'ostrich', 'is a', 'bird'),
-(9125, 36, 'Birds', 'ostrich is tall', 1, 'ostrich', 'is', 'tall'),
-(9126, 36, 'Birds', 'ostrich cannot fly', 1, 'ostrich', 'cannot', 'fly'),
-(9127, 36, 'Fish', 'fish is a animal', 1, 'fish', 'is a', 'animal'),
-(9128, 36, 'Fish', 'fish can swim', 1, 'fish', 'can', 'swim'),
-(9129, 36, 'Fish', 'fish has fins', 1, 'fish', 'has', 'fins'),
-(9130, 36, 'Fish', 'fish has gills', 1, 'fish', 'has', 'gills'),
-(9131, 36, 'Fish', 'salmon is edible', 1, 'salmon', 'is', 'edible'),
-(9132, 36, 'Fish', 'salmon is a fish', 1, 'salmon', 'is a', 'fish'),
-(9133, 36, 'Fish', 'shark is a fish', 1, 'shark', 'is a', 'fish'),
-(9134, 36, 'Fish', 'shark is dangerous', 1, 'shark', 'is', 'dangerous');
+(9135, 36, 'Animals', 'animal can breathe', 1, 'animal', 'can', 'breathe'),
+(9136, 36, 'Animals', 'animal can eat', 1, 'animal', 'can', 'eat'),
+(9137, 36, 'Animals', 'animal can move', 1, 'animal', 'can', 'move'),
+(9138, 36, 'Animals', 'animal has skin', 1, 'animal', 'has', 'skin'),
+(9139, 36, 'Birds', 'bird can fly', 1, 'bird', 'can', 'fly'),
+(9140, 36, 'Birds', 'bird has feathers', 1, 'bird', 'has', 'feathers'),
+(9141, 36, 'Birds', 'bird has wings', 1, 'bird', 'has', 'wings'),
+(9142, 36, 'Birds', 'bird is a animal', 1, 'bird', 'is a', 'animal'),
+(9143, 36, 'Birds', 'canary can sing', 1, 'canary', 'can', 'sing'),
+(9144, 36, 'Birds', 'canary is yellow', 1, 'canary', 'is', 'yellow'),
+(9145, 36, 'Birds', 'canary is a bird', 1, 'canary', 'is a', 'bird'),
+(9146, 36, 'Birds', 'ostrich cannot fly', 1, 'ostrich', 'cannot', 'fly'),
+(9147, 36, 'Birds', 'ostrich is tall', 1, 'ostrich', 'is', 'tall'),
+(9148, 36, 'Birds', 'ostrich is a bird', 1, 'ostrich', 'is a', 'bird'),
+(9149, 36, 'Fish', 'fish can swim', 1, 'fish', 'can', 'swim'),
+(9150, 36, 'Fish', 'fish has fins', 1, 'fish', 'has', 'fins'),
+(9151, 36, 'Fish', 'fish has gills', 1, 'fish', 'has', 'gills'),
+(9152, 36, 'Fish', 'fish is a animal', 1, 'fish', 'is a', 'animal'),
+(9153, 36, 'Fish', 'salmon is edible', 1, 'salmon', 'is', 'edible'),
+(9154, 36, 'Fish', 'salmon is edible', 1, 'salmon', 'is', 'edible'),
+(9155, 36, 'Fish', 'salmon is a fish', 1, 'salmon', 'is a', 'fish'),
+(9156, 36, 'Fish', 'shark is dangerous', 1, 'shark', 'is', 'dangerous'),
+(9157, 36, 'Fish', 'shark is a fish', 1, 'shark', 'is a', 'fish');
 
 -- --------------------------------------------------------
 
@@ -500,6 +515,7 @@ INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categ
 -- Table structure for table `short_term_mem`
 --
 
+DROP TABLE IF EXISTS `short_term_mem`;
 CREATE TABLE `short_term_mem` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -527,6 +543,7 @@ INSERT INTO `short_term_mem` (`id`, `version_id`, `domain`, `item`, `value`, `de
 -- Table structure for table `types`
 --
 
+DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types` (
   `id` int(11) NOT NULL,
   `version_id` int(11) NOT NULL,
@@ -566,6 +583,7 @@ INSERT INTO `types` (`id`, `version_id`, `value`) VALUES
 -- Table structure for table `versions`
 --
 
+DROP TABLE IF EXISTS `versions`;
 CREATE TABLE `versions` (
   `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL,
@@ -713,7 +731,7 @@ ALTER TABLE `environment`
 -- AUTO_INCREMENT for table `experiment`
 --
 ALTER TABLE `experiment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `facts`
@@ -743,7 +761,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `sem_mem`
 --
 ALTER TABLE `sem_mem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9135;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9158;
 
 --
 -- AUTO_INCREMENT for table `short_term_mem`
@@ -763,8 +781,6 @@ ALTER TABLE `types`
 ALTER TABLE `versions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 COMMIT;
-
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

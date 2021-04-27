@@ -216,18 +216,20 @@ class Ui_AddToExpWindow(object):
         self.DomComboBox.show()
         self.for_lineEdit.show()
         self.in_lineEdit.show()
-        self.repeat_lineEdit.show()
-        self.in_time_lineEdit.show()
         self.QuestComboBox.show()
+        self.repeat_lineEdit.hide()
+        self.in_time_lineEdit.hide()
+        self.label_repeat.hide()
+        self.label_in_time.hide()
         self.label_9.hide()
         self.label_10.show()
         self.label_4.show()
         self.label_8.show()
         self.label_11.show()
-        self.label_repeat.show()
-        self.label_in_time.show()
         self.FactsComboBox.clear()
         self.QuestComboBox.clear()
+        global add_fact
+        add_fact = False
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
@@ -243,10 +245,11 @@ class Ui_AddToExpWindow(object):
             cur_dom = str(self.DomComboBox.currentText())
             cur_for_time = int(str(self.for_lineEdit.text()))
             cur_in_time = int(str(self.in_lineEdit.text()))
-            repeat = int(str(self.repeat_lineEdit.text()))
-            repeat_in_time = int(str(self.in_time_lineEdit.text()))
+            
             global add_fact
             if(add_fact):
+                repeat = int(str(self.repeat_lineEdit.text()))
+                repeat_in_time = int(str(self.in_time_lineEdit.text()))
                 add_fact = False
                 cur_fact = str(self.FactsComboBox.currentText())
                 cur.execute("SELECT * FROM facts WHERE version_id = '%i' AND value = '%s'" % (version_id, cur_fact))
@@ -266,7 +269,7 @@ class Ui_AddToExpWindow(object):
                     quest_type = quest[3]
                     quest_attr = quest[5]
                 cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes, repeat_num, in_time) "
-                        "VALUES('%i', '%s', 'question', '%s', '%i', '%i', '%s', '%s', '%s', '%i', '%i')" % (version_id, cur_dom, cur_quest, cur_in_time, cur_for_time, quest_cat, quest_type, quest_attr, repeat, repeat_in_time))
+                        "VALUES('%i', '%s', 'question', '%s', '%i', '%i', '%s', '%s', '%s', NULL, NULL)" % (version_id, cur_dom, cur_quest, cur_in_time, cur_for_time, quest_cat, quest_type, quest_attr))
             
 
             db.commit()
