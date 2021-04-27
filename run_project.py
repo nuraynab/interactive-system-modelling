@@ -327,15 +327,20 @@ class Ui_RunProjectWindow(object):
             item = exp_dict[y][1]
             if item=="question":
                 addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ; \n'
+                list_of_lines.insert(i, addition)
+            if item=="fact":
+                i-=1
             # print (addition)               
-            list_of_lines.insert(i, addition)
+            
         for y in env_dict:
             i+=1
             domain = env_dict[y][0]
             item = env_dict[y][1]
             if item=="question":
                 addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay DECAY-TIME of DECAY-TIME) ; \n'
-            list_of_lines.insert(i, addition)
+                list_of_lines.insert(i, addition)
+            if item=="fact":
+                i-=1
         list_of_lines[i] = list_of_lines[i][:-4]
         list_of_lines[i+1] = '\n .\n'
 
@@ -429,22 +434,22 @@ class Ui_RunProjectWindow(object):
         f.close()
         f2.close()
 
-        # f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        # f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        # start_str = 'eq init-env ='
-        # end_str = 'aHuman .'
-        # for line in f:
-        #     if start_str in line:
-        #         break
-        #     f2.write(line)
-        # for line in f:
-        #     if end_str in line:
-        #         f2.write("\n\n")
-        #         break
-        # for line in f:
-        #     f2.write(line)
-        # f.close()
-        # f2.close()
+        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
+        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        start_str = 'eq init-env ='
+        end_str = 'aHuman .'
+        for line in f:
+            if start_str in line:
+                break
+            f2.write(line)
+        for line in f:
+            if end_str in line:
+                f2.write("\n\n")
+                break
+        for line in f:
+            f2.write(line)
+        f.close()
+        f2.close()
 
         self.ResultsWindow.show()
 

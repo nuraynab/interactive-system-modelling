@@ -251,7 +251,7 @@ endtom)
   including HUMAN .
 
   var H : Oid .
-  vars N N1 N2 : Nat .
+  vars N N1 N2 N3 : Nat .
   vars M M1 FT IT : Time .
   vars T T1 T2 T3 T4 TP : TimeInf .
   vars D D1 D2 : Domain .
@@ -418,7 +418,8 @@ crl [tick] :
 
 
   crl [from-STM-to-LTM-fact-can] :
-    {< H : Human | cognitiveLoad : N,
+    {(repeat N3 times starting in TP : (exp ((a C can A for T) in FT)))
+    < H : Human | cognitiveLoad : N,
                    shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
                                   (chunk (a C can A) decay T3 of T4) ; STM,
                    semanticMem : S >
@@ -431,7 +432,8 @@ crl [tick] :
    if T4 >= STM-TO-LTM-THRESHOLD .
 
   crl [from-STM-to-LTM-fact-has] :
-    {< H : Human | cognitiveLoad : N,
+    {(repeat N3 times starting in TP : (exp ((a C has A for T) in FT)))
+    < H : Human | cognitiveLoad : N,
                    shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
                                   (chunk (a C has A) decay T3 of T4) ; STM,
                    semanticMem : S >
@@ -444,7 +446,8 @@ crl [tick] :
    if T4 >= STM-TO-LTM-THRESHOLD .
 
   crl [from-STM-to-LTM-fact-is] :
-    {< H : Human | cognitiveLoad : N,
+    {(repeat N3 times starting in TP : (exp ((a C is A for T) in FT)))
+    < H : Human | cognitiveLoad : N,
                    shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
                                   (chunk (a C is A) decay T3 of T4) ; STM,
                    semanticMem : S >
@@ -453,6 +456,20 @@ crl [tick] :
     {< H : Human | cognitiveLoad : N,
                    shortTermMem : STM,
                    semanticMem : (D : C |- 1 ->| (is A)) S >
+     REST}
+   if T4 >= STM-TO-LTM-THRESHOLD .
+
+  crl [from-STM-to-LTM-fact-is-a] :
+    {(repeat N3 times starting in TP : (exp ((a C is a A for T) in FT)))
+    < H : Human | cognitiveLoad : N,
+                   shortTermMem : (chunk goal(D, rehearsed, N1, N2) decay T1 of T2) ;
+                                  (chunk (a C is a A) decay T3 of T4) ; STM,
+                   semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+                   shortTermMem : STM,
+                   semanticMem : (D : C |- 1 ->| (is a A)) S >
      REST}
    if T4 >= STM-TO-LTM-THRESHOLD .
 
@@ -574,7 +591,7 @@ endtom)
 
 
 
-  eq theHuman = < human : Human | cognitiveLoad : 1,
+  eq theHuman = < human : Human | cognitiveLoad : 0,
                                shortTermMem : init-STM,
                                sensoryMem : emptySensory,
                                proceduralMem : emptyProcedural,

@@ -3,134 +3,74 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Tue Apr 20 15:11:15 2021
+		   Wed Apr 28 02:13:53 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 22970 in 24ms cpu (24ms real) (957083 rewrites/second)
+rewrites: 22970 in 12ms cpu (12ms real) (1914166 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 17731 in 16ms cpu (16ms real) (1108187 rewrites/second)
+rewrites: 17731 in 12ms cpu (8ms real) (1477583 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
-rewrites: 8250 in 4ms cpu (4ms real) (2062500 rewrites/second)
+rewrites: 8250 in 0ms cpu (2ms real) (~ rewrites/second)
 
 Introduced timed module: SENSORY-MEMORY
 
-rewrites: 3232 in 0ms cpu (2ms real) (~ rewrites/second)
+rewrites: 3232 in 0ms cpu (1ms real) (~ rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 12835 in 8ms cpu (7ms real) (1604375 rewrites/second)
+rewrites: 12835 in 8ms cpu (6ms real) (1604375 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 14446 in 8ms cpu (7ms real) (1805750 rewrites/second)
+rewrites: 14446 in 4ms cpu (5ms real) (3611500 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
-rewrites: 12457 in 8ms cpu (7ms real) (1557125 rewrites/second)
+rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 96284 in 96ms cpu (103ms real) (1002958 rewrites/second)
+rewrites: 101423 in 64ms cpu (63ms real) (1584734 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 55301 in 136ms cpu (141ms real) (406625 rewrites/second)
+rewrites: 33353 in 16ms cpu (15ms real) (2084562 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 113057 in 72ms cpu (82ms real) (1570236 rewrites/second)
+rewrites: 63415 in 28ms cpu (27ms real) (2264821 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
   {
-ans(a "animal" can "move" 2 for INF)
-ans(a "bird" can "fly" 2 for INF)
-ans(a "canary" can "fly" 3 for INF)
-exp(can a "ostrich" "move" ? for 2 in 25)
-exp(can a "shark" "breathe" ? for 2 in 33)
-exp(can a "shark" "eat" ? for 2 in 29)
-exp(can a "shark" "swim" ? for 2 in 13)
-exp(has a "canary" "feathers" ? for 2 in 5)
-exp(has a "canary" "skin" ? for 2 in 21)
-exp(has a "canary" "wings" ? for 2 in 1)
-exp(has a "shark" "fins" ? for 2 in 9)
-exp(has a "shark" "gills" ? for 2 in 17)
-perc(can a "canary" "sing" ? for 2)
-perc(can a "fish" "swim" ? for 2)
-perc(is a "animal" "animal" ? for 2)
-perc(is a "bird" "animal" ? for 2)
-perc(is a "bird" "bird" ? for 2)
-perc(is a "canary" "animal" ? for 2)
-perc(is a "canary" "bird" ? for 2)
-perc(is a "canary" "canary" ? for 2)
-perc(is a "fish" "animal" ? for 2)
-perc(is a "fish" "fish" ? for 2)
-perc(is a "ostrich" "animal" ? for 2)
-perc(is a "ostrich" "bird" ? for 2)
-perc(is a "ostrich" "ostrich" ? for 2)
-perc(is a "ostrich" "tall" ? for 2)
-perc(is a "salmon" "animal" ? for 2)
-perc(is a "salmon" "edible" ? for 2)
-perc(is a "salmon" "fish" ? for 2)
-perc(is a "salmon" "salmon" ? for 2)
-perc(is a "shark" "animal" ? for 2)
-perc(is a "shark" "dangerous" ? for 2)
-perc(is a "shark" "fish" ? for 2)
-perc(is a "shark" "shark" ? for 2)< human : Human | cognitiveLoad : 7,
+ans(a "animal" can "move" 1 for INF)
+perc(can a "bird" "sing" ? for 1)< human : Human | cognitiveLoad : 3,
     proceduralMem : emptyProcedural,semanticMem :(
-("Animals" : "animal" |- 2 ->| can "breathe")
+("Animals" : "animal" |- 1 ->| can "breathe")
 
-("Animals" : "animal" |- 2 ->| can "eat")
+("Animals" : "animal" |- 1 ->| can "eat")
 
-("Animals" : "animal" |- 2 ->| can "move")
+("Animals" : "animal" |- 1 ->| can "move")
 
-("Animals" : "animal" |- 2 ->| has "skin")
+("Animals" : "animal" |- 1 ->| has "skin")
 
-("Birds" : "bird" |- 1 ->| is a "animal")
+("Birds" : "bird" |- 1 ->| can "fly")
 
-("Birds" : "bird" |- 2 ->| can "fly")
+("Birds" : "bird" |- 1 ->| has "feathers")
 
-("Birds" : "bird" |- 2 ->| has "feathers")
-
-("Birds" : "bird" |- 2 ->| has "wings")
-
-("Birds" : "canary" |- 1 ->| is a "bird")
-
-("Birds" : "canary" |- 2 ->| can "sing")
-
-("Birds" : "canary" |- 2 ->| is "yellow")
-
-("Birds" : "ostrich" |- 1 ->| is a "bird")
-
-("Birds" : "ostrich" |- 2 ->| is "tall")
-
-("Birds" : "ostrich" |- 3 ->| cannot "fly")
-
-("Fish" : "fish" |- 1 ->| is a "animal")
-
-("Fish" : "fish" |- 2 ->| can "swim")
-
-("Fish" : "fish" |- 2 ->| has "fins")
-
-("Fish" : "fish" |- 2 ->| has "gills")
-
-("Fish" : "salmon" |- 1 ->| is "edible")
-
-("Fish" : "salmon" |- 1 ->| is a "fish")
-
-("Fish" : "shark" |- 1 ->| is a "fish")
-"Fish" : "shark" |- 2 ->| is "dangerous"),sensoryMem : emptySensory,
-    shortTermMem :((chunk a "animal" can "move" decay 93 of 100);
-(chunk a "bird" can "fly" decay 96 of 100);
-chunk a "canary" can "fly" decay 100 of 100)>} in time 102
+("Birds" : "bird" |- 1 ->| has "wings")
+"Birds" : "bird" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem
+    :((chunk a "animal" can "move" decay 99 of 100);
+(chunk can a "bird" "sing" ? decay 100 of 100);
+chunk goal("Birds",foundAnswer,0,5)decay 93 of 100)>} in time 7
 
 Bye.

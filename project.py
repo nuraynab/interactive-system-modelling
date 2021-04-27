@@ -173,6 +173,9 @@ class Ui_ProjectWindow(QWidget):
         self.learnBtn.clicked.connect(self.learn)
 
     def learn(self):
+        sem_mem_dict = {}
+        env_dict = {}
+        exp_dict = {}
         version_id = int(self.version_id.text())
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
@@ -266,10 +269,10 @@ class Ui_ProjectWindow(QWidget):
             typ = exp_dict[y][4]
             attr = exp_dict[y][5]
             if item=="fact":
-                addition = '(chunk goal("'+domain+'", rehearsed, 0, 5) decay DECAY-TIME of DECAY-TIME) ; \n'
+                addition = '(chunk goal("'+domain+'", rehearsed, 0, 5) decay INF of DECAY-TIME) ; \n'
                 list_of_lines.insert(i, addition)
                 i+=1
-                addition = '(chunk a "'+cat+'" '+typ+' "'+attr+'" decay 10 of DECAY-TIME) ; \n'
+                addition = '(chunk a "'+cat+'" '+typ+' "'+attr+'" decay INF of DECAY-TIME) ; \n'
                 list_of_lines.insert(i, addition)
             if item=="question":
                 i-=1
