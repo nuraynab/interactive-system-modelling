@@ -17,8 +17,8 @@ add_fact = False
 class Ui_AddToExpWindow(object):
     def setupUi(self, AddToExpWindow):
         AddToExpWindow.setObjectName("AddToExpWindow")
-        AddToExpWindow.resize(513, 500)
-        AddToExpWindow.setFixedSize(600, 500)
+        AddToExpWindow.resize(513, 600)
+        AddToExpWindow.setFixedSize(600, 600)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -35,7 +35,7 @@ class Ui_AddToExpWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(190, 420, 241, 25))
+        self.saveBtn.setGeometry(QtCore.QRect(190, 520, 241, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
@@ -80,6 +80,12 @@ class Ui_AddToExpWindow(object):
         self.in_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.in_lineEdit.setGeometry(QtCore.QRect(220, 310, 311, 41))
         self.in_lineEdit.setObjectName("in_lineEdit")
+        self.repeat_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.repeat_lineEdit.setGeometry(QtCore.QRect(220, 410, 311, 41))
+        self.repeat_lineEdit.setObjectName("repeat_lineEdit")
+        self.in_time_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.in_time_lineEdit.setGeometry(QtCore.QRect(220, 460, 311, 41))
+        self.in_time_lineEdit.setObjectName("in_time_lineEdit")
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setGeometry(QtCore.QRect(30, 360, 201, 31))
         font = QtGui.QFont()
@@ -91,7 +97,19 @@ class Ui_AddToExpWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.label_11.setFont(font)
-        self.label_11.setObjectName("label_8")
+        self.label_11.setObjectName("label_11")
+        self.label_repeat = QtWidgets.QLabel(self.centralwidget)
+        self.label_repeat.setGeometry(QtCore.QRect(30, 410, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_repeat.setFont(font)
+        self.label_repeat.setObjectName("label_repeat")
+        self.label_in_time = QtWidgets.QLabel(self.centralwidget)
+        self.label_in_time.setGeometry(QtCore.QRect(30, 460, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_in_time.setFont(font)
+        self.label_in_time.setObjectName("label_in_time")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(30, 210, 121, 31))
         font = QtGui.QFont()
@@ -133,6 +151,8 @@ class Ui_AddToExpWindow(object):
 
         self.for_lineEdit.hide()
         self.in_lineEdit.hide()
+        self.repeat_lineEdit.hide()
+        self.in_time_lineEdit.hide()
         self.FactsComboBox.hide()
         self.QuestComboBox.hide()
         self.DomComboBox.hide()
@@ -142,6 +162,8 @@ class Ui_AddToExpWindow(object):
         self.label_9.hide()
         self.label_10.hide()
         self.label_4.hide()
+        self.label_repeat.hide()
+        self.label_in_time.hide()
 
         self.version_id = QtWidgets.QLabel(self.centralwidget)
         self.version_id.setGeometry(QtCore.QRect(0, 0, 0, 0))
@@ -167,12 +189,16 @@ class Ui_AddToExpWindow(object):
         self.DomComboBox.show()
         self.for_lineEdit.show()
         self.in_lineEdit.show()
+        self.repeat_lineEdit.show()
+        self.in_time_lineEdit.show()
         self.FactsComboBox.show()        
         self.label_10.hide()
         self.label_9.show()
         self.label_4.show()
         self.label_8.show()
         self.label_11.show()
+        self.label_repeat.show()
+        self.label_in_time.show()
         self.FactsComboBox.clear()
         self.QuestComboBox.clear()
         global add_fact
@@ -190,12 +216,16 @@ class Ui_AddToExpWindow(object):
         self.DomComboBox.show()
         self.for_lineEdit.show()
         self.in_lineEdit.show()
+        self.repeat_lineEdit.show()
+        self.in_time_lineEdit.show()
         self.QuestComboBox.show()
         self.label_9.hide()
         self.label_10.show()
         self.label_4.show()
         self.label_8.show()
         self.label_11.show()
+        self.label_repeat.show()
+        self.label_in_time.show()
         self.FactsComboBox.clear()
         self.QuestComboBox.clear()
         version_id = int(self.version_id.text())
@@ -213,6 +243,8 @@ class Ui_AddToExpWindow(object):
             cur_dom = str(self.DomComboBox.currentText())
             cur_for_time = int(str(self.for_lineEdit.text()))
             cur_in_time = int(str(self.in_lineEdit.text()))
+            repeat = int(str(self.repeat_lineEdit.text()))
+            repeat_in_time = int(str(self.in_time_lineEdit.text()))
             global add_fact
             if(add_fact):
                 add_fact = False
@@ -223,8 +255,8 @@ class Ui_AddToExpWindow(object):
                     fact_cat = fact[3]
                     fact_type = fact[4]
                     fact_attr = fact[5]
-                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes)"
-                        "VALUES('%i', '%s', 'fact', '%s', '%i', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_fact, cur_in_time, cur_for_time, fact_cat, fact_type, fact_attr))
+                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes, repeat_num, in_time) "
+                        "VALUES('%i', '%s', 'fact', '%s', '%i', '%i', '%s', '%s', '%s', '%i', '%i')" % (version_id, cur_dom, cur_fact, cur_in_time, cur_for_time, fact_cat, fact_type, fact_attr, repeat, repeat_in_time))
             else:
                 cur_quest = str(self.QuestComboBox.currentText())
                 cur.execute("SELECT * FROM questions WHERE version_id = '%i' AND value = '%s'" % (version_id, cur_quest))
@@ -233,8 +265,8 @@ class Ui_AddToExpWindow(object):
                     quest_cat = quest[4]
                     quest_type = quest[3]
                     quest_attr = quest[5]
-                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes)"
-                        "VALUES('%i', '%s', 'question', '%s', '%i', '%i', '%s', '%s', '%s')" % (version_id, cur_dom, cur_quest, cur_in_time, cur_for_time, quest_cat, quest_type, quest_attr))
+                cur.execute("INSERT INTO experiment(version_id, domain, item, value, future_time, persist_time, categories, types, attributes, repeat_num, in_time) "
+                        "VALUES('%i', '%s', 'question', '%s', '%i', '%i', '%s', '%s', '%s', '%i', '%i')" % (version_id, cur_dom, cur_quest, cur_in_time, cur_for_time, quest_cat, quest_type, quest_attr, repeat, repeat_in_time))
             
 
             db.commit()
@@ -256,6 +288,8 @@ class Ui_AddToExpWindow(object):
         self.label_4.setText(_translate("AddToExpWindow", "Domain"))
         self.label_8.setText(_translate("AddToExpWindow", "Available for"))
         self.label_11.setText(_translate("AddToExpWindow", "Starting in"))
+        self.label_repeat.setText(_translate("AddToExpWindow", "Repeat"))
+        self.label_in_time.setText(_translate("AddToExpWindow", "In time"))
         self.label_9.setText(_translate("AddToExpWindow", "Fact"))
         self.label_10.setText(_translate("AddToExpWindow", "Question"))
 

@@ -17,7 +17,7 @@ from contextlib import closing
 class Ui_EditItemReprInExpWindow(object):
     def setupUi(self, EditItemReprInExpWindow):
         EditItemReprInExpWindow.setObjectName("EditItemReprInExpWindow")
-        EditItemReprInExpWindow.resize(535, 631)
+        EditItemReprInExpWindow.resize(535, 700)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -63,6 +63,12 @@ class Ui_EditItemReprInExpWindow(object):
         self.in_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.in_lineEdit.setGeometry(QtCore.QRect(200, 420, 311, 41))
         self.in_lineEdit.setObjectName("in_lineEdit")
+        self.repeat_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.repeat_lineEdit.setGeometry(QtCore.QRect(200, 520, 311, 41))
+        self.repeat_lineEdit.setObjectName("repeat_lineEdit")
+        self.in_time_lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.in_time_lineEdit.setGeometry(QtCore.QRect(200, 570, 311, 41))
+        self.in_time_lineEdit.setObjectName("in_time_lineEdit")
         self.CatComboBox = QtWidgets.QComboBox(self.centralwidget)
         # self.CatComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
         font = QtGui.QFont()
@@ -93,8 +99,20 @@ class Ui_EditItemReprInExpWindow(object):
         font.setPointSize(14)
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_8")
+        self.label_repeat = QtWidgets.QLabel(self.centralwidget)
+        self.label_repeat.setGeometry(QtCore.QRect(20, 520, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_repeat.setFont(font)
+        self.label_repeat.setObjectName("label_repeat")
+        self.label_in_time = QtWidgets.QLabel(self.centralwidget)
+        self.label_in_time.setGeometry(QtCore.QRect(20, 570, 201, 31))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_in_time.setFont(font)
+        self.label_in_time.setObjectName("label_in_time")
         self.saveBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.saveBtn.setGeometry(QtCore.QRect(140, 520, 241, 25))
+        self.saveBtn.setGeometry(QtCore.QRect(140, 620, 241, 25))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.saveBtn.setFont(font)
@@ -158,11 +176,13 @@ class Ui_EditItemReprInExpWindow(object):
 
         cur_for_time = int(self.for_lineEdit.text())
         cur_in_time = int(self.in_lineEdit.text())
+        repeat = int(str(self.repeat_lineEdit.text()))
+        repeat_in_time = int(str(self.in_time_lineEdit.text()))
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
             
-            cur.execute("UPDATE experiment SET domain = '%s', value = '%s', future_time = '%i', persist_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
-                                                 % (cur_dom, cur_value, cur_in_time, cur_for_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
+            cur.execute("UPDATE experiment SET domain = '%s', value = '%s', future_time = '%i', persist_time = '%i', repeat_num = '%i', in_time = '%i', categories = '%s', types = '%s', attributes = '%s' WHERE version_id = '%i' AND domain = '%s' AND value = '%s'"
+                                                 % (cur_dom, cur_value, cur_in_time, cur_for_time, repeat, repeat_in_time, ''.join(self.CatComboBox.currentText()), ''.join(self.TypesComboBox.currentText()),
                                                  ''.join(self.AttrComboBox.currentText()), version_id, ''.join(self.origin_dom), ''.join(self.origin_value)))
  
             db.commit()
@@ -226,5 +246,7 @@ class Ui_EditItemReprInExpWindow(object):
         self.label_5.setText(_translate("EditItemReprInExpWindow", "Category"))
         self.label_6.setText(_translate("EditItemReprInExpWindow", "Type"))
         self.label_7.setText(_translate("EditItemReprInExpWindow", "Attribute"))
+        self.label_repeat.setText(_translate("EditItemReprInExpWindow", "Repeat"))
+        self.label_in_time.setText(_translate("EditItemReprInExpWindow", "In time"))
         self.menuInteractive_System_Modelling.setTitle(_translate("EditItemReprInExpWindow", "1"))
 

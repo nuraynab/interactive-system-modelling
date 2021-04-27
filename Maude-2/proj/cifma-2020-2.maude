@@ -574,7 +574,7 @@ endtom)
 
 
 
-  eq theHuman = < human : Human | cognitiveLoad : 1,
+  eq theHuman = < human : Human | cognitiveLoad : 2,
                                shortTermMem : init-STM,
                                sensoryMem : emptySensory,
                                proceduralMem : emptyProcedural,
