@@ -314,6 +314,19 @@ endtom)
   ceq hasRetrievalTime(C, A, (D : C1 |- M ->| (has A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
   eq hasRetrievalTime(C, A, S, IS) = INF [owise] .
 
+  op isRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
+  ceq isRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C is A, IS) .
+  ceq isRetrievalTime(C, A, (D : C |- M ->| (is A)) S, IS) = M if not isItemIn(a C is A, IS) .
+  ceq isRetrievalTime(C, A, (D : C1 |- M ->| (is A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
+  eq isRetrievalTime(C, A, S, IS) = INF [owise] .
+
+  op isARetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
+  eq isARetrievalTime(C, C, S, IS) = STM-ACCESS-TIME .
+  ceq isARetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C is a A, IS) .
+  ceq isARetrievalTime(C, A, (D : C |- M ->| (is a A)) S, IS) = M if not isItemIn(a C is a A, IS) .
+  ceq isARetrievalTime(C, A, (D : C1 |- M ->| (is a A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
+  eq isARetrievalTime(C, A, S, IS) = INF [owise] .
+
   op questionFound : ShortTermMemory -> Bool .
   eq questionFound(emptySTM) = false .
   eq questionFound((chunk Q decay T1 of T2) ; STM) = true .
@@ -484,7 +497,7 @@ crl [tick] :
        semanticMem : S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N + 1,
+    {< H : Human | cognitiveLoad : N,
        shortTermMem : NEW-GOAL-CHUNK ;
                       (chunk (a C can A) decay DECAY-TIME of DECAY-TIME) ;
                       idle(STM, T),
@@ -500,29 +513,6 @@ crl [tick] :
                          then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
                          else emptySTM fi .
 
-  crl [has] :
-    {< H : Human | cognitiveLoad : N,
-       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
-                      (chunk (has a C A ?) decay T3 of T4) ; STM,
-       semanticMem : S >
-     REST}
-  =>
-    {< H : Human | cognitiveLoad : N + 1,
-       shortTermMem : NEW-GOAL-CHUNK ;
-                      (chunk (a C has A) decay DECAY-TIME of DECAY-TIME) ;
-                      idle(STM, T),
-       semanticMem : S >
-       (ans ((a C has A T) for INF))
-    idle(REST,T)}
-  in time T
-  if IS := removeTime(STM) /\
-     not isItemIn(a C has A, IS) /\ T := hasRetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
-     not ( ( a C has A ) is negated in S ) /\ not isItemIn(a C has not A, IS) /\
-     N + 1 <= stmCapacity /\
-     NEW-GOAL-CHUNK := if N1 > 0
-                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
-                         else emptySTM fi .
-
   crl [cannot-explicit] :
     {< H : Human | cognitiveLoad : N,
        shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
@@ -530,7 +520,7 @@ crl [tick] :
        semanticMem : (D : C |- M ->| (cannot A)) S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N + 1,
+    {< H : Human | cognitiveLoad : N,
        shortTermMem : NEW-GOAL-CHUNK ;
                       (chunk (a C cannot A) decay DECAY-TIME of DECAY-TIME) ;
                       idle(STM, M),
@@ -548,14 +538,14 @@ crl [tick] :
     {< H : Human | cognitiveLoad : N,
        shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
                       (chunk (can a C A ?) decay T3 of T4) ; STM,
-       semanticMem : (D : C1 |- M ->| (can A)) S >
+       semanticMem : (D1 : C1 |- M ->| (can A)) S >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N + 1,
+    {< H : Human | cognitiveLoad : N,
        shortTermMem : NEW-GOAL-CHUNK ;
                       (chunk (a C cannot A) decay DECAY-TIME of DECAY-TIME) ;
                       idle(STM, M),
-       semanticMem : (D : C1 |- M ->| (can A)) S >
+       semanticMem : (D1 : C1 |- M ->| (can A)) S >
        (ans ((a C cannot A T) for INF))
     idle(REST,T)}
   in time T
@@ -566,6 +556,209 @@ crl [tick] :
      NEW-GOAL-CHUNK := if N1 > 0
                          then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
                          else emptySTM fi .
+
+  crl [has] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, T),
+       semanticMem : S >
+       (ans ((a C has A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C has A, IS) /\ T := hasRetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
+     not ( ( a C has A ) is negated in S ) /\ not isItemIn(a C has not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [hasnot-explicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D : C |- M ->| (has not A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D : C |- M ->| (has not A)) S >
+       (ans ((a C has not A M) for INF))
+    idle(REST,M)}
+  in time M
+  if IS := removeTime(STM) /\  not isItemIn(a C has not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [hasnot-implicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (has a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D1 : C1 |- M ->| (has A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C has not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D1 : C1 |- M ->| (has A)) S >
+       (ans ((a C has not A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C has not A, IS) /\ not isItemIn(a C has A, IS) /\
+     T := timeToSuper(C1, C, S, IS) + M /\ T <= MAX-RETRIEVAL-TIME /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [is] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is C A ?) decay T3 of T4) ; STM,
+       semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, T),
+       semanticMem : S >
+       (ans ((a C is A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C is A, IS) /\ T := isRetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
+     not ( ( a C is A ) is negated in S ) /\ not isItemIn(a C is not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [isnot-explicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D : C |- M ->| (is not A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D : C |- M ->| (is not A)) S >
+       (ans ((a C is not A M) for INF))
+    idle(REST,M)}
+  in time M
+  if IS := removeTime(STM) /\  not isItemIn(a C is not A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [isnot-implicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D1 : C1 |- M ->| (is A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is not A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D1 : C1 |- M ->| (is A)) S >
+       (ans ((a C is not A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C is not A, IS) /\ not isItemIn(a C is A, IS) /\
+     T := timeToSuper(C1, C, S, IS) + M /\ T <= MAX-RETRIEVAL-TIME /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [is-a] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is a C A ?) decay T3 of T4) ; STM,
+       semanticMem : S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is a A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, T),
+       semanticMem : S >
+       (ans ((a C is a A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C is a A, IS) /\ T := isARetrievalTime(C, A, S, IS) /\ T <= MAX-RETRIEVAL-TIME /\
+     not ( ( a C is a A ) is negated in S ) /\ not isItemIn(a C is not a A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [isnot-a-explicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D : C |- M ->| (is not a A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is not a A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D : C |- M ->| (is not a A)) S >
+       (ans ((a C is not a A M) for INF))
+    idle(REST,M)}
+  in time M
+  if IS := removeTime(STM) /\  not isItemIn(a C is not a A, IS) /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+  crl [isnot-a-implicit] :
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : (chunk goal(D, foundAnswer, N1, N2) decay T1 of T2) ;
+                      (chunk (is a C A ?) decay T3 of T4) ; STM,
+       semanticMem : (D1 : C1 |- M ->| (is a A)) S >
+     REST}
+  =>
+    {< H : Human | cognitiveLoad : N,
+       shortTermMem : NEW-GOAL-CHUNK ;
+                      (chunk (a C is not a A) decay DECAY-TIME of DECAY-TIME) ;
+                      idle(STM, M),
+       semanticMem : (D1 : C1 |- M ->| (is a A)) S >
+       (ans ((a C is not a A T) for INF))
+    idle(REST,T)}
+  in time T
+  if IS := removeTime(STM) /\
+     not isItemIn(a C is not a A, IS) /\ not isItemIn(a C is a A, IS) /\
+     T := timeToSuper(C1, C, S, IS) + M /\ T <= MAX-RETRIEVAL-TIME /\
+     N + 1 <= stmCapacity /\
+     NEW-GOAL-CHUNK := if N1 > 0
+                         then (chunk goal(D, foundAnswer, N1 monus 1, N2) decay DECAY-TIME of DECAY-TIME)
+                         else emptySTM fi .
+
+
 
 endtom)
 

@@ -504,7 +504,6 @@ INSERT INTO `sem_mem` (`id`, `version_id`, `domain`, `fact`, `retr_time`, `categ
 (9151, 36, 'Fish', 'fish has gills', 1, 'fish', 'has', 'gills'),
 (9152, 36, 'Fish', 'fish is a animal', 1, 'fish', 'is a', 'animal'),
 (9153, 36, 'Fish', 'salmon is edible', 1, 'salmon', 'is', 'edible'),
-(9154, 36, 'Fish', 'salmon is edible', 1, 'salmon', 'is', 'edible'),
 (9155, 36, 'Fish', 'salmon is a fish', 1, 'salmon', 'is a', 'fish'),
 (9156, 36, 'Fish', 'shark is dangerous', 1, 'shark', 'is', 'dangerous'),
 (9157, 36, 'Fish', 'shark is a fish', 1, 'shark', 'is a', 'fish');

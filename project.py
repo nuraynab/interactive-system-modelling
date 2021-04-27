@@ -195,7 +195,7 @@ class Ui_ProjectWindow(QWidget):
             perc_repr = cur.fetchall()
 
             for y in perc_repr:
-                exp_dict[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5]]
+                exp_dict[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5], y[10], y[11]]
 
         db.close()
 
@@ -242,8 +242,10 @@ class Ui_ProjectWindow(QWidget):
             typ = exp_dict[y][4]
             attr = exp_dict[y][5]
             time_in = str(exp_dict[y][6])
+            rep = str(exp_dict[y][7])
+            rep_time_in = str(exp_dict[y][8])
             if item=="fact":
-                addition = '(repeat 20 times starting in 3 : exp(((a "'+cat+'" '+typ+' "'+attr+'") for '+time+') in '+time_in+')) \n' 
+                addition = '(repeat '+rep+' times starting in '+rep_time_in+' : exp(((a "'+cat+'" '+typ+' "'+attr+'") for '+time+') in '+time_in+')) \n' 
                 # print (addition)               
                 list_of_lines.insert(i, addition)
             if item=="question":
@@ -456,18 +458,21 @@ class Ui_ProjectWindow(QWidget):
 
     def get_res_stm(self):
         stm = {}
-        stm_str = "decay"
+        stm_str = "chunk"
         f = open("Maude-2/results.txt", "r")
         i = 0
         for line in f:
             i += 1
             if stm_str in line:
                 new_line = str(line)
-                start = new_line.find("(")+len("(")
-                end = new_line.find(" <")
+                print(new_line.find("goal"))
+                if new_line.find("goal") != -1:
+                    continue
+                start = new_line.find("chunk ")+len("chunk ")
+                end = new_line.find(" decay")
                 mid = new_line[start:end]
                 start_t = new_line.find("decay ")+len("decay ")
-                end_t = new_line.find(" >")
+                end_t = new_line.find(" of")
                 time = new_line[start_t:end_t]
                 stm[mid] = time
         f.close()
