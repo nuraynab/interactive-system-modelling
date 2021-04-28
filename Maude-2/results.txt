@@ -3,17 +3,17 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Wed Apr 28 05:02:02 2021
+		   Wed Apr 28 13:13:10 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 22970 in 16ms cpu (12ms real) (1435625 rewrites/second)
+rewrites: 22970 in 12ms cpu (13ms real) (1914166 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 17731 in 8ms cpu (8ms real) (2216375 rewrites/second)
+rewrites: 17731 in 12ms cpu (8ms real) (1477583 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
@@ -37,100 +37,40 @@ rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 144155 in 108ms cpu (109ms real) (1334768 rewrites/second)
+rewrites: 144155 in 108ms cpu (110ms real) (1334768 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 63274 in 92ms cpu (88ms real) (687760 rewrites/second)
+rewrites: 41630 in 20ms cpu (18ms real) (2081500 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 117624 in 48ms cpu (50ms real) (2450500 rewrites/second)
+rewrites: 91633 in 52ms cpu (53ms real) (1762173 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
-  {
-ans(a "animal" can "move" 1 for INF)
-ans(a "bird" can "fly" 1 for INF)
-ans(a "canary" can "fly" 2 for INF)
-exp(can a "ostrich" "move" ? for 2 in 26)
-exp(can a "shark" "breathe" ? for 2 in 34)
-exp(can a "shark" "eat" ? for 2 in 30)
-exp(can a "shark" "swim" ? for 2 in 14)
-exp(has a "canary" "feathers" ? for 2 in 6)
-exp(has a "canary" "skin" ? for 2 in 22)
-exp(has a "canary" "wings" ? for 2 in 2)
-exp(has a "shark" "fins" ? for 2 in 10)
-exp(has a "shark" "gills" ? for 2 in 18)
-perc(can a "canary" "sing" ? for 2)
-perc(can a "fish" "swim" ? for 2)
-perc(is a "animal" "animal" ? for 2)
-perc(is a "bird" "animal" ? for 2)
-perc(is a "bird" "bird" ? for 2)
-perc(is a "canary" "animal" ? for 2)
-perc(is a "canary" "bird" ? for 2)
-perc(is a "canary" "canary" ? for 2)
-perc(is a "fish" "animal" ? for 2)
-perc(is a "fish" "fish" ? for 2)
-perc(is a "ostrich" "animal" ? for 2)
-perc(is a "ostrich" "bird" ? for 2)
-perc(is a "ostrich" "ostrich" ? for 2)
-perc(is a "ostrich" "tall" ? for 2)
-perc(is a "salmon" "animal" ? for 2)
-perc(is a "salmon" "edible" ? for 2)
-perc(is a "salmon" "fish" ? for 2)
-perc(is a "salmon" "salmon" ? for 2)
-perc(is a "shark" "animal" ? for 2)
-perc(is a "shark" "dangerous" ? for 2)
-perc(is a "shark" "fish" ? for 2)
-perc(is a "shark" "shark" ? for 2)< human : Human | cognitiveLoad : 3,
-    proceduralMem : emptyProcedural,semanticMem :(
-("Animals" : "animal" |- 1 ->| can "breathe")
+  {< human : Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,
+    semanticMem :(
+("animals" : "animal" |- 1 ->| can "breath")
 
-("Animals" : "animal" |- 1 ->| can "eat")
+("animals" : "animal" |- 1 ->| can "move")
 
-("Animals" : "animal" |- 1 ->| can "move")
+("animals" : "dog" |- 1 ->| is a "animal")
 
-("Animals" : "animal" |- 1 ->| has "skin")
+("animals" : "hound" |- 1 ->| can "track")
 
-("Birds" : "bird" |- 1 ->| can "fly")
+("dogs" : "basenji" |- 1 ->| cannot "bark")
 
-("Birds" : "bird" |- 1 ->| has "feathers")
+("dogs" : "basenji" |- 1 ->| is a "hound")
 
-("Birds" : "bird" |- 1 ->| has "wings")
+("dogs" : "bobby" |- 1 ->| can "lay")
 
-("Birds" : "bird" |- 1 ->| is a "animal")
+("dogs" : "bobby" |- 1 ->| is a "basenji")
 
-("Birds" : "canary" |- 1 ->| can "sing")
-
-("Birds" : "canary" |- 1 ->| is "yellow")
-
-("Birds" : "canary" |- 1 ->| is a "bird")
-
-("Birds" : "ostrich" |- 1 ->| cannot "fly")
-
-("Birds" : "ostrich" |- 1 ->| is "tall")
-
-("Birds" : "ostrich" |- 1 ->| is a "bird")
-
-("Fish" : "fish" |- 1 ->| can "swim")
-
-("Fish" : "fish" |- 1 ->| has "fins")
-
-("Fish" : "fish" |- 1 ->| has "gills")
-
-("Fish" : "fish" |- 1 ->| is a "animal")
-
-("Fish" : "salmon" |- 1 ->| is "edible")
-
-("Fish" : "salmon" |- 1 ->| is a "fish")
-
-("Fish" : "shark" |- 1 ->| is "dangerous")
-"Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
-    :((chunk a "animal" can "move" decay 93 of 100);
-(chunk a "bird" can "fly" decay 95 of 100);
-chunk a "canary" can "fly" decay 100 of 100)>} in time 101
+("dogs" : "dog" |- 1 ->| can "bark")
+"dogs" : "dog" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem :
+    emptySTM >} in time 1000
 
 Bye.
