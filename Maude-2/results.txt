@@ -3,7 +3,7 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Wed Apr 28 13:13:10 2021
+		   Thu Apr 29 03:21:01 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
@@ -13,7 +13,7 @@ rewrites: 22970 in 12ms cpu (13ms real) (1914166 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 17731 in 12ms cpu (8ms real) (1477583 rewrites/second)
+rewrites: 17730 in 12ms cpu (8ms real) (1477500 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
@@ -37,40 +37,128 @@ rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 144155 in 108ms cpu (110ms real) (1334768 rewrites/second)
+rewrites: 142035 in 108ms cpu (110ms real) (1315138 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 41630 in 20ms cpu (18ms real) (2081500 rewrites/second)
+rewrites: 62868 in 88ms cpu (87ms real) (714409 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 91633 in 52ms cpu (53ms real) (1762173 rewrites/second)
+rewrites: 231873 in 80ms cpu (77ms real) (2898412 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
-  {< human : Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,
-    semanticMem :(
-("animals" : "animal" |- 1 ->| can "breath")
+  {
+ans(a "animal" can "move" 1 for INF)
+ans(a "animal" is a "animal" 1 for INF)
+ans(a "bird" can "fly" 1 for INF)
+ans(a "bird" is a "animal" 1 for INF)
+ans(a "bird" is a "bird" 1 for INF)
+ans(a "canary" can "fly" 2 for INF)
+ans(a "canary" can "sing" 1 for INF)
+ans(a "canary" has "feathers" 2 for INF)
+ans(a "canary" has "skin" 3 for INF)
+ans(a "canary" has "wings" 2 for INF)
+ans(a "canary" is a "animal" 2 for INF)
+ans(a "canary" is a "bird" 1 for INF)
+ans(a "fish" can "swim" 1 for INF)
+ans(a "fish" is a "animal" 1 for INF)
+ans(a "fish" is a "fish" 1 for INF)
+ans(a "ostrich" can "move" 3 for INF)
+ans(a "ostrich" is a "animal" 2 for INF)
+ans(a "ostrich" is a "bird" 1 for INF)
+ans(a "ostrich" is a "ostrich" 1 for INF)
+ans(a "salmon" is a "fish" 1 for INF)
+ans(a "salmon" is a "salmon" 1 for INF)
+ans(a "shark" can "breathe" 3 for INF)
+ans(a "shark" can "eat" 3 for INF)
+ans(a "shark" can "swim" 2 for INF)
+ans(a "shark" has "fins" 2 for INF)
+ans(a "shark" has "gills" 2 for INF)
+ans(a "shark" is a "fish" 1 for INF)
+ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 34,
+    proceduralMem : emptyProcedural,semanticMem :(
+("Animals" : "animal" |- 1 ->| can "breathe")
 
-("animals" : "animal" |- 1 ->| can "move")
+("Animals" : "animal" |- 1 ->| can "eat")
 
-("animals" : "dog" |- 1 ->| is a "animal")
+("Animals" : "animal" |- 1 ->| can "move")
 
-("animals" : "hound" |- 1 ->| can "track")
+("Animals" : "animal" |- 1 ->| has "skin")
 
-("dogs" : "basenji" |- 1 ->| cannot "bark")
+("Birds" : "bird" |- 1 ->| can "fly")
 
-("dogs" : "basenji" |- 1 ->| is a "hound")
+("Birds" : "bird" |- 1 ->| has "feathers")
 
-("dogs" : "bobby" |- 1 ->| can "lay")
+("Birds" : "bird" |- 1 ->| has "wings")
 
-("dogs" : "bobby" |- 1 ->| is a "basenji")
+("Birds" : "bird" |- 1 ->| is a "animal")
 
-("dogs" : "dog" |- 1 ->| can "bark")
-"dogs" : "dog" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem :
-    emptySTM >} in time 1000
+("Birds" : "canary" |- 1 ->| can "sing")
+
+("Birds" : "canary" |- 1 ->| is "yellow")
+
+("Birds" : "canary" |- 1 ->| is a "bird")
+
+("Birds" : "ostrich" |- 1 ->| cannot "fly")
+
+("Birds" : "ostrich" |- 1 ->| is "tall")
+
+("Birds" : "ostrich" |- 1 ->| is a "bird")
+
+("Fish" : "fish" |- 1 ->| can "swim")
+
+("Fish" : "fish" |- 1 ->| has "fins")
+
+("Fish" : "fish" |- 1 ->| has "gills")
+
+("Fish" : "fish" |- 1 ->| is a "animal")
+
+("Fish" : "salmon" |- 1 ->| is "edible")
+
+("Fish" : "salmon" |- 1 ->| is a "fish")
+
+("Fish" : "shark" |- 1 ->| is "dangerous")
+"Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
+    :((chunk a "animal" is a "animal" decay 66 of 100);
+(chunk a "bird" is a "animal" decay 68 of 100);
+(chunk a "bird" is a "bird" decay 70 of 100);
+(chunk a "canary" can "sing" decay 2 of 100);
+(chunk a "canary" has "feathers" decay 51 of 100);
+(chunk a "canary" has "skin" decay 55 of 100);
+(chunk a "canary" has "wings" decay 58 of 100);
+(chunk a "canary" is a "animal" decay 73 of 100);
+(chunk a "canary" is a "bird" decay 75 of 100);
+(chunk a "fish" can "swim" decay 4 of 100);
+(chunk a "fish" is a "animal" decay 78 of 100);
+(chunk a "fish" is a "fish" decay 80 of 100);
+(chunk a "ostrich" can "move" decay 32 of 100);
+(chunk a "ostrich" is a "animal" decay 83 of 100);
+(chunk a "ostrich" is a "bird" decay 85 of 100);
+(chunk a "ostrich" is a "ostrich" decay 87 of 100);
+(chunk a "salmon" is a "fish" decay 92 of 100);
+(chunk a "salmon" is a "salmon" decay 94 of 100);
+(chunk a "shark" can "breathe" decay 41 of 100);
+(chunk a "shark" can "eat" decay 45 of 100);
+(chunk a "shark" can "swim" decay 48 of 100);
+(chunk a "shark" has "fins" decay 61 of 100);
+(chunk a "shark" has "gills" decay 64 of 100);
+(chunk a "shark" is a "fish" decay 98 of 100);
+(chunk a "shark" is a "shark" decay 100 of 100);
+(chunk is a "canary" "fish" ? decay 76 of 100);
+(chunk is a "ostrich" "tall" ? decay 88 of 100);
+(chunk is a "salmon" "animal" ? decay 89 of 100);
+(chunk is a "salmon" "edible" ? decay 90 of 100);
+(chunk is a "shark" "animal" ? decay 95 of 100);
+(chunk is a "shark" "dangerous" ? decay 96 of 100);
+(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
+(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
+(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
+(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
+(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
+chunk goal("Fish",foundAnswer,0,5)decay INF of 100)>} in time 201
 
 Bye.

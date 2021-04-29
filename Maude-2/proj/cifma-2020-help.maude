@@ -95,7 +95,7 @@ endtom)
    eq MAX-RETRIEVAL-TIME = 20 .
 
    op stmCapacity : -> Nat .
-   eq stmCapacity = 7 .
+   eq stmCapacity = 100 .
 
    ops STM-ACCESS-TIME STM-TO-LTM-THRESHOLD : -> Time .
    eq STM-ACCESS-TIME = 1 .
@@ -305,27 +305,27 @@ endtom)
   op canRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
   ceq canRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C can A, IS) .
   ceq canRetrievalTime(C, A, (D : C |- M ->| (can A)) S, IS) = M if not isItemIn(a C can A, IS) .
-  ceq canRetrievalTime(C, A, (D : C1 |- M ->| (can A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
-  eq canRetrievalTime(C, A, S, IS) = INF [owise] .
+  ceq canRetrievalTime(C, A, (D : C1 |- M ->| (can A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 [owise] .
+  --- eq canRetrievalTime(C, A, S, IS) = INF [owise] .
 
   op hasRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
   ceq hasRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C has A, IS) .
   ceq hasRetrievalTime(C, A, (D : C |- M ->| (has A)) S, IS) = M if not isItemIn(a C has A, IS) .
-  ceq hasRetrievalTime(C, A, (D : C1 |- M ->| (has A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
-  eq hasRetrievalTime(C, A, S, IS) = INF [owise] .
+  ceq hasRetrievalTime(C, A, (D : C1 |- M ->| (has A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 [owise] .
+  --- eq hasRetrievalTime(C, A, S, IS) = INF [owise] .
 
   op isRetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
   ceq isRetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C is A, IS) .
   ceq isRetrievalTime(C, A, (D : C |- M ->| (is A)) S, IS) = M if not isItemIn(a C is A, IS) .
-  ceq isRetrievalTime(C, A, (D : C1 |- M ->| (is A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
-  eq isRetrievalTime(C, A, S, IS) = INF [owise] .
+  ceq isRetrievalTime(C, A, (D : C1 |- M ->| (is A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 [owise] .
+  --- eq isRetrievalTime(C, A, S, IS) = INF [owise] .
 
   op isARetrievalTime : Category Attribute SemanticMemory ItemSet -> TimeInf .
   eq isARetrievalTime(C, C, S, IS) = STM-ACCESS-TIME .
   ceq isARetrievalTime(C, A, S, IS) = STM-ACCESS-TIME  if isItemIn(a C is a A, IS) .
   ceq isARetrievalTime(C, A, (D : C |- M ->| (is a A)) S, IS) = M if not isItemIn(a C is a A, IS) .
-  ceq isARetrievalTime(C, A, (D : C1 |- M ->| (is a A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 .
-  eq isARetrievalTime(C, A, S, IS) = INF [owise] .
+  ceq isARetrievalTime(C, A, (D : C1 |- M ->| (is a A)) S, IS) = M + timeToSuper(C, C1, S, IS) if C =/= C1 [owise] .
+  --- eq isARetrievalTime(C, A, S, IS) = INF [owise] .
 
   op questionFound : ShortTermMemory -> Bool .
   eq questionFound(emptySTM) = false .
@@ -363,7 +363,7 @@ crl [forgetSomethingIfSTMfull] :
     {< H : Human | shortTermMem : STM, 
                     cognitiveLoad : sd(N, 1) >
      REST}
-  if N > stmCapacity .
+  if N >= stmCapacity .
 
 crl [tick] :
     {< H : Human | shortTermMem : STM >

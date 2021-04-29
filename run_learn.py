@@ -29,7 +29,7 @@ stm_dict = {}
 class Ui_RunLearnWindow(object):
     def setupUi(self, RunLearnWindow):
         RunLearnWindow.setObjectName("RunLearnWindow")
-        RunLearnWindow.setFixedSize(480, 480)
+        RunLearnWindow.setFixedSize(480, 800)
         self.centralwidget = QtWidgets.QWidget(RunLearnWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -62,6 +62,18 @@ class Ui_RunLearnWindow(object):
         self.label_4.setGeometry(QtCore.QRect(40, 270, 351, 51))
         self.label_4.setObjectName("label_4")
         self.label_4.setFont(font)
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(40, 370, 351, 51))
+        self.label_5.setObjectName("label_5")
+        self.label_5.setFont(font)
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(40, 470, 351, 51))
+        self.label_6.setObjectName("label_6")
+        self.label_6.setFont(font)
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(40, 570, 351, 51))
+        self.label_7.setObjectName("label_7")
+        self.label_7.setFont(font)
         self.stm_capacity = QtWidgets.QLineEdit(self.centralwidget)
         self.stm_capacity.setGeometry(QtCore.QRect(40, 220, 400, 41))
         self.stm_capacity.setObjectName("stm_capacity")
@@ -70,8 +82,20 @@ class Ui_RunLearnWindow(object):
         self.cogn_load.setGeometry(QtCore.QRect(40, 320, 400, 41))
         self.cogn_load.setObjectName("stm_capacity")
         self.cogn_load.setFont(font)
+        self.decay_time = QtWidgets.QLineEdit(self.centralwidget)
+        self.decay_time.setGeometry(QtCore.QRect(40, 420, 400, 41))
+        self.decay_time.setObjectName("decay_time")
+        self.decay_time.setFont(font)
+        self.in_time = QtWidgets.QLineEdit(self.centralwidget)
+        self.in_time.setGeometry(QtCore.QRect(40, 520, 400, 41))
+        self.in_time.setObjectName("in_time")
+        self.in_time.setFont(font)
+        self.rewrite_steps = QtWidgets.QLineEdit(self.centralwidget)
+        self.rewrite_steps.setGeometry(QtCore.QRect(40, 620, 400, 41))
+        self.rewrite_steps.setObjectName("rewrite_steps")
+        self.rewrite_steps.setFont(font)
         self.runBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.runBtn.setGeometry(QtCore.QRect(195, 400, 90, 25))
+        self.runBtn.setGeometry(QtCore.QRect(195, 700, 90, 25))
         # self.runBtn.clicked.connect(self.create_project)
         self.runBtn.clicked.connect(RunLearnWindow.close)
         self.runBtn.setFont(font)
@@ -128,7 +152,6 @@ class Ui_RunLearnWindow(object):
 
 
         lookup = "op stmCapacity : -> Nat ."
-
         for i, line in enumerate(list_of_lines, 1):
             if lookup in line:
                 break
@@ -138,8 +161,8 @@ class Ui_RunLearnWindow(object):
         f.writelines(list_of_lines)
         f.close()
 
-        lookup = "eq theHuman = < human : Human | cognitiveLoad"
 
+        lookup = "eq theHuman = < human : Human | cognitiveLoad"
         for i, line in enumerate(list_of_lines, 1):
             if lookup in line:
                 break
@@ -149,6 +172,27 @@ class Ui_RunLearnWindow(object):
         f.writelines(list_of_lines)
         f.close()
 
+
+        lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
+        for i, line in enumerate(list_of_lines, 1):
+            if lookup in line:
+                break
+        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
+        list_of_lines[i] = addition
+        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        f.writelines(list_of_lines)
+        f.close()
+
+
+        lookup = "quit"
+        for i, line in enumerate(list_of_lines, 1):
+            if lookup in line:
+                break
+        addition = "(trew [" + self.rewrite_steps.text() + "] in EXAMPLE-DOGS : {init} in time <= " + self.in_time.text() + " .)\n"
+        list_of_lines[i-3] = addition
+        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        f.writelines(list_of_lines)
+        f.close()
 
 
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
@@ -372,6 +416,14 @@ class Ui_RunLearnWindow(object):
         self.label.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Run Project</span></p></body></html>"))
         self.label_2.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">STM capacity</span></p></body></html>"))
         self.label_4.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Cognitive Load</span></p></body></html>"))
+        self.label_5.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Decay time</span></p></body></html>"))
+        self.label_6.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">In time</span></p></body></html>"))
+        self.label_7.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
+        self.stm_capacity.setText(_translate("RunLearnWindow", "7"))
+        self.cogn_load.setText(_translate("RunLearnWindow", "0"))
+        self.decay_time.setText(_translate("RunLearnWindow", "100"))
+        self.in_time.setText(_translate("RunLearnWindow", "1000"))
+        self.rewrite_steps.setText(_translate("RunLearnWindow", "10000"))
         self.runBtn.setText(_translate("RunLearnWindow", "Run"))
         self.menuInteractive_System_Modelling.setTitle(_translate("RunLearnWindow", "1"))
 

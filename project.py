@@ -74,7 +74,7 @@ class Ui_ProjectWindow(QWidget):
         self.ExpBtn.setFont(font)
         self.ExpBtn.setObjectName("ExpBtn")
         self.learnBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.learnBtn.setGeometry(QtCore.QRect(150, 744, 271, 41))
+        self.learnBtn.setGeometry(QtCore.QRect(150, 744, 300, 41))
         self.learnBtn.setFont(font)
         self.learnBtn.setObjectName("learnBtn")
         self.editDatabaseBtn = QtWidgets.QPushButton(self.centralwidget)
@@ -82,7 +82,7 @@ class Ui_ProjectWindow(QWidget):
         self.editDatabaseBtn.setFont(font)
         self.editDatabaseBtn.setObjectName("editDatabaseBtn")
         self.runBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.runBtn.setGeometry(QtCore.QRect(800, 744, 100, 41))
+        self.runBtn.setGeometry(QtCore.QRect(650, 744, 200, 41))
         self.runBtn.setFont(font)
         self.runBtn.setObjectName("runBtn")
         self.resultsBtn = QtWidgets.QPushButton(self.centralwidget)
@@ -234,7 +234,7 @@ class Ui_ProjectWindow(QWidget):
             i += 1
             if stm_str in line:
                 new_line = str(line)
-                print(new_line.find("goal"))
+                #print(new_line.find("goal"))
                 if new_line.find("goal") != -1:
                     continue
                 start = new_line.find("chunk ")+len("chunk ")
@@ -497,18 +497,24 @@ class Ui_ProjectWindow(QWidget):
             self.ui.tableWidget.setRowCount(j+1)
             
             for item, time in ans.items():
-                if question[4] in item and question[5] in item and question[6] in item:
+                cat = item.split(' ', 3)[1][1:-1]
+                attr = item.rsplit(' ', 1)[1][1:-1]
+
+                # if question[4] in item and question[5] in item and question[6] in item:
+                if question[4]==cat and question[6]==attr:
                     self.ui.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(item))
                     self.ui.tableWidget.setItem(j, 2, QtWidgets.QTableWidgetItem(time))
-
-            q = self.ui.tableWidget.item(j,1);
-            for item, time in res_stm.items():
-                if q:
-                    if "?" in item and question[4] in item and question[5] in item and question[6] in item:
-                        self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
-            if not q:
-                continue
-            j += 1
+                    self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(question[5]+' a "'+question[4]+'" "'+question[6]+'" ?')))
+                    self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(question[3])))
+                    j += 1
+            # q = self.ui.tableWidget.item(j,1);
+            # for item, time in res_stm.items():
+            #     if q:
+            #         if "?" in item and question[4] in item and question[5] in item and question[6] in item:
+            #             self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
+            # if not q:
+            #     continue
+            
         self.QAResultsWindow.show()
 
     def exp(self):
@@ -602,9 +608,9 @@ class Ui_ProjectWindow(QWidget):
         # self.label.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Project: Animal-Dog</span></p></body></html>"))
         # self.label_2.setText(_translate("ProjectWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version #1.1: Version Name 2</span></p></body></html>"))
         self.ExpBtn.setText(_translate("ProjectWindow", "Experiments"))
-        self.learnBtn.setText(_translate("ProjectWindow", "Learning process"))
+        self.learnBtn.setText(_translate("ProjectWindow", "Run Learning Process"))
         self.editDatabaseBtn.setText(_translate("ProjectWindow", "Edit Database"))
-        self.runBtn.setText(_translate("ProjectWindow", "Run"))
+        self.runBtn.setText(_translate("ProjectWindow", "Run Experiment"))
         self.resultsBtn.setText(_translate("ProjectWindow", "Results"))
         self.textBrowser.setHtml(_translate("ProjectWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
