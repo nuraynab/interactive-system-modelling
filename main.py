@@ -14,16 +14,15 @@ import MySQLdb as mdb
 from contextlib import closing
 
 from create_project import Ui_CreateProjectInfoWindow
-from edit_project import Ui_EditProjectInfoWindow
-from edit_version import Ui_EditVersionInfoWindow
-from project_desc import Ui_ProjectDescWindow
-from version_desc import Ui_VersionDescWindow
+from edit_info import Ui_EditInfoWindow
+from long_desc import Ui_LongDescWindow
 from project import Ui_ProjectWindow
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
 
 projects_dict = {}
 versions_dict = {}
+
 
 class Ui_MainWindow(QWidget):
     def setupUi(self, MainWindow):
@@ -188,46 +187,43 @@ class Ui_MainWindow(QWidget):
         self.timer.timeout.connect(self.updateWindow)
         self.timer.start(10000)
 
-
     def updateWindow(self):
-        self.get_projects() 
+        self.get_projects()
 
     def show_versions(self):
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return  
+        listItems = self.listWidget.selectedItems()
+        if not listItems: return
         for item in listItems:
             self.tableWidget.setRowCount(0)
             db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
             with closing(db.cursor()) as cur:
-                cur.execute("SELECT T2.id, T2.name, T2.project_name, T2.numb, T2.short_descr, T2.long_descr FROM projects T1 INNER JOIN versions T2 ON T1.name = T2.project_name WHERE T1.name = '%s' ORDER BY T2.numb" % (''.join(item.text())))
+                cur.execute(
+                    "SELECT T2.id, T2.name, T2.project_name, T2.numb, T2.short_descr, T2.long_descr FROM projects T1 INNER JOIN versions T2 ON T1.name = T2.project_name WHERE T1.name = '%s' ORDER BY T2.numb" % (
+                        ''.join(item.text())))
                 versions = cur.fetchall()
 
                 i = 0
                 for y in versions:
-                    self.tableWidget.setRowCount(i+1)
+                    self.tableWidget.setRowCount(i + 1)
                     self.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(y[1])))
                     self.tableWidget.setItem(i, 1, QtWidgets.QTableWidgetItem(str(y[3])))
                     versions_dict[y[1]] = [y[2], y[3], y[4], y[5], y[0]]
-                    i+=1
+                    i += 1
             db.close()
 
-
     def show_project_short_descr(self):
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return  
+        listItems = self.listWidget.selectedItems()
+        if not listItems: return
         for item in listItems:
             self.textBrowser.clear()
-
             self.textBrowser.append(projects_dict[item.text()][0])
 
-
     def show_version_short_descr(self):
-        curr_row = self.tableWidget.currentRow() 
+        curr_row = self.tableWidget.currentRow()
         curr_col = 0
         self.textBrowser_2.clear()
         item = self.tableWidget.item(curr_row, curr_col)
         self.textBrowser_2.append(versions_dict[item.text()][2])
-
 
     def get_projects(self):
         self.listWidget.clear()
@@ -245,13 +241,14 @@ class Ui_MainWindow(QWidget):
                 item.setFont(font)
                 self.listWidget.addItem(item)
                 projects_dict[x[1]] = [x[2], x[3]]
-        db.close()                
-
+        db.close()
 
     def delete_project(self):
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return   
-        reply = QMessageBox.question(self, "Delete project", "Are you sure you want to delete this project and its versions?", QMessageBox.Yes | QMessageBox.No)
+        listItems = self.listWidget.selectedItems()
+        if not listItems: return
+        reply = QMessageBox.question(self, "Delete project",
+                                     "Are you sure you want to delete this project and its versions?",
+                                     QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             for item in listItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
@@ -268,20 +265,22 @@ class Ui_MainWindow(QWidget):
             return
 
     def delete_version(self):
-        curr_row = self.tableWidget.currentRow() 
+        curr_row = self.tableWidget.currentRow()
         curr_col = 0
-        project_name =self.listWidget.currentItem()
+        project_name = self.listWidget.currentItem()
 
         if curr_row == -1 and curr_col == -1:
-            return 
+            return
         ver_name = self.tableWidget.item(curr_row, curr_col)
-        reply = QMessageBox.question(self, "Delete version", "Are you sure you want to delete this version?", QMessageBox.Yes | QMessageBox.No)
+        reply = QMessageBox.question(self, "Delete version", "Are you sure you want to delete this version?",
+                                     QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
-            
+
             self.textBrowser_2.clear()
             db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
             with closing(db.cursor()) as cur:
-                cur.execute("DELETE FROM versions WHERE name = '%s' AND project_name = '%s'" % (''.join(ver_name.text()),''.join(project_name.text())))
+                cur.execute("DELETE FROM versions WHERE name = '%s' AND project_name = '%s'" % (
+                ''.join(ver_name.text()), ''.join(project_name.text())))
                 db.commit()
                 self.tableWidget.removeRow(curr_row)
                 self.textBrowser_2.clear()
@@ -289,78 +288,71 @@ class Ui_MainWindow(QWidget):
         else:
             return
 
-
     def new_project(self):
         self.CreateProjectInfoWindow = QtWidgets.QMainWindow()
         self.ui = Ui_CreateProjectInfoWindow()
         self.ui.setupUi(self.CreateProjectInfoWindow)
         self.CreateProjectInfoWindow.show()
 
-
     def edit_project(self):
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return  
+        listItems = self.listWidget.selectedItems()
+        if not listItems: return
         for item in listItems:
-            self.EditProjectInfoWindow = QtWidgets.QMainWindow()
-            self.ui = Ui_EditProjectInfoWindow()
-            self.ui.setupUi(self.EditProjectInfoWindow)
-            self.ui.lineEdit.setText(item.text())
-            self.ui.origin_name = item.text()
-            self.ui.textEdit.setText(projects_dict[item.text()][0])
-            self.ui.textEdit_2.setText(projects_dict[item.text()][1])
-            self.EditProjectInfoWindow.show()
+            project = [item.text(), projects_dict[item.text()][0], projects_dict[item.text()][1]]
+            self.edit(project, '', project[0])
 
     def edit_version(self):
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return  
+        listItems = self.listWidget.selectedItems()
+        if not listItems: return
         for x in listItems:
-            curr_row = self.tableWidget.currentRow() 
+            curr_row = self.tableWidget.currentRow()
             curr_col = 0
             item = self.tableWidget.item(curr_row, curr_col)
-            self.EditVersionInfoWindow = QtWidgets.QMainWindow()
-            self.ui = Ui_EditVersionInfoWindow()
-            self.ui.setupUi(self.EditVersionInfoWindow)
-            self.ui.label_3.setText(x.text())
-            self.ui.label_7.setText("Version " + str(versions_dict[item.text()][1]))
-            self.ui.lineEdit.setText(item.text())
-            self.ui.origin_name = item.text()
-            self.ui.textEdit.setText(versions_dict[item.text()][2])
-            self.ui.textEdit_2.setText(versions_dict[item.text()][3])
-            self.EditVersionInfoWindow.show()
+            version = [item.text(), versions_dict[item.text()][2], versions_dict[item.text()][3]]
+            self.edit(version, "Version " + str(versions_dict[item.text()][1]), x.text())
 
+    def edit(self, item, ver_num, proj_name):
+        self.EditInfoWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_EditInfoWindow()
+        self.ui.setupUi(self.EditInfoWindow)
+        self.ui.label_3.setText(proj_name)
+        self.ui.label_7.setText(ver_num)
+        self.ui.lineEdit.setText(item[0])
+        self.ui.origin_name = item[0]
+        self.ui.textEdit.setText(item[1])
+        self.ui.textEdit_2.setText(item[2])
+        self.EditInfoWindow.show()
 
     def project_desc(self):
-        self.ProjectDescWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_ProjectDescWindow()
-        self.ui.setupUi(self.ProjectDescWindow)
-        # self.ui.textBrowser.append(projects_dict['test'][0])
-        listItems=self.listWidget.selectedItems()
-        if not listItems: return  
-        for item in listItems:
-            self.ui.textBrowser.clear()
-            self.ui.textBrowser.append(projects_dict[item.text()][1])
-        self.ProjectDescWindow.show()
+        list_items = self.listWidget.selectedItems()
+        if not list_items: return
+        for item in list_items:
+            text = projects_dict[item.text()][1]
+            self.show_long_desc(text)
 
     def version_desc(self):
-        self.VersionDescWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_VersionDescWindow()
-        self.ui.setupUi(self.VersionDescWindow)
-
-        curr_row = self.tableWidget.currentRow() 
+        curr_row = self.tableWidget.currentRow()
         curr_col = self.tableWidget.currentColumn()
         item = self.tableWidget.item(curr_row, curr_col)
+        text = versions_dict[item.text()][3]
+        self.show_long_desc(text)
+
+    def show_long_desc(self, text):
+        self.LongDescWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_LongDescWindow()
+        self.ui.setupUi(self.LongDescWindow)
         self.ui.textBrowser.clear()
-        self.ui.textBrowser.append(versions_dict[item.text()][3])
-        self.VersionDescWindow.show()
+        self.ui.textBrowser.append(text)
+        self.LongDescWindow.show()
 
     def open_project(self):
-        listItems=self.listWidget.selectedItems()
-        curr_row = self.tableWidget.currentRow() 
+        listItems = self.listWidget.selectedItems()
+        curr_row = self.tableWidget.currentRow()
         curr_col = self.tableWidget.currentColumn()
         ver_name = self.tableWidget.item(curr_row, curr_col)
-        if not listItems: return 
+        if not listItems: return
         if curr_row == -1 and curr_col == -1:
-            return 
+            return
         for item in listItems:
             cur_name = item.text()
 
@@ -382,19 +374,18 @@ class Ui_MainWindow(QWidget):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.createBtn.setText(_translate("MainWindow", "Create a Project"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Interactive System Modelling</span></p></body></html>"))
-        self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Projects</span></p></body></html>"))
-        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Versions</span></p></body></html>"))
+        self.label.setText(_translate("MainWindow",
+                                      "<html><head/><body><p><span style=\" font-size:28pt;\">Interactive System Modelling</span></p></body></html>"))
+        self.label_2.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:20pt;\">Projects</span></p></body></html>"))
+        self.label_3.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:20pt;\">Versions</span></p></body></html>"))
         self.editProjInfoBtn.setText(_translate("MainWindow", "Edit Info"))
         self.deleteProjBtn.setText(_translate("MainWindow", "Delete"))
         self.editVerInfoBtn.setText(_translate("MainWindow", "Edit Info"))
         self.deleteVerBtn.setText(_translate("MainWindow", "Delete"))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
-        # item = self.listWidget.item(0)
-        # item.setText(_translate("MainWindow", "Animal-Dog"))
-
-
         self.listWidget.setSortingEnabled(__sortingEnabled)
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Name"))
@@ -403,28 +394,18 @@ class Ui_MainWindow(QWidget):
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setSortingEnabled(__sortingEnabled)
-        self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Project Description</span></p></body></html>"))
-        self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version Description</span></p></body></html>"))
-#         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-# "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-# "p, li { white-space: pre-wrap; }\n"
-# "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-# "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This project blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
-#         self.textBrowser_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-# "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-# "p, li { white-space: pre-wrap; }\n"
-# "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-# "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This version blablaballabalbaalalalabalalbalablabal</span></p></body></html>"))
+        self.label_4.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:20pt;\">Project Description</span></p></body></html>"))
+        self.label_5.setText(_translate("MainWindow",
+                                        "<html><head/><body><p><span style=\" font-size:20pt;\">Version Description</span></p></body></html>"))
         self.viewProjDescBtn.setText(_translate("MainWindow", "View Long Description"))
         self.viewVerDescBtn.setText(_translate("MainWindow", "View Long Description"))
         self.openBtn.setText(_translate("MainWindow", "Open"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("MainWindow", "1"))
-
-
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
@@ -432,4 +413,3 @@ if __name__ == "__main__":
     MainWindow.show()
 
     sys.exit(app.exec_())
-    
