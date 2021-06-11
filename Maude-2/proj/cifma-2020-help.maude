@@ -95,7 +95,7 @@ endtom)
    eq MAX-RETRIEVAL-TIME = 20 .
 
    op stmCapacity : -> Nat .
-   eq stmCapacity = 100 .
+   eq stmCapacity = 7 .
 
    ops STM-ACCESS-TIME STM-TO-LTM-THRESHOLD : -> Time .
    eq STM-ACCESS-TIME = 1 .

@@ -3,17 +3,17 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Thu Apr 29 03:21:01 2021
+		   Fri Jun 11 07:36:40 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 22970 in 12ms cpu (13ms real) (1914166 rewrites/second)
+rewrites: 22970 in 12ms cpu (11ms real) (1914166 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 17730 in 12ms cpu (8ms real) (1477500 rewrites/second)
+rewrites: 17731 in 8ms cpu (7ms real) (2216375 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
@@ -25,11 +25,11 @@ rewrites: 3232 in 4ms cpu (1ms real) (808000 rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 12835 in 4ms cpu (6ms real) (3208750 rewrites/second)
+rewrites: 12835 in 4ms cpu (5ms real) (3208750 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 14446 in 8ms cpu (5ms real) (1805750 rewrites/second)
+rewrites: 14446 in 4ms cpu (4ms real) (3611500 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
@@ -37,7 +37,7 @@ rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 142035 in 108ms cpu (110ms real) (1315138 rewrites/second)
+rewrites: 142035 in 96ms cpu (94ms real) (1479531 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
@@ -45,7 +45,7 @@ rewrites: 62868 in 88ms cpu (87ms real) (714409 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 231873 in 80ms cpu (77ms real) (2898412 rewrites/second)
+rewrites: 194432 in 56ms cpu (58ms real) (3472000 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
@@ -64,6 +64,7 @@ ans(a "canary" has "skin" 3 for INF)
 ans(a "canary" has "wings" 2 for INF)
 ans(a "canary" is a "animal" 2 for INF)
 ans(a "canary" is a "bird" 1 for INF)
+ans(a "canary" is a "canary" 1 for INF)
 ans(a "fish" can "swim" 1 for INF)
 ans(a "fish" is a "animal" 1 for INF)
 ans(a "fish" is a "fish" 1 for INF)
@@ -79,7 +80,7 @@ ans(a "shark" can "swim" 2 for INF)
 ans(a "shark" has "fins" 2 for INF)
 ans(a "shark" has "gills" 2 for INF)
 ans(a "shark" is a "fish" 1 for INF)
-ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 34,
+ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 6,
     proceduralMem : emptyProcedural,semanticMem :(
 ("Animals" : "animal" |- 1 ->| can "breathe")
 
@@ -123,32 +124,7 @@ ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 34,
 
 ("Fish" : "shark" |- 1 ->| is "dangerous")
 "Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
-    :((chunk a "animal" is a "animal" decay 66 of 100);
-(chunk a "bird" is a "animal" decay 68 of 100);
-(chunk a "bird" is a "bird" decay 70 of 100);
-(chunk a "canary" can "sing" decay 2 of 100);
-(chunk a "canary" has "feathers" decay 51 of 100);
-(chunk a "canary" has "skin" decay 55 of 100);
-(chunk a "canary" has "wings" decay 58 of 100);
-(chunk a "canary" is a "animal" decay 73 of 100);
-(chunk a "canary" is a "bird" decay 75 of 100);
-(chunk a "fish" can "swim" decay 4 of 100);
-(chunk a "fish" is a "animal" decay 78 of 100);
-(chunk a "fish" is a "fish" decay 80 of 100);
-(chunk a "ostrich" can "move" decay 32 of 100);
-(chunk a "ostrich" is a "animal" decay 83 of 100);
-(chunk a "ostrich" is a "bird" decay 85 of 100);
-(chunk a "ostrich" is a "ostrich" decay 87 of 100);
-(chunk a "salmon" is a "fish" decay 92 of 100);
-(chunk a "salmon" is a "salmon" decay 94 of 100);
-(chunk a "shark" can "breathe" decay 41 of 100);
-(chunk a "shark" can "eat" decay 45 of 100);
-(chunk a "shark" can "swim" decay 48 of 100);
-(chunk a "shark" has "fins" decay 61 of 100);
-(chunk a "shark" has "gills" decay 64 of 100);
-(chunk a "shark" is a "fish" decay 98 of 100);
-(chunk a "shark" is a "shark" decay 100 of 100);
-(chunk is a "canary" "fish" ? decay 76 of 100);
+    :((chunk a "shark" is a "shark" decay 100 of 100);
 (chunk is a "ostrich" "tall" ? decay 88 of 100);
 (chunk is a "salmon" "animal" ? decay 89 of 100);
 (chunk is a "salmon" "edible" ? decay 90 of 100);
@@ -158,7 +134,6 @@ ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 34,
 (chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
 (chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
 (chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-chunk goal("Fish",foundAnswer,0,5)decay INF of 100)>} in time 201
+chunk goal("Fish",foundAnswer,0,5)decay INF of 100)>} in time 202
 
 Bye.
