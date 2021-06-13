@@ -3,7 +3,7 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Fri Jun 11 07:36:40 2021
+		   Sun Jun 13 21:55:05 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
@@ -17,11 +17,11 @@ rewrites: 17731 in 8ms cpu (7ms real) (2216375 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
-rewrites: 8250 in 0ms cpu (2ms real) (~ rewrites/second)
+rewrites: 8250 in 4ms cpu (2ms real) (2062500 rewrites/second)
 
 Introduced timed module: SENSORY-MEMORY
 
-rewrites: 3232 in 4ms cpu (1ms real) (808000 rewrites/second)
+rewrites: 3232 in 0ms cpu (1ms real) (~ rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
@@ -37,103 +37,44 @@ rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 142035 in 96ms cpu (94ms real) (1479531 rewrites/second)
+rewrites: 142035 in 96ms cpu (95ms real) (1479531 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 62868 in 88ms cpu (87ms real) (714409 rewrites/second)
+rewrites: 40747 in 16ms cpu (15ms real) (2546687 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 194432 in 56ms cpu (58ms real) (3472000 rewrites/second)
+rewrites: 69350 in 28ms cpu (28ms real) (2476785 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
   {
-ans(a "animal" can "move" 1 for INF)
-ans(a "animal" is a "animal" 1 for INF)
-ans(a "bird" can "fly" 1 for INF)
-ans(a "bird" is a "animal" 1 for INF)
-ans(a "bird" is a "bird" 1 for INF)
-ans(a "canary" can "fly" 2 for INF)
-ans(a "canary" can "sing" 1 for INF)
-ans(a "canary" has "feathers" 2 for INF)
-ans(a "canary" has "skin" 3 for INF)
-ans(a "canary" has "wings" 2 for INF)
-ans(a "canary" is a "animal" 2 for INF)
-ans(a "canary" is a "bird" 1 for INF)
-ans(a "canary" is a "canary" 1 for INF)
-ans(a "fish" can "swim" 1 for INF)
-ans(a "fish" is a "animal" 1 for INF)
-ans(a "fish" is a "fish" 1 for INF)
-ans(a "ostrich" can "move" 3 for INF)
-ans(a "ostrich" is a "animal" 2 for INF)
-ans(a "ostrich" is a "bird" 1 for INF)
-ans(a "ostrich" is a "ostrich" 1 for INF)
-ans(a "salmon" is a "fish" 1 for INF)
-ans(a "salmon" is a "salmon" 1 for INF)
-ans(a "shark" can "breathe" 3 for INF)
-ans(a "shark" can "eat" 3 for INF)
-ans(a "shark" can "swim" 2 for INF)
-ans(a "shark" has "fins" 2 for INF)
-ans(a "shark" has "gills" 2 for INF)
-ans(a "shark" is a "fish" 1 for INF)
-ans(a "shark" is a "shark" 1 for INF)< human : Human | cognitiveLoad : 6,
+ans(a "animal" can "breath" 1 for INF)
+perc(can a "animal" "breath" ? for 2)
+perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 3,
     proceduralMem : emptyProcedural,semanticMem :(
-("Animals" : "animal" |- 1 ->| can "breathe")
+("animals" : "animal" |- 1 ->| can "breath")
 
-("Animals" : "animal" |- 1 ->| can "eat")
+("animals" : "animal" |- 1 ->| can "move")
 
-("Animals" : "animal" |- 1 ->| can "move")
+("animals" : "hound" |- 1 ->| can "track")
 
-("Animals" : "animal" |- 1 ->| has "skin")
+("dogs" : "basenji" |- 1 ->| cannot "bark")
 
-("Birds" : "bird" |- 1 ->| can "fly")
+("dogs" : "basenji" |- 1 ->| is a "hound")
 
-("Birds" : "bird" |- 1 ->| has "feathers")
+("dogs" : "bobby" |- 1 ->| can "lay")
 
-("Birds" : "bird" |- 1 ->| has "wings")
+("dogs" : "bobby" |- 1 ->| is a "basenji")
 
-("Birds" : "bird" |- 1 ->| is a "animal")
-
-("Birds" : "canary" |- 1 ->| can "sing")
-
-("Birds" : "canary" |- 1 ->| is "yellow")
-
-("Birds" : "canary" |- 1 ->| is a "bird")
-
-("Birds" : "ostrich" |- 1 ->| cannot "fly")
-
-("Birds" : "ostrich" |- 1 ->| is "tall")
-
-("Birds" : "ostrich" |- 1 ->| is a "bird")
-
-("Fish" : "fish" |- 1 ->| can "swim")
-
-("Fish" : "fish" |- 1 ->| has "fins")
-
-("Fish" : "fish" |- 1 ->| has "gills")
-
-("Fish" : "fish" |- 1 ->| is a "animal")
-
-("Fish" : "salmon" |- 1 ->| is "edible")
-
-("Fish" : "salmon" |- 1 ->| is a "fish")
-
-("Fish" : "shark" |- 1 ->| is "dangerous")
-"Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
-    :((chunk a "shark" is a "shark" decay 100 of 100);
-(chunk is a "ostrich" "tall" ? decay 88 of 100);
-(chunk is a "salmon" "animal" ? decay 89 of 100);
-(chunk is a "salmon" "edible" ? decay 90 of 100);
-(chunk is a "shark" "animal" ? decay 95 of 100);
-(chunk is a "shark" "dangerous" ? decay 96 of 100);
-(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-(chunk goal("Fish",foundAnswer,0,5)decay INF of 100);
-chunk goal("Fish",foundAnswer,0,5)decay INF of 100)>} in time 202
+("dogs" : "dog" |- 1 ->| can "bark")
+"dogs" : "dog" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem
+    :((chunk a "animal" can "breath" decay 98 of 100);
+(chunk can a "animal" "breath" ? decay 99 of 100);
+(chunk can a "hound" "move" ? decay 100 of 100);
+chunk goal("animals",foundAnswer,0,5)decay INF of 100)>} in time 9
 
 Bye.

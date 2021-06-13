@@ -7,7 +7,7 @@ load real-time-maude.maude
 
   sorts Fact Question Answer .
   sorts Domain BasicItem Item Goal .     --- an 'Item' can be either a 'BasicItem' or a 'Goal'
-  subsort BasicItem < Item .        
+  subsort BasicItem < Item .
   subsort Goal < Item .
   subsorts Fact Question Answer < BasicItem .
 
@@ -38,7 +38,7 @@ load real-time-maude.maude
   op what`can_do? : Category -> Question [ctor] .
   ops can`a__? is`a__? has`a__? is__? : Category Attribute -> Question [ctor] .
   op a__ : Category TypedAttribute -> Fact [ctor] .
-  
+
   ops I`dont`know`if`a_can_ I`dont`know`if`a_is_ : Category Attribute -> Fact [ctor] .
   op I`dont`know`what`a_can`do : Category -> Fact [ctor] .
 
@@ -75,7 +75,7 @@ load real-time-maude.maude
 
   eq isAchievement(BI1, goal(D, (BI2 ; BIS), DET, REP) ; IS) = BI1 == BI2 or isAchievement(BI1, IS) .
   eq isAchievement(BI1, IS) = false [owise] .
-  
+
 
   var Q : Question .
   eq explicitAttention(Q, goal(D, (foundAnswer ; BIS), DET, REP) ; IS) = true .
@@ -114,7 +114,7 @@ endtom)
    op chunk_decay_of_ : ItemSet TimeInf TimeInf -> Chunk [ctor] .
    op _for_ : BasicItem TimeInf -> TimedBasicItem [ctor] .
    op _in_ : TimedBasicItem Time -> FutureBasicItem [ctor] .
-   
+
    op emptySTM : -> ShortTermMemory [ctor] .
    op _;_ : ShortTermMemory ShortTermMemory ->
               ShortTermMemory [ctor assoc comm id: emptySTM format (b o n b)] .
@@ -127,10 +127,10 @@ endtom)
    var IS : ItemSet .
    var STM : ShortTermMemory .
    vars T1 T2 : TimeInf .
-   
+
    eq removeTime(emptySTM) = none .
    eq removeTime((chunk IS decay T1 of T2) ; STM) =  IS ; removeTime(STM) .
-   
+
 endtom)
 
 
@@ -151,7 +151,7 @@ endtom)
 
   protecting NAT .
   protecting STRING .
----  including TIMED-ITEMS . 
+---  including TIMED-ITEMS .
 
   sorts ProceduralMemory .
 
@@ -165,7 +165,7 @@ endtom)
   protecting NAT .
   protecting STRING .
   including TIMED-ITEMS .
-  
+
   sorts FactRepresentation SemanticMemory .
   subsort FactRepresentation < SemanticMemory .
 
@@ -208,7 +208,7 @@ endtom)
                                              -> Experiment .
 
   var BI : BasicItem .
-  
+
   eq perc(BI for 0) = none .
 
   var T : Time .
@@ -360,7 +360,7 @@ crl [forgetSomethingIfSTMfull] :
                     cognitiveLoad : N >
      REST}
   =>
-    {< H : Human | shortTermMem : STM, 
+    {< H : Human | shortTermMem : STM,
                     cognitiveLoad : sd(N, 1) >
      REST}
   if N >= stmCapacity .
@@ -375,7 +375,7 @@ crl [tick] :
 ---  if true .
   if not questionFound(STM) /\ noExperimentStart(REST) /\ noPerceptionAvailable(REST) .
 ---  if noQuestionFound(STM) .
-  
+
 
   rl [activate-perception] :
     {(exp ((BI for T) in 0))
@@ -403,7 +403,7 @@ crl [tick] :
      shortTermMem : STM >
      REST}
   =>
-    {< H : Human | cognitiveLoad : N + 1, 
+    {< H : Human | cognitiveLoad : N + 1,
     shortTermMem : (chunk BI decay DECAY-TIME of DECAY-TIME) ; idle(STM,TP) >
      (perc (BI for (T monus TP)))
      REST}
@@ -779,7 +779,7 @@ endtom)
 
   ops theHuman : -> Object .
   ops init-STM : -> ShortTermMemory .
-  
+
 
 
 

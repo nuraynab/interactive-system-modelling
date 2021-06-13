@@ -117,15 +117,6 @@ class Ui_RunProjectWindow(object):
 
         self.runBtn.clicked.connect(self.run)
 
-    def get_questions(self):
-        version_id = int(self.version_id.text())
-        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-        with closing(db.cursor()) as cur:
-            cur.execute("""SELECT version_id, domain, item, value, categories, types, attributes FROM experiment WHERE version_id = '%i' AND item = 'question' 
-                UNION SELECT version_id, domain, item, value, categories, types, attributes FROM environment WHERE version_id = '%i' AND item = 'question' """ % (version_id, version_id))
-            questions = cur.fetchall()
-        return questions
-
     def get_res_perc(self):
         perc = {}
         env_str = "perc"
@@ -234,18 +225,45 @@ class Ui_RunProjectWindow(object):
                 exp[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5]]
         return exp
 
-    def find_start_i(self, list_of_lines, start_str):
-        i = 0
-        for line in list_of_lines:
-            i += 1
-            if start_str in line:
-                i += 1
+    def find_line(self, list_of_lines, look_up):
+        for i, line in enumerate(list_of_lines, 1):
+            if look_up in line:
                 break
+        print(i)
         return i
 
+    def write_stm_capacity_to_Maude(self, list_of_lines):
+        look_up = "op stmCapacity : -> Nat ."
+        i = self.find_line(list_of_lines, look_up)
+        addition = "   eq stmCapacity = " + self.stm_capacity.text() + " .\n"
+        list_of_lines[i] = addition
+        self.write_to_Maude_file(list_of_lines)
+
+    def write_cognitive_load_to_Maude(self, list_of_lines):
+        look_up = "eq theHuman = < human : Human | cognitiveLoad"
+        i = self.find_line(list_of_lines, look_up)
+        addition = "  eq theHuman = < human : Human | cognitiveLoad : " + self.cogn_load.text() + ",\n"
+        list_of_lines[i - 1] = addition
+        self.write_to_Maude_file(list_of_lines)
+
+    def write_decay_time_to_Maude(self, list_of_lines):
+        look_up = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
+        i = self.find_line(list_of_lines, look_up)
+        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
+        list_of_lines[i] = addition
+        self.write_to_Maude_file(list_of_lines)
+
+    def write_rewrite_steps_to_Maude(self, list_of_lines):
+        look_up = "quit"
+        i = self.find_line(list_of_lines, look_up)
+        addition = "(trew [" + self.rewrite_steps.text() + "] in EXAMPLE-DOGS : {init} in time <= " + self.in_time.text() + " .)\n"
+        list_of_lines[i - 3] = addition
+        self.write_to_Maude_file(list_of_lines)
+
     def write_sem_mem_to_Maude(self, list_of_lines, sem_mem_dict):
-        start_str = "op initSemanticMem : -> SemanticMemory ."
-        i = self.find_start_i(list_of_lines, start_str)
+        look_up = "op initSemanticMem : -> SemanticMemory ."
+        i = self.find_line(list_of_lines, look_up)
+        i += 1
         list_of_lines[i] = '  eq initSemanticMem =  \n'
         for y in sem_mem_dict:
             i += 1
@@ -257,14 +275,13 @@ class Ui_RunProjectWindow(object):
             addition = '("' + domain + '" : "' + cat + '" |- ' + time + ' ->| (' + typ + ' "' + attr + '")) \n'
             list_of_lines.insert(i, addition)
         list_of_lines[i + 1] = '.\n'
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
+        self.write_to_Maude_file(list_of_lines)
         return list_of_lines
 
     def write_exp_to_Maude(self, list_of_lines, exp_dict):
-        start_str = "semanticMem : initSemanticMem > ."
-        i = self.find_start_i(list_of_lines, start_str)
+        look_up = "semanticMem : initSemanticMem > ."
+        i = self.find_line(list_of_lines, look_up)
+        i += 1
         list_of_lines[i] = '  eq init = \n'
         for y in exp_dict:
             i += 1
@@ -304,9 +321,35 @@ class Ui_RunProjectWindow(object):
                 i -= 1
 
         list_of_lines[i + 1] = 'theHuman .\n'
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
+        self.write_to_Maude_file(list_of_lines)
+        return list_of_lines
+
+    def write_stm_to_Maude(self, list_of_lines, exp_dict, env_dict):
+        look_up = "ops init-STM : -> ShortTermMemory ."
+        i = self.find_line(list_of_lines, look_up)
+        i += 1
+        list_of_lines[i] = '  eq init-STM = \n'
+        for y in exp_dict:
+            i += 1
+            domain = exp_dict[y][0]
+            item = exp_dict[y][1]
+            if item == "question":
+                addition = '(chunk goal("' + domain + '", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
+                list_of_lines.insert(i, addition)
+            if item == "fact":
+                i -= 1
+
+        for y in env_dict:
+            i += 1
+            domain = env_dict[y][0]
+            item = env_dict[y][1]
+            if item == "question":
+                addition = '(chunk goal("' + domain + '", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
+                list_of_lines.insert(i, addition)
+            if item == "fact":
+                i -= 1
+        list_of_lines[i] = list_of_lines[i][:-4]
+        list_of_lines[i + 1] = '\n .\n'
         return list_of_lines
 
     def show_results_window(self):
@@ -336,103 +379,18 @@ class Ui_RunProjectWindow(object):
         in_time = self.get_res_time()
         self.ui.label_6.setText(in_time)
 
-    def run(self):
-
-        version_id = int(self.version_id.text())
-        sem_mem_dict = self.get_sem_mem(version_id)
-        env_dict = self.get_env(version_id)
-        exp_dict = self.get_exp(version_id)
-
+    def read_Maude_file(self):
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
         list_of_lines = f.readlines()
         f.close()
+        return list_of_lines
 
-        lookup = "op stmCapacity : -> Nat ."
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "   eq stmCapacity = " + self.stm_capacity.text() + " .\n"
-        list_of_lines[i] = addition
+    def write_to_Maude_file(self, list_of_lines):
         f = open("Maude-2/proj/cifma-2020-2.maude", "w")
         f.writelines(list_of_lines)
         f.close()
 
-        lookup = "eq theHuman = < human : Human | cognitiveLoad"
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "  eq theHuman = < human : Human | cognitiveLoad : " + self.cogn_load.text() + ",\n"
-        list_of_lines[i-1] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
-        list_of_lines[i] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        lookup = "quit"
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "(trew [" + self.rewrite_steps.text() + "] in EXAMPLE-DOGS : {init} in time <= " + self.in_time.text() + " .)\n"
-        list_of_lines[i-3] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        list_of_lines = f.readlines()
-        f.close()
-
-        list_of_lines = self.write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
-        list_of_lines, i = self.write_exp_to_Maude(list_of_lines, exp_dict)
-        list_of_lines = self.write_env_to_Maude(list_of_lines, env_dict, i)
-
-        start_str = "ops init-STM : -> ShortTermMemory ."
-        i=0
-        for line in list_of_lines:
-            i+=1
-            if start_str in line:
-                i+=1
-                break
-        list_of_lines[i] = '  eq init-STM = \n'
-        for y in exp_dict:
-            i+=1
-            domain = exp_dict[y][0]
-            item = exp_dict[y][1]
-            if item=="question":
-                addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-            if item=="fact":
-                i-=1
-            # print (addition)               
-            
-        for y in env_dict:
-            i+=1
-            domain = env_dict[y][0]
-            item = env_dict[y][1]
-            if item=="question":
-                addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-            if item=="fact":
-                i-=1
-        list_of_lines[i] = list_of_lines[i][:-4]
-        list_of_lines[i+1] = '\n .\n'
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-        subprocess.call("./start_maude.sh")
-
-        self.show_results_window()
-
+    def reset_Maude_file(self):
         f = open("Maude-2/proj/cifma-2020-2.maude", "r")
         f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
         start_str = 'eq initSemanticMem ='
@@ -508,6 +466,31 @@ class Ui_RunProjectWindow(object):
         f.close()
         f2.close()
 
+    def run(self):
+
+        version_id = int(self.version_id.text())
+        sem_mem_dict = self.get_sem_mem(version_id)
+        env_dict = self.get_env(version_id)
+        exp_dict = self.get_exp(version_id)
+
+        list_of_lines = self.read_Maude_file()
+        self.write_stm_capacity_to_Maude(list_of_lines)
+        self.write_cognitive_load_to_Maude(list_of_lines)
+        self.write_decay_time_to_Maude(list_of_lines)
+        self.write_rewrite_steps_to_Maude(list_of_lines)
+
+        list_of_lines = self.read_Maude_file()
+
+        list_of_lines = self.write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
+        list_of_lines, i = self.write_exp_to_Maude(list_of_lines, exp_dict)
+        list_of_lines = self.write_env_to_Maude(list_of_lines, env_dict, i)
+        list_of_lines = self.write_stm_to_Maude(list_of_lines, exp_dict, env_dict)
+
+        self.write_to_Maude_file(list_of_lines)
+        subprocess.call("./start_maude.sh")
+
+        self.show_results_window()
+        self.reset_Maude_file()
         self.ResultsWindow.show()
 
    

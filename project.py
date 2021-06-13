@@ -284,13 +284,6 @@ class Ui_ProjectWindow(QWidget):
                     self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(question[5]+' a "'+question[4]+'" "'+question[6]+'" ?')))
                     self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(str(question[3])))
                     j += 1
-            # q = self.ui.tableWidget.item(j,1);
-            # for item, time in res_stm.items():
-            #     if q:
-            #         if "?" in item and question[4] in item and question[5] in item and question[6] in item:
-            #             self.ui.tableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
-            # if not q:
-            #     continue
             
         self.QAResultsWindow.show()
 
@@ -363,8 +356,6 @@ class Ui_ProjectWindow(QWidget):
                 self.ui.project_name.setText(self.project_name.text())
                 self.ui.version_number.setText(str(ver_numb))
                 self.CreateVersionInfoWindow.show()
-
-     
                 db.commit()
         else:
             self.SaveVersionWindow = QtWidgets.QMainWindow()
