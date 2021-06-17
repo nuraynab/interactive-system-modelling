@@ -229,7 +229,6 @@ class Ui_RunProjectWindow(object):
         for i, line in enumerate(list_of_lines, 1):
             if look_up in line:
                 break
-        print(i)
         return i
 
     def write_stm_capacity_to_Maude(self, list_of_lines):

@@ -3,7 +3,7 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Sun Jun 13 21:55:05 2021
+		   Fri Jun 18 01:28:30 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
@@ -29,33 +29,30 @@ rewrites: 12835 in 4ms cpu (5ms real) (3208750 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 14446 in 4ms cpu (4ms real) (3611500 rewrites/second)
+rewrites: 14446 in 8ms cpu (5ms real) (1805750 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
-rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
+rewrites: 12457 in 0ms cpu (3ms real) (~ rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 142035 in 96ms cpu (95ms real) (1479531 rewrites/second)
+rewrites: 142035 in 96ms cpu (98ms real) (1479531 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 40747 in 16ms cpu (15ms real) (2546687 rewrites/second)
+rewrites: 42375 in 20ms cpu (17ms real) (2118750 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 69350 in 28ms cpu (28ms real) (2476785 rewrites/second)
+rewrites: 100501 in 48ms cpu (51ms real) (2093770 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
-  {
-ans(a "animal" can "breath" 1 for INF)
-perc(can a "animal" "breath" ? for 2)
-perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 3,
-    proceduralMem : emptyProcedural,semanticMem :(
+  {< human : Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,
+    semanticMem :(
 ("animals" : "animal" |- 1 ->| can "breath")
 
 ("animals" : "animal" |- 1 ->| can "move")
@@ -72,9 +69,8 @@ perc(can a "hound" "move" ? for 2)< human : Human | cognitiveLoad : 3,
 
 ("dogs" : "dog" |- 1 ->| can "bark")
 "dogs" : "dog" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem
-    :((chunk a "animal" can "breath" decay 98 of 100);
-(chunk can a "animal" "breath" ? decay 99 of 100);
-(chunk can a "hound" "move" ? decay 100 of 100);
-chunk goal("animals",foundAnswer,0,5)decay INF of 100)>} in time 9
+    :((chunk goal("animals",rehearsed,0,5)decay INF of 100);
+(chunk goal("animals",rehearsed,0,5)decay INF of 100);
+chunk goal("dogs",rehearsed,0,5)decay INF of 100)>} in time 1000
 
 Bye.
