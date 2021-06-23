@@ -1,7 +1,7 @@
 # interactive-system-modelling
 ## Project Installation
-- Download the code from repository https://github.com/nuraynab/interactive-system-modelling.git 
-- Install PyQt5   
+1. Download the code from repository https://github.com/nuraynab/interactive-system-modelling.git 
+2. Install PyQt5   
 ```
 pip3 install PyQt5
 ```   
@@ -12,21 +12,21 @@ pip3 install --user pyqt5
 sudo apt-get install python3-pyqt5
 ```
   &ensp;source #2: https://gist.github.com/ujjwal96/1dcd57542bdaf3c9d1b0dd526ccd44ff   
-- Download and install XAMPP   
+3. Download and install XAMPP   
 link: https://www.apachefriends.org/ru/download.html   
-- Install MySQLdb  
+4. Install MySQLdb  
 ```
 pip3 install mysqlclient
 ```
 source #3: https://pypi.org/project/mysqlclient/ 
 ## How to run the project
-- Launch XAMPP (Ubuntu)  
+5. Launch XAMPP (Ubuntu)  
 ```
 sudo /opt/lampp/lampp start
 ```
-- Open http://localhost/phpmyadmin   
-- Import the InterSys.sql file from the project’s database directory
-- Run the system 
+6. Open http://localhost/phpmyadmin   
+7. Import the InterSys.sql file from the project’s database directory
+8. Run the system 
 ```
 python3 main.py
 ```
