@@ -15,9 +15,8 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 import MySQLdb as mdb
 from contextlib import closing
 
-
-from add_to_env import Ui_AddToEnvWindow
-from edit_item_repr_in_env import Ui_EditItemReprInEnvWindow
+from add_item_to_component import Ui_AddItemToComponent
+from edit_item_repr_in_component import Ui_EditItemInComponent
 
 
 class Ui_EnvironmentWindow(object):
@@ -231,11 +230,13 @@ class Ui_EnvironmentWindow(object):
                     j+=1
 
     def addItem(self):
-        self.AddToEnvWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_AddToEnvWindow()
-        self.ui.setupUi(self.AddToEnvWindow)
+        self.AddItemToComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_AddItemToComponent()
+        self.ui.setupUi(self.AddItemToComponent)
         self.ui.version_id.setText(self.version_id.text())
-        self.AddToEnvWindow.show()
+        self.ui.component = "environment"
+        self.ui.persistence_time_label.setText("Persistence time")
+        self.AddItemToComponent.show()
 
     def editItem(self):
 
@@ -260,28 +261,31 @@ class Ui_EnvironmentWindow(object):
             cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
             cur_time = self.questTableWidget.item(curr_row, curr_col+2).text()            
 
-        self.EditItemReprInEnvWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_EditItemReprInEnvWindow()
-        self.ui.setupUi(self.EditItemReprInEnvWindow)
-        self.ui.lineEdit.setText(cur_time)
+        self.EditItemInComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_EditItemInComponent()
+        self.ui.setupUi(self.EditItemInComponent)
+        self.ui.persistence_time_lineEdit.setText(cur_time)
+        self.ui.persistence_time_label.setText("Persistence time")
+        self.ui.component = "environment"
         self.ui.version_id.setText(self.version_id.text())
         self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_time)
         self.ui.origin_dom = cur_dom
         self.ui.origin_value = cur_value
+        
         if fact:
             self.ui.item = "facts"
-            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
-            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(200, 260, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(200, 310, 311, 41))
             self.ui.label_5.setGeometry(QtCore.QRect(20, 260, 121, 31))
             self.ui.label_6.setGeometry(QtCore.QRect(20, 310, 121, 31))
 
         else:
             self.ui.item = "questions"
-            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
-            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(200, 310, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(200, 260, 311, 41))
             self.ui.label_5.setGeometry(QtCore.QRect(20, 310, 121, 31))
             self.ui.label_6.setGeometry(QtCore.QRect(20, 260, 121, 31))
-        self.EditItemReprInEnvWindow.show()
+        self.EditItemInComponent.show()
 
     def deleteItem(self):
         version_id = int(self.version_id.text())

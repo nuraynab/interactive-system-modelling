@@ -16,8 +16,8 @@ import MySQLdb as mdb
 from contextlib import closing
 
 
-from add_to_exp import Ui_AddToExpWindow
-from edit_item_repr_in_exp import Ui_EditItemReprInExpWindow
+from add_item_to_component import Ui_AddItemToComponent
+from edit_item_repr_in_component import Ui_EditItemInComponent
 
 
 class Ui_ExperimentWindow(object):
@@ -259,11 +259,16 @@ class Ui_ExperimentWindow(object):
                     j+=1
 
     def addItem(self):
-        self.AddToExpWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_AddToExpWindow()
-        self.ui.setupUi(self.AddToExpWindow)
+        self.AddItemToComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_AddItemToComponent()
+        self.ui.setupUi(self.AddItemToComponent)
         self.ui.version_id.setText(self.version_id.text())
-        self.AddToExpWindow.show()
+        self.ui.component = "experiment"
+        self.ui.label_11.setText("Starting in")
+        self.ui.label_8.setText("Available for")
+        self.ui.label_repeat.setText("Repeat")
+        self.ui.label_in_time.setText("In time")
+        self.AddItemToComponent.show()
 
     def editItem(self):
 
@@ -293,11 +298,12 @@ class Ui_ExperimentWindow(object):
             cur_for_time = self.questTableWidget.item(curr_row, curr_col+3).text()
                         
 
-        self.EditItemReprInExpWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_EditItemReprInExpWindow()
-        self.ui.setupUi(self.EditItemReprInExpWindow)
+        self.EditItemInComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_EditItemInComponent()
+        self.ui.setupUi(self.EditItemInComponent)
         self.ui.for_lineEdit.setText(cur_for_time)
         self.ui.in_lineEdit.setText(cur_in_time)
+        self.ui.component = "experiment"
         if fact:
             self.ui.repeat_lineEdit.setText(repeat)
             self.ui.in_time_lineEdit.setText(repeat_in_time)
@@ -322,7 +328,7 @@ class Ui_ExperimentWindow(object):
             self.ui.in_time_lineEdit.hide()
             self.ui.label_repeat.hide()
             self.ui.label_in_time.hide()
-        self.EditItemReprInExpWindow.show()
+        self.EditItemInComponent.show()
 
     def deleteItem(self):
         version_id = int(self.version_id.text())

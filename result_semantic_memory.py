@@ -15,11 +15,6 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 import MySQLdb as mdb
 from contextlib import closing
 
-
-from add_to_env import Ui_AddToEnvWindow
-from edit_item_repr_in_env import Ui_EditItemReprInEnvWindow
-
-
 class Ui_ResultsSemanticMemoryWindow(object):
     def setupUi(self, ResultsSemanticMemoryWindow):
         ResultsSemanticMemoryWindow.setObjectName("ResultsSemanticMemoryWindow")

@@ -14,9 +14,8 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 import MySQLdb as mdb
 from contextlib import closing
 
-
-from add_to_short_term_mem import Ui_AddToShortTermMemWindow
-from edit_item_repr_in_short_term_mem import Ui_EditItemReprInShortTermMemWindow
+from add_item_to_component import Ui_AddItemToComponent
+from edit_item_repr_in_component import Ui_EditItemInComponent
 
 class Ui_ShortTermMemWindow(object):
     def setupUi(self, ShortTermMemWindow):
@@ -228,11 +227,13 @@ class Ui_ShortTermMemWindow(object):
                     j+=1
 
     def addItem(self):
-        self.AddToShortTermMemWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_AddToShortTermMemWindow()
-        self.ui.setupUi(self.AddToShortTermMemWindow)
+        self.AddItemToComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_AddItemToComponent()
+        self.ui.setupUi(self.AddItemToComponent)
         self.ui.version_id.setText(self.version_id.text())
-        self.AddToShortTermMemWindow.show()
+        self.ui.component = "short_term_mem"
+        self.ui.decay_time_label.setText("Decay time")
+        self.AddItemToComponent.show()
 
     def editItem(self):
 
@@ -257,32 +258,34 @@ class Ui_ShortTermMemWindow(object):
             cur_value = self.questTableWidget.item(curr_row, curr_col+1).text()
             cur_time = self.questTableWidget.item(curr_row, curr_col+2).text()            
 
-        self.EditItemReprInShortTermMemWindow = QtWidgets.QMainWindow()
-        self.ui = Ui_EditItemReprInShortTermMemWindow()
-        self.ui.setupUi(self.EditItemReprInShortTermMemWindow)
-        self.ui.lineEdit.setText(cur_time)
+        self.EditItemInComponent = QtWidgets.QMainWindow()
+        self.ui = Ui_EditItemInComponent()
+        self.ui.setupUi(self.EditItemInComponent)
+        self.ui.decay_time_lineEdit.setText(cur_time)
+        self.ui.decay_time_label.setText("Decay time")
+        self.ui.component = "short_term_mem"
         self.ui.version_id.setText(self.version_id.text())
         self.ui.label_3.setText(cur_dom + " - " + cur_value + " - " + cur_time)
         self.ui.origin_dom = cur_dom
         self.ui.origin_value = cur_value
         if fact:
             self.ui.item = "facts"
-            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
-            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(200, 260, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(200, 310, 311, 41))
             self.ui.label_5.setGeometry(QtCore.QRect(20, 260, 121, 31))
             self.ui.label_6.setGeometry(QtCore.QRect(20, 310, 121, 31))
         else:
             self.ui.item = "questions"
-            self.ui.CatComboBox.setGeometry(QtCore.QRect(170, 310, 311, 41))
-            self.ui.TypesComboBox.setGeometry(QtCore.QRect(170, 260, 311, 41))
+            self.ui.CatComboBox.setGeometry(QtCore.QRect(200, 310, 311, 41))
+            self.ui.TypesComboBox.setGeometry(QtCore.QRect(200, 260, 311, 41))
             self.ui.label_5.setGeometry(QtCore.QRect(20, 310, 121, 31))
             self.ui.label_6.setGeometry(QtCore.QRect(20, 260, 121, 31))
-        self.EditItemReprInShortTermMemWindow.show()
+        self.EditItemInComponent.show()
 
     def deleteItem(self):
         version_id = int(self.version_id.text())
 
-        tableItems=self.factsTableWidget.selectedItems()
+        tableItems = self.factsTableWidget.selectedItems()
         if tableItems:
             curr_row = self.factsTableWidget.currentRow()
             fact = True
