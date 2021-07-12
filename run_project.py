@@ -264,15 +264,15 @@ class Ui_RunProjectWindow(object):
         f.close()
 
 
-        lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
-        list_of_lines[i] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
+        # lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
+        # for i, line in enumerate(list_of_lines, 1):
+        #     if lookup in line:
+        #         break
+        # addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
+        # list_of_lines[i] = addition
+        # f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        # f.writelines(list_of_lines)
+        # f.close()
 
 
         lookup = "quit"
@@ -512,7 +512,7 @@ class Ui_RunProjectWindow(object):
         self.label_7.setText(_translate("RunProjectWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
         self.stm_capacity.setText(_translate("RunProjectWindow", "7"))
         self.cogn_load.setText(_translate("RunProjectWindow", "0"))
-        self.decay_time.setText(_translate("RunProjectWindow", "100"))
+        self.decay_time.setText(_translate("RunProjectWindow", "3"))
         self.in_time.setText(_translate("RunProjectWindow", "1000"))
         self.rewrite_steps.setText(_translate("RunProjectWindow", "10000"))
         self.runBtn.setText(_translate("RunProjectWindow", "Run"))

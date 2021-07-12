@@ -173,15 +173,15 @@ class Ui_RunLearnWindow(object):
         f.close()
 
 
-        lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
-        list_of_lines[i] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
+        # lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
+        # for i, line in enumerate(list_of_lines, 1):
+        #     if lookup in line:
+        #         break
+        # addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
+        # list_of_lines[i] = addition
+        # f = open("Maude-2/proj/cifma-2020-2.maude", "w")
+        # f.writelines(list_of_lines)
+        # f.close()
 
 
         lookup = "quit"
@@ -385,13 +385,19 @@ class Ui_RunLearnWindow(object):
                 start_line = new_line.find('(')+len('(')
                 end_line = new_line.find(')')
                 cur_line = new_line[start_line:end_line]
-                domain = cur_line.split(' ', 6)[0][1:-1]
+                # domain = cur_line.split(' ', 6)[0][1:-1]
                 cat = cur_line.split(' ', 6)[2][1:-1]
                 time = cur_line.split(' ', 6)[4]
                 rest = cur_line.split(' ', 6)[6]
                 attr = rest.rsplit(' ', 1)[1][1:-1]
                 typ = rest.rsplit(' ', 1)[0]
                 val = cat+' '+typ+' '+attr
+                if (cat=="bird" or cat=="canary" or cat=="ostrich"):
+                    domain = "Birds"
+                elif (cat=="fish" or cat=="salmon" or cat=="shark"):
+                    domain = "Fish"
+                elif (cat=="animal"):
+                    domain = "Animals"
                 self.ui.newTableWidget.setRowCount(j+1)
                 self.ui.newTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(domain))
                 self.ui.newTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(val))
@@ -421,7 +427,7 @@ class Ui_RunLearnWindow(object):
         self.label_7.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
         self.stm_capacity.setText(_translate("RunLearnWindow", "7"))
         self.cogn_load.setText(_translate("RunLearnWindow", "0"))
-        self.decay_time.setText(_translate("RunLearnWindow", "100"))
+        self.decay_time.setText(_translate("RunLearnWindow", "3"))
         self.in_time.setText(_translate("RunLearnWindow", "1000"))
         self.rewrite_steps.setText(_translate("RunLearnWindow", "10000"))
         self.runBtn.setText(_translate("RunLearnWindow", "Run"))
