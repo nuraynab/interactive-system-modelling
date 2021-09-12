@@ -475,7 +475,7 @@ class Ui_RunProjectWindow(object):
         list_of_lines = self.read_Maude_file()
         self.write_stm_capacity_to_Maude(list_of_lines)
         self.write_cognitive_load_to_Maude(list_of_lines)
-        self.write_decay_time_to_Maude(list_of_lines)
+        # self.write_decay_time_to_Maude(list_of_lines)
         self.write_rewrite_steps_to_Maude(list_of_lines)
 
         list_of_lines = self.read_Maude_file()
@@ -505,7 +505,7 @@ class Ui_RunProjectWindow(object):
         self.label_7.setText(_translate("RunProjectWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
         self.stm_capacity.setText(_translate("RunProjectWindow", "7"))
         self.cogn_load.setText(_translate("RunProjectWindow", "0"))
-        self.decay_time.setText(_translate("RunProjectWindow", "100"))
+        self.decay_time.setText(_translate("RunProjectWindow", "3"))
         self.in_time.setText(_translate("RunProjectWindow", "1000"))
         self.rewrite_steps.setText(_translate("RunProjectWindow", "10000"))
         self.runBtn.setText(_translate("RunProjectWindow", "Run"))

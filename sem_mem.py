@@ -261,7 +261,7 @@ class Ui_SemMemWindow(QWidget):
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("SemMemWindow", "Fact"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("SemMemWindow", "Retrieval Time (sec)"))
+        item.setText(_translate("SemMemWindow", "Retrieval Time"))
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setSortingEnabled(__sortingEnabled)

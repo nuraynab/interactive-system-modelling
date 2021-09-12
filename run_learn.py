@@ -234,6 +234,7 @@ class Ui_RunLearnWindow(object):
                 i -= 1
         list_of_lines[i + 1] = 'theHuman .\n'
         self.write_to_Maude_file(list_of_lines)
+        return list_of_lines
 
     def write_stm_to_Maude(self, list_of_lines, exp_dict ):
         look_up = "ops init-STM : -> ShortTermMemory ."
@@ -391,15 +392,16 @@ class Ui_RunLearnWindow(object):
         list_of_lines = self.read_Maude_file()
         self.write_stm_capacity_to_Maude(list_of_lines)
         self.write_cognitive_load_to_Maude(list_of_lines)
-        self.write_decay_time_to_Maude(list_of_lines)
+        # self.write_decay_time_to_Maude(list_of_lines)
         self.write_rewrite_steps_to_Maude(list_of_lines)
 
         list_of_lines = self.read_Maude_file()
         list_of_lines = self.write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
-        self.write_exp_to_Maude(list_of_lines, exp_dict)
+        list_of_lines = self.write_exp_to_Maude(list_of_lines, exp_dict)
 
         list_of_lines = self.write_stm_to_Maude(list_of_lines, exp_dict)
         self.write_to_Maude_file(list_of_lines)
+        subprocess.call("./start_maude.sh")
         self.create_result_window()
         self.reset_Maude_file()
         self.get_old_sem_mem_from_db(version_id)
@@ -419,7 +421,7 @@ class Ui_RunLearnWindow(object):
         self.label_7.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
         self.stm_capacity.setText(_translate("RunLearnWindow", "7"))
         self.cogn_load.setText(_translate("RunLearnWindow", "0"))
-        self.decay_time.setText(_translate("RunLearnWindow", "100"))
+        self.decay_time.setText(_translate("RunLearnWindow", "3"))
         self.in_time.setText(_translate("RunLearnWindow", "1000"))
         self.rewrite_steps.setText(_translate("RunLearnWindow", "10000"))
         self.runBtn.setText(_translate("RunLearnWindow", "Run"))

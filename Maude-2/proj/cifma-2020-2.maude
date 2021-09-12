@@ -99,7 +99,7 @@ endtom)
 
    ops STM-ACCESS-TIME STM-TO-LTM-THRESHOLD : -> Time .
    eq STM-ACCESS-TIME = 1 .
-   eq STM-TO-LTM-THRESHOLD = 120 .
+   eq STM-TO-LTM-THRESHOLD = 110 .
 
    op maintenance-effect : TimeInf -> TimeInf .
    var T : TimeInf .
@@ -392,7 +392,7 @@ crl [tick] :
     {(repeat (N monus 1) times starting in FT : (exp ((BI for T) in FT)))
      (exp ((BI for T) in 0))
      REST}
-  if N > 0 .
+  if N >= 0 .
 
 
 --- create in STM the information corresponding to the perception if there is explicit attention
@@ -409,7 +409,8 @@ crl [tick] :
      REST}
    in time TP
    if TP := tp(perc (BI for T)) /\
-      IS := removeTime(STM) /\ explicitAttention(BI, IS) /\  not isItemIn(BI, IS) .
+      IS := removeTime(STM) /\ explicitAttention(BI, IS) /\  not isItemIn(BI, IS) /\
+     N + 1 <= stmCapacity .
 
 
 --- reset the current decay time of the information in STM that corresponds to the perception

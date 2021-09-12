@@ -3,7 +3,7 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Fri Jun 18 01:28:30 2021
+		   Sun Sep 12 17:01:25 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
@@ -17,11 +17,11 @@ rewrites: 17731 in 8ms cpu (7ms real) (2216375 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
-rewrites: 8250 in 4ms cpu (2ms real) (2062500 rewrites/second)
+rewrites: 8250 in 0ms cpu (2ms real) (~ rewrites/second)
 
 Introduced timed module: SENSORY-MEMORY
 
-rewrites: 3232 in 0ms cpu (1ms real) (~ rewrites/second)
+rewrites: 3232 in 4ms cpu (1ms real) (808000 rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
@@ -29,48 +29,78 @@ rewrites: 12835 in 4ms cpu (5ms real) (3208750 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 14446 in 8ms cpu (5ms real) (1805750 rewrites/second)
+rewrites: 14446 in 4ms cpu (4ms real) (3611500 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
-rewrites: 12457 in 0ms cpu (3ms real) (~ rewrites/second)
+rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 142035 in 96ms cpu (98ms real) (1479531 rewrites/second)
+rewrites: 142152 in 96ms cpu (96ms real) (1480750 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 42375 in 20ms cpu (17ms real) (2118750 rewrites/second)
+rewrites: 57337 in 64ms cpu (61ms real) (895890 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 100501 in 48ms cpu (51ms real) (2093770 rewrites/second)
+rewrites: 200778 in 76ms cpu (76ms real) (2641815 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
-  {< human : Human | cognitiveLoad : 0,proceduralMem : emptyProcedural,
-    semanticMem :(
-("animals" : "animal" |- 1 ->| can "breath")
+  {
+perc(a "canary" is a "bird" for 10)< human : Human | cognitiveLoad : 0,
+    proceduralMem : emptyProcedural,semanticMem :(
+("Animals" : "animal" |- 1 ->| can "breathe")
 
-("animals" : "animal" |- 1 ->| can "move")
+("Animals" : "animal" |- 1 ->| can "eat")
 
-("animals" : "hound" |- 1 ->| can "track")
+("Animals" : "animal" |- 1 ->| can "move")
 
-("dogs" : "basenji" |- 1 ->| cannot "bark")
+("Animals" : "animal" |- 1 ->| has "skin")
 
-("dogs" : "basenji" |- 1 ->| is a "hound")
+("Birds" : "bird" |- 1 ->| can "fly")
 
-("dogs" : "bobby" |- 1 ->| can "lay")
+("Birds" : "bird" |- 1 ->| has "feathers")
 
-("dogs" : "bobby" |- 1 ->| is a "basenji")
+("Birds" : "bird" |- 1 ->| has "wings")
 
-("dogs" : "dog" |- 1 ->| can "bark")
-"dogs" : "dog" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem
-    :((chunk goal("animals",rehearsed,0,5)decay INF of 100);
-(chunk goal("animals",rehearsed,0,5)decay INF of 100);
-chunk goal("dogs",rehearsed,0,5)decay INF of 100)>} in time 1000
+("Birds" : "bird" |- 1 ->| is a "animal")
+
+("Birds" : "canary" |- 1 ->| can "sing")
+
+("Birds" : "canary" |- 1 ->| is "yellow")
+
+("Birds" : "fish" |- 1 ->| can "swim")
+
+("Birds" : "fish" |- 1 ->| has "fins")
+
+("Birds" : "fish" |- 1 ->| has "gills")
+
+("Birds" : "fish" |- 1 ->| is a "animal")
+
+("Fish" : "ostrich" |- 1 ->| is "tall")
+
+("Fish" : "ostrich" |- 1 ->| is a "bird")
+
+("Fish" : "salmon" |- 1 ->| is "edible")
+
+("Fish" : "salmon" |- 1 ->| is "pink")
+
+("Fish" : "salmon" |- 1 ->| is a "fish")
+
+("Fish" : "shark" |- 1 ->| can "bite")
+
+("Fish" : "shark" |- 1 ->| is "dangerous")
+"Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
+    :((chunk a "ostrich" cannot "fly" decay 29 of 110);
+(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
+chunk goal("Fish",rehearsed,0,5)decay INF of 100)>(repeat 18 times starting in
+    170 :
+exp(a "canary" is a "bird" for 10 in 170))repeat 19 times starting in 120 :
+exp(a "ostrich" cannot "fly" for 10 in 120)} in time 662
 
 Bye.
