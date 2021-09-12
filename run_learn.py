@@ -12,6 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 
 from result_semantic_memory import Ui_ResultsSemanticMemoryWindow
+from functions_with_db import get_sem_mem, get_exp
+from translation_to_Maude import read_Maude_file, write_stm_capacity_to_Maude, write_cognitive_load_to_Maude, write_decay_time_to_Maude, \
+    write_rewrite_steps_to_Maude
 
 import MySQLdb as mdb
 from contextlib import closing
@@ -127,36 +130,6 @@ class Ui_RunLearnWindow(object):
         f = open("Maude-2/proj/cifma-2020-2.maude", "w")
         f.writelines(list_of_lines)
         f.close()
-
-    def get_sem_mem(self, version_id):
-        sem_mem = {}
-        with closing(db.cursor()) as cur:
-            cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % version_id)
-            fact_repr = cur.fetchall()
-
-            for y in fact_repr:
-                sem_mem[y[3]] = [y[2], y[4], y[5], y[6], y[7]]
-        return sem_mem
-
-    def get_env(self, version_id):
-        env = {}
-        with closing(db.cursor()) as cur:
-            cur.execute("SELECT * FROM environment WHERE version_id = '%i' ORDER BY id" % version_id)
-            perc_repr = cur.fetchall()
-
-            for y in perc_repr:
-                env[y[4]] = [y[2], y[3], y[5], y[6], y[7], y[8]]
-        return env
-
-    def get_exp(self, version_id):
-        exp = {}
-        with closing(db.cursor()) as cur:
-            cur.execute("SELECT * FROM experiment WHERE version_id = '%i' ORDER BY id" % (version_id))
-            perc_repr = cur.fetchall()
-
-            for y in perc_repr:
-                exp[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5], y[10], y[11]]
-        return exp
 
     def find_line(self, list_of_lines, look_up):
         for i, line in enumerate(list_of_lines, 1):
@@ -385,15 +358,14 @@ class Ui_RunLearnWindow(object):
 
     def run(self):
         version_id = int(self.version_id.text())
-        sem_mem_dict = self.get_sem_mem(version_id)
-        # env_dict = self.get_env(version_id)
-        exp_dict = self.get_exp(version_id)
+        sem_mem_dict = get_sem_mem(version_id)
+        exp_dict = get_exp(version_id)
 
-        list_of_lines = self.read_Maude_file()
-        self.write_stm_capacity_to_Maude(list_of_lines)
-        self.write_cognitive_load_to_Maude(list_of_lines)
-        # self.write_decay_time_to_Maude(list_of_lines)
-        self.write_rewrite_steps_to_Maude(list_of_lines)
+        list_of_lines = read_Maude_file()
+        write_stm_capacity_to_Maude(list_of_lines, self.stm_capacity.text())
+        write_cognitive_load_to_Maude(list_of_lines, self.cogn_load.text())
+        #write_decay_time_to_Maude(list_of_lines, self.decay_time.text())
+        write_rewrite_steps_to_Maude(list_of_lines, self.rewrite_steps.text(), self.in_time.text())
 
         list_of_lines = self.read_Maude_file()
         list_of_lines = self.write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
