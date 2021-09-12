@@ -3,17 +3,17 @@
 		     /||||||||||||||||||\
 	   Maude 2.7.1 built: Jun 27 2016 16:35:16
 	    Copyright 1997-2016 SRI International
-		   Sun Sep 12 20:30:19 2021
+		   Mon Sep 13 02:33:37 2021
 
 	     Full Maude 2.3 `(February 12th`, 2007`)
 
 	  Real-Time Maude 2.3 extension February 4, 2010
 
-rewrites: 22970 in 12ms cpu (11ms real) (1914166 rewrites/second)
+rewrites: 22970 in 12ms cpu (12ms real) (1914166 rewrites/second)
 
 Introduced timed module: INFORMATION
 
-rewrites: 17731 in 8ms cpu (7ms real) (2216375 rewrites/second)
+rewrites: 17731 in 8ms cpu (9ms real) (2216375 rewrites/second)
 
 Introduced timed module: TIMED-ITEMS
 
@@ -25,34 +25,34 @@ rewrites: 3232 in 0ms cpu (1ms real) (~ rewrites/second)
 
 Introduced timed module: PROCEDURAL-MEMORY
 
-rewrites: 12835 in 4ms cpu (6ms real) (3208750 rewrites/second)
+rewrites: 12835 in 4ms cpu (5ms real) (3208750 rewrites/second)
 
 Introduced timed module: SEMANTIC-MEMORY
 
-rewrites: 14446 in 8ms cpu (4ms real) (1805750 rewrites/second)
+rewrites: 14446 in 8ms cpu (5ms real) (1805750 rewrites/second)
 
 Introduced timed module: ENVIRONMENT
 
-rewrites: 12457 in 0ms cpu (3ms real) (~ rewrites/second)
+rewrites: 12457 in 4ms cpu (3ms real) (3114250 rewrites/second)
 
 Introduced timed module: HUMAN
 
-rewrites: 142152 in 96ms cpu (98ms real) (1480750 rewrites/second)
+rewrites: 142152 in 108ms cpu (110ms real) (1316222 rewrites/second)
 
 Introduced timed module: EVOLUTION
 
-rewrites: 57338 in 64ms cpu (62ms real) (895906 rewrites/second)
+rewrites: 57337 in 64ms cpu (66ms real) (895890 rewrites/second)
 
 Introduced timed module: EXAMPLE-DOGS
 
-rewrites: 244984 in 100ms cpu (98ms real) (2449840 rewrites/second)
+rewrites: 200778 in 88ms cpu (85ms real) (2281568 rewrites/second)
 
 Timed rewrite [10000]  {init} in EXAMPLE-DOGS with mode deterministic time
     increase in time <= 1000
 
 Result ClockedSystem :
   {
-perc(a "ostrich" cannot "fly" for 2)< human : Human | cognitiveLoad : 0,
+perc(a "canary" is a "bird" for 10)< human : Human | cognitiveLoad : 0,
     proceduralMem : emptyProcedural,semanticMem :(
 ("Animals" : "animal" |- 1 ->| can "breathe")
 
@@ -74,41 +74,33 @@ perc(a "ostrich" cannot "fly" for 2)< human : Human | cognitiveLoad : 0,
 
 ("Birds" : "canary" |- 1 ->| is "yellow")
 
-("Birds" : "canary" |- 1 ->| is a "bird")
-
 ("Birds" : "fish" |- 1 ->| can "swim")
 
 ("Birds" : "fish" |- 1 ->| has "fins")
 
 ("Birds" : "fish" |- 1 ->| has "gills")
-"Fish" : "fish" |- 1 ->| is a "animal"),sensoryMem : emptySensory,shortTermMem
-    :((chunk a "ostrich" cannot "fly" decay 69 of 110);
-(chunk a "ostrich" is "tall" decay 87 of 102);
-(chunk a "ostrich" is a "bird" decay 89 of 102);
-(chunk a "salmon" is "edible" decay 91 of 102);
-(chunk a "salmon" is "pink" decay 93 of 102);
-(chunk a "salmon" is a "fish" decay 95 of 102);
-(chunk a "shark" can "bite" decay 97 of 102);
-(chunk a "shark" is "dangerous" decay 99 of 102);
-(chunk a "shark" is a "fish" decay 101 of 102);
+
+("Birds" : "fish" |- 1 ->| is a "animal")
+
+("Fish" : "ostrich" |- 1 ->| is "tall")
+
+("Fish" : "ostrich" |- 1 ->| is a "bird")
+
+("Fish" : "salmon" |- 1 ->| is "edible")
+
+("Fish" : "salmon" |- 1 ->| is "pink")
+
+("Fish" : "salmon" |- 1 ->| is a "fish")
+
+("Fish" : "shark" |- 1 ->| can "bite")
+
+("Fish" : "shark" |- 1 ->| is "dangerous")
+"Fish" : "shark" |- 1 ->| is a "fish"),sensoryMem : emptySensory,shortTermMem
+    :((chunk a "ostrich" cannot "fly" decay 29 of 110);
 (chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-(chunk goal("Fish",rehearsed,0,5)decay INF of 100);
-chunk goal("Fish",rehearsed,0,5)decay INF of 100)>(repeat 14 times starting in
-    24 :
-exp(a "ostrich" cannot "fly" for 2 in 24))(repeat 19 times starting in 22 :
-exp(a "ostrich" is "tall" for 2 in 22))(repeat 19 times starting in 26 :
-exp(a "shark" can "bite" for 2 in 26))(repeat 19 times starting in 28 :
-exp(a "shark" is "dangerous" for 2 in 28))(repeat 19 times starting in 30 :
-exp(a "salmon" is "pink" for 2 in 30))(repeat 19 times starting in 32 :
-exp(a "salmon" is "edible" for 2 in 32))(repeat 19 times starting in 36 :
-exp(a "ostrich" is a "bird" for 2 in 36))(repeat 19 times starting in 38 :
-exp(a "shark" is a "fish" for 2 in 38))repeat 19 times starting in 40 :
-exp(a "salmon" is a "fish" for 2 in 40)} in time 978
+chunk goal("Fish",rehearsed,0,5)decay INF of 100)>(repeat 18 times starting in
+    170 :
+exp(a "canary" is a "bird" for 10 in 170))repeat 19 times starting in 120 :
+exp(a "ostrich" cannot "fly" for 10 in 120)} in time 662
 
 Bye.

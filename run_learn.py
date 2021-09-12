@@ -14,20 +14,14 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 from result_semantic_memory import Ui_ResultsSemanticMemoryWindow
 from functions_with_db import get_sem_mem, get_exp
 from translation_to_Maude import read_Maude_file, write_stm_capacity_to_Maude, write_cognitive_load_to_Maude, write_decay_time_to_Maude, \
-    write_rewrite_steps_to_Maude
+    write_rewrite_steps_to_Maude, write_sem_mem_to_Maude, write_exp_to_Maude, write_stm_to_Maude, reset_Maude_file, write_to_Maude_file
 
 import MySQLdb as mdb
 from contextlib import closing
 
 import subprocess
-import re
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-
-# sem_mem_dict = {}
-# env_dict = {}
-# exp_dict = {}
-# stm_dict = {}
 
 class Ui_RunLearnWindow(object):
     def setupUi(self, RunLearnWindow):
@@ -120,119 +114,6 @@ class Ui_RunLearnWindow(object):
 
         self.runBtn.clicked.connect(self.run)
 
-    def read_Maude_file(self):
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        list_of_lines = f.readlines()
-        f.close()
-        return list_of_lines
-
-    def write_to_Maude_file(self, list_of_lines):
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-    def find_line(self, list_of_lines, look_up):
-        for i, line in enumerate(list_of_lines, 1):
-            if look_up in line:
-                break
-        return i
-
-    def write_stm_capacity_to_Maude(self, list_of_lines):
-        look_up = "op stmCapacity : -> Nat ."
-        i = self.find_line(list_of_lines, look_up)
-        addition = "   eq stmCapacity = " + self.stm_capacity.text() + " .\n"
-        list_of_lines[i] = addition
-        self.write_to_Maude_file(list_of_lines)
-
-    def write_cognitive_load_to_Maude(self, list_of_lines):
-        look_up = "eq theHuman = < human : Human | cognitiveLoad"
-        i = self.find_line(list_of_lines, look_up)
-        addition = "  eq theHuman = < human : Human | cognitiveLoad : " + self.cogn_load.text() + ",\n"
-        list_of_lines[i - 1] = addition
-        self.write_to_Maude_file(list_of_lines)
-
-    def write_decay_time_to_Maude(self, list_of_lines):
-        look_up = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
-        i = self.find_line(list_of_lines, look_up)
-        addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
-        list_of_lines[i] = addition
-        self.write_to_Maude_file(list_of_lines)
-
-    def write_rewrite_steps_to_Maude(self, list_of_lines):
-        look_up = "quit"
-        i = self.find_line(list_of_lines, look_up)
-        addition = "(trew [" + self.rewrite_steps.text() + "] in EXAMPLE-DOGS : {init} in time <= " + self.in_time.text() + " .)\n"
-        list_of_lines[i - 3] = addition
-        self.write_to_Maude_file(list_of_lines)
-
-    def write_sem_mem_to_Maude(self, list_of_lines, sem_mem_dict):
-        look_up = "op initSemanticMem : -> SemanticMemory ."
-        i = self.find_line(list_of_lines, look_up)
-        i += 1
-        list_of_lines[i] = '  eq initSemanticMem =  \n'
-        for y in sem_mem_dict:
-            i += 1
-            domain = sem_mem_dict[y][0]
-            time = str(sem_mem_dict[y][1])
-            cat = sem_mem_dict[y][2]
-            typ = sem_mem_dict[y][3]
-            attr = sem_mem_dict[y][4]
-            addition = '("' + domain + '" : "' + cat + '" |- ' + time + ' ->| (' + typ + ' "' + attr + '")) \n'
-            list_of_lines.insert(i, addition)
-        list_of_lines[i + 1] = '.\n'
-        self.write_to_Maude_file(list_of_lines)
-        return list_of_lines
-
-    def write_exp_to_Maude(self, list_of_lines, exp_dict):
-        look_up = "semanticMem : initSemanticMem > ."
-        i = self.find_line(list_of_lines, look_up)
-        i += 1
-        list_of_lines[i] = '  eq init = \n'
-        for y in exp_dict:
-            i += 1
-            domain = exp_dict[y][0]
-            item = exp_dict[y][1]
-            time = str(exp_dict[y][2])
-            cat = exp_dict[y][3]
-            typ = exp_dict[y][4]
-            attr = exp_dict[y][5]
-            time_in = str(exp_dict[y][6])
-            rep = str(exp_dict[y][7])
-            rep_time_in = str(exp_dict[y][8])
-            if item == "fact":
-                addition = '(repeat ' + rep + ' times starting in ' + rep_time_in + ' : exp(((a "' + cat + '" ' + typ + ' "' + attr + '") for ' + time + ') in ' + time_in + ')) \n'
-                # print (addition)
-                list_of_lines.insert(i, addition)
-            if item == "question":
-                i -= 1
-        list_of_lines[i + 1] = 'theHuman .\n'
-        self.write_to_Maude_file(list_of_lines)
-        return list_of_lines
-
-    def write_stm_to_Maude(self, list_of_lines, exp_dict ):
-        look_up = "ops init-STM : -> ShortTermMemory ."
-        i = self.find_line(list_of_lines, look_up)
-        i += 1
-        list_of_lines[i] = '  eq init-STM = \n'
-        for y in exp_dict:
-            i += 1
-            domain = exp_dict[y][0]
-            item = exp_dict[y][1]
-            cat = exp_dict[y][3]
-            typ = exp_dict[y][4]
-            attr = exp_dict[y][5]
-            if item == "fact":
-                addition = '(chunk goal("' + domain + '", rehearsed, 0, 5) decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-                i += 1
-                addition = '(chunk a "' + cat + '" ' + typ + ' "' + attr + '" decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-            if item == "question":
-                i -= 1
-        list_of_lines[i] = list_of_lines[i][:-4]
-        list_of_lines[i + 1] = '\n .\n'
-        return list_of_lines
-
     def create_result_window(self):
         self.ResultsSemanticMemoryWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ResultsSemanticMemoryWindow()
@@ -241,72 +122,12 @@ class Ui_RunLearnWindow(object):
         self.ui.label_3.setText(self.label_2.text())
         self.ui.version_id.setText(self.version_id.text())
 
-    def reset_Maude_file(self):
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
-        start_str = 'eq initSemanticMem ='
-        end_str = '.'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
-
-        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        start_str = 'eq init-STM ='
-        end_str = ' .'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
-        start_str = 'eq init ='
-        end_str = 'theHuman .'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
-
-        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
-
     def get_old_sem_mem_from_db(self, version_id):
         self.ui.oldTableWidget.setRowCount(0)
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with closing(db.cursor()) as cur:
             cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
             fact_repr = cur.fetchall()
-
             i = 0
             for y in fact_repr:
                 self.ui.oldTableWidget.setRowCount(i + 1)
@@ -355,7 +176,6 @@ class Ui_RunLearnWindow(object):
         f.close()
         QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Inserted Successfully')
 
-
     def run(self):
         version_id = int(self.version_id.text())
         sem_mem_dict = get_sem_mem(version_id)
@@ -364,23 +184,21 @@ class Ui_RunLearnWindow(object):
         list_of_lines = read_Maude_file()
         write_stm_capacity_to_Maude(list_of_lines, self.stm_capacity.text())
         write_cognitive_load_to_Maude(list_of_lines, self.cogn_load.text())
-        #write_decay_time_to_Maude(list_of_lines, self.decay_time.text())
+        # write_decay_time_to_Maude(list_of_lines, self.decay_time.text())
         write_rewrite_steps_to_Maude(list_of_lines, self.rewrite_steps.text(), self.in_time.text())
 
-        list_of_lines = self.read_Maude_file()
-        list_of_lines = self.write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
-        list_of_lines = self.write_exp_to_Maude(list_of_lines, exp_dict)
+        list_of_lines = read_Maude_file()
+        list_of_lines = write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
+        list_of_lines = write_exp_to_Maude(list_of_lines, exp_dict, True)
 
-        list_of_lines = self.write_stm_to_Maude(list_of_lines, exp_dict)
-        self.write_to_Maude_file(list_of_lines)
+        list_of_lines = write_stm_to_Maude(list_of_lines, exp_dict, {}, True)
+        write_to_Maude_file(list_of_lines)
         subprocess.call("./start_maude.sh")
         self.create_result_window()
-        self.reset_Maude_file()
+        reset_Maude_file()
         self.get_old_sem_mem_from_db(version_id)
         self.save_new_sem_mem(version_id)
         self.ResultsSemanticMemoryWindow.show()
-
-   
 
     def retranslateUi(self, RunLearnWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -393,7 +211,7 @@ class Ui_RunLearnWindow(object):
         self.label_7.setText(_translate("RunLearnWindow", "<html><head/><body><p><span style=\" font-size:14pt;\">Number of rewrite steps</span></p></body></html>"))
         self.stm_capacity.setText(_translate("RunLearnWindow", "7"))
         self.cogn_load.setText(_translate("RunLearnWindow", "0"))
-        self.decay_time.setText(_translate("RunLearnWindow", "3"))
+        self.decay_time.setText(_translate("RunLearnWindow", "100"))
         self.in_time.setText(_translate("RunLearnWindow", "1000"))
         self.rewrite_steps.setText(_translate("RunLearnWindow", "10000"))
         self.runBtn.setText(_translate("RunLearnWindow", "Run"))

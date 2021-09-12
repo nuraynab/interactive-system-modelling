@@ -88,7 +88,6 @@ def write_exp_to_Maude(list_of_lines, exp_dict, is_learn):
             rep_time_in = str(exp_dict[y][8])
             if item == "fact":
                 addition = '(repeat ' + rep + ' times starting in ' + rep_time_in + ' : exp(((a "' + cat + '" ' + typ + ' "' + attr + '") for ' + time + ') in ' + time_in + ')) \n'
-                # print (addition)
                 list_of_lines.insert(i, addition)
             if item == "question":
                 i -= 1
@@ -104,6 +103,7 @@ def write_exp_to_Maude(list_of_lines, exp_dict, is_learn):
     if is_learn:
         list_of_lines[i + 1] = 'theHuman .\n'
         write_to_Maude_file(list_of_lines)
+        return list_of_lines
     else:
         return list_of_lines, i
 
@@ -172,3 +172,12 @@ def write_stm_to_Maude(list_of_lines, exp_dict, env_dict, is_learn):
     list_of_lines[i] = list_of_lines[i][:-4]
     list_of_lines[i + 1] = '\n .\n'
     return list_of_lines
+
+
+def reset_Maude_file():
+    f = open("Maude-2/proj/cifma-2020-help.maude", "r")
+    f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
+    for line in f:
+        f2.write(line)
+    f.close()
+    f2.close()
