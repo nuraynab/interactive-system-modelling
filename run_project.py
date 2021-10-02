@@ -12,19 +12,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import (QApplication, QWidget, QMessageBox)
 
 from results import Ui_ResultsWindow
+from functions_with_db import get_sem_mem, get_env, get_exp
+from translation_to_Maude import read_Maude_file, write_stm_capacity_to_Maude, write_cognitive_load_to_Maude, write_decay_time_to_Maude, \
+    write_rewrite_steps_to_Maude, write_sem_mem_to_Maude, write_exp_to_Maude, write_env_to_Maude, write_stm_to_Maude, reset_Maude_file, write_to_Maude_file
 
 import MySQLdb as mdb
-from contextlib import closing
 
 import subprocess
-import re
 
 db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-
-sem_mem_dict = {}
-env_dict = {}
-exp_dict = {}
-stm_dict = {}
 
 class Ui_RunProjectWindow(object):
     def setupUi(self, RunProjectWindow):
@@ -117,15 +113,6 @@ class Ui_RunProjectWindow(object):
 
         self.runBtn.clicked.connect(self.run)
 
-    def get_questions(self):
-        version_id = int(self.version_id.text())
-        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-        with closing(db.cursor()) as cur:
-            cur.execute("""SELECT version_id, domain, item, value, categories, types, attributes FROM experiment WHERE version_id = '%i' AND item = 'question' 
-                UNION SELECT version_id, domain, item, value, categories, types, attributes FROM environment WHERE version_id = '%i' AND item = 'question' """ % (version_id, version_id))
-            questions = cur.fetchall()
-        return questions
-
     def get_res_perc(self):
         perc = {}
         env_str = "perc"
@@ -204,198 +191,7 @@ class Ui_RunProjectWindow(object):
         f.close()
         return ans
 
-    def run(self):
-        sem_mem_dict = {}
-        env_dict = {}
-        exp_dict = {}
-        stm_dict = {}
-        version_id = int(self.version_id.text())
-        db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
-        with closing(db.cursor()) as cur:
-            cur.execute("SELECT * FROM sem_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
-            fact_repr = cur.fetchall()
-
-            for y in fact_repr:
-                sem_mem_dict[y[3]] = [y[2], y[4], y[5], y[6], y[7]]
-
-            cur.execute("SELECT * FROM environment WHERE version_id = '%i' ORDER BY id" % (version_id))
-            perc_repr = cur.fetchall()
-
-            for y in perc_repr:
-                env_dict[y[4]] = [y[2], y[3], y[5], y[6], y[7], y[8]]
-
-            cur.execute("SELECT * FROM experiment WHERE version_id = '%i' ORDER BY id" % (version_id))
-            perc_repr = cur.fetchall()
-
-            for y in perc_repr:
-                exp_dict[y[4]] = [y[2], y[3], y[6], y[7], y[8], y[9], y[5]]
-
-            cur.execute("SELECT * FROM short_term_mem WHERE version_id = '%i' ORDER BY id" % (version_id))
-            perc_repr = cur.fetchall()
-
-            for y in perc_repr:
-                stm_dict[y[4]] = [y[2], y[3], y[5], y[6], y[7], y[8]]
-        db.close()
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        list_of_lines = f.readlines()
-        f.close()
-
-
-
-        lookup = "op stmCapacity : -> Nat ."
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "   eq stmCapacity = " + self.stm_capacity.text() + " .\n"
-        list_of_lines[i] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        lookup = "eq theHuman = < human : Human | cognitiveLoad"
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "  eq theHuman = < human : Human | cognitiveLoad : " + self.cogn_load.text() + ",\n"
-        list_of_lines[i-1] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-
-        # lookup = "ops DECAY-TIME MAX-RETRIEVAL-TIME : -> TimeInf ."
-        # for i, line in enumerate(list_of_lines, 1):
-        #     if lookup in line:
-        #         break
-        # addition = "   eq DECAY-TIME = " + self.decay_time.text() + " .\n"
-        # list_of_lines[i] = addition
-        # f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        # f.writelines(list_of_lines)
-        # f.close()
-
-
-        lookup = "quit"
-        for i, line in enumerate(list_of_lines, 1):
-            if lookup in line:
-                break
-        addition = "(trew [" + self.rewrite_steps.text() + "] in EXAMPLE-DOGS : {init} in time <= " + self.in_time.text() + " .)\n"
-        list_of_lines[i-3] = addition
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        list_of_lines = f.readlines()
-        f.close()
-        start_str = "op initSemanticMem : -> SemanticMemory ."
-        i=0
-        for line in list_of_lines:
-            i+=1
-            if start_str in line:
-                i+=1
-                break
-        list_of_lines[i] = '  eq initSemanticMem =  \n'
-        for y in sem_mem_dict:
-            i+=1
-            domain = sem_mem_dict[y][0]
-            time = str(sem_mem_dict[y][1])
-            cat = sem_mem_dict[y][2]
-            typ = sem_mem_dict[y][3]
-            attr = sem_mem_dict[y][4]
-            addition = '("'+domain+'" : "'+cat+'" |- '+time+' ->| ('+typ+' "'+attr+'")) \n'
-            list_of_lines.insert(i, addition)
-        list_of_lines[i+1] = '.\n'
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        start_str = "semanticMem : initSemanticMem > ."
-        i=0
-        for line in list_of_lines:
-            i+=1
-            if start_str in line:
-                i+=1
-                break
-        list_of_lines[i] = '  eq init = \n'
-        for y in exp_dict:
-            i+=1
-            domain = exp_dict[y][0]
-            item = exp_dict[y][1]
-            time = str(exp_dict[y][2])
-            cat = exp_dict[y][3]
-            typ = exp_dict[y][4]
-            attr = exp_dict[y][5]
-            time_in = str(exp_dict[y][6])
-            if item=="question":
-                if typ=="is a":
-                    addition = '(exp((('+typ+' "'+cat+'" "'+attr+'" ?) for '+time+') in '+time_in+')) \n'
-                else:
-                    addition = '(exp((('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+') in '+time_in+')) \n'
-                list_of_lines.insert(i, addition)
-            elif item=="fact":
-            #     addition = '(exp(((a "'+cat+'" '+typ+' "'+attr+'") for '+time+') in '+time_in+')) \n' 
-                i-=1
-            # print (addition)               
-            
-        for y in env_dict:
-            i+=1
-            domain = env_dict[y][0]
-            item = env_dict[y][1]
-            time = str(env_dict[y][2])
-            cat = env_dict[y][3]
-            typ = env_dict[y][4]
-            attr = env_dict[y][5]
-            if item=="question":
-                addition = '(perc(('+typ+' a "'+cat+'" "'+attr+'" ?) for '+time+')) \n'
-                list_of_lines.insert(i, addition)
-            elif item=="fact":
-            #     addition = '(perc((a "'+cat+'" '+typ+' "'+attr+'") for '+time+')) \n'                
-                i-=1
-            
-        list_of_lines[i+1] = 'theHuman .\n'
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-
-        start_str = "ops init-STM : -> ShortTermMemory ."
-        i=0
-        for line in list_of_lines:
-            i+=1
-            if start_str in line:
-                i+=1
-                break
-        list_of_lines[i] = '  eq init-STM = \n'
-        for y in exp_dict:
-            i+=1
-            domain = exp_dict[y][0]
-            item = exp_dict[y][1]
-            if item=="question":
-                addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-            if item=="fact":
-                i-=1
-            # print (addition)               
-            
-        for y in env_dict:
-            i+=1
-            domain = env_dict[y][0]
-            item = env_dict[y][1]
-            if item=="question":
-                addition = '(chunk goal("'+domain+'", foundAnswer, 0, 5) decay INF of DECAY-TIME) ; \n'
-                list_of_lines.insert(i, addition)
-            if item=="fact":
-                i-=1
-        list_of_lines[i] = list_of_lines[i][:-4]
-        list_of_lines[i+1] = '\n .\n'
-
-        f = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        f.writelines(list_of_lines)
-        f.close()
-        subprocess.call("./start_maude.sh")
-
-
+    def show_results_window(self):
         self.ResultsWindow = QtWidgets.QMainWindow()
         self.ui = Ui_ResultsWindow()
         self.ui.setupUi(self.ResultsWindow)
@@ -406,100 +202,48 @@ class Ui_RunProjectWindow(object):
         perc = self.get_res_perc()
         j = 0
         for item, time in perc.items():
-            self.ui.envTableWidget.setRowCount(j+1)
+            self.ui.envTableWidget.setRowCount(j + 1)
             self.ui.envTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
             self.ui.envTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-            j+=1
+            j += 1
 
         stm = self.get_res_stm()
         j = 0
         for item, time in stm.items():
-            self.ui.stmTableWidget.setRowCount(j+1)
+            self.ui.stmTableWidget.setRowCount(j + 1)
             self.ui.stmTableWidget.setItem(j, 0, QtWidgets.QTableWidgetItem(item))
             self.ui.stmTableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(time))
-            j+=1
+            j += 1
 
         in_time = self.get_res_time()
         self.ui.label_6.setText(in_time)
 
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
-        start_str = 'eq initSemanticMem ='
-        end_str = '.'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
+    def run(self):
 
-        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        start_str = 'eq init-STM ='
-        end_str = ' .'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
+        version_id = int(self.version_id.text())
+        sem_mem_dict = get_sem_mem(version_id)
+        env_dict = get_env(version_id)
+        exp_dict = get_exp(version_id)
 
-        f = open("Maude-2/proj/cifma-2020-2.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-help.maude", "w")
-        start_str = 'eq init ='
-        end_str = 'theHuman .'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
+        list_of_lines = read_Maude_file()
+        write_stm_capacity_to_Maude(list_of_lines, self.stm_capacity.text())
+        write_cognitive_load_to_Maude(list_of_lines, self.cogn_load.text())
+        # write_decay_time_to_Maude(list_of_lines, self.decay_time.text())
+        write_rewrite_steps_to_Maude(list_of_lines, self.rewrite_steps.text(), self.in_time.text())
 
-        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
+        list_of_lines = read_Maude_file()
 
-        f = open("Maude-2/proj/cifma-2020-help.maude", "r")
-        f2 = open("Maude-2/proj/cifma-2020-2.maude", "w")
-        start_str = 'eq init-env ='
-        end_str = 'aHuman .'
-        for line in f:
-            if start_str in line:
-                break
-            f2.write(line)
-        for line in f:
-            if end_str in line:
-                f2.write("\n\n")
-                break
-        for line in f:
-            f2.write(line)
-        f.close()
-        f2.close()
+        list_of_lines = write_sem_mem_to_Maude(list_of_lines, sem_mem_dict)
+        list_of_lines, i = write_exp_to_Maude(list_of_lines, exp_dict, False)
+        list_of_lines = write_env_to_Maude(list_of_lines, env_dict, i)
+        list_of_lines = write_stm_to_Maude(list_of_lines, exp_dict, env_dict, False)
 
+        write_to_Maude_file(list_of_lines)
+        subprocess.call("./start_maude.sh")
+
+        self.show_results_window()
+        reset_Maude_file()
         self.ResultsWindow.show()
-
-   
 
     def retranslateUi(self, RunProjectWindow):
         _translate = QtCore.QCoreApplication.translate

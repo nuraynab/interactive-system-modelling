@@ -11,11 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_ProjectDescWindow(object):
-    def setupUi(self, ProjectDescWindow):
-        ProjectDescWindow.setObjectName("ProjectDescWindow")
-        ProjectDescWindow.setFixedSize(553, 416)
-        self.centralwidget = QtWidgets.QWidget(ProjectDescWindow)
+class Ui_LongDescWindow(object):
+    def setupUi(self, LongDescWindow):
+        LongDescWindow.setObjectName("LongDescWindow")
+        LongDescWindow.setFixedSize(553, 416)
+        self.centralwidget = QtWidgets.QWidget(LongDescWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(90, 10, 591, 51))
@@ -31,38 +31,38 @@ class Ui_ProjectDescWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.textBrowser.setFont(font)
-        ProjectDescWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(ProjectDescWindow)
+        LongDescWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(LongDescWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 553, 22))
         self.menubar.setObjectName("menubar")
         self.menuInteractive_System_Modelling = QtWidgets.QMenu(self.menubar)
         self.menuInteractive_System_Modelling.setObjectName("menuInteractive_System_Modelling")
-        ProjectDescWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(ProjectDescWindow)
+        LongDescWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(LongDescWindow)
         self.statusbar.setObjectName("statusbar")
-        ProjectDescWindow.setStatusBar(self.statusbar)
+        LongDescWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
 
-        self.retranslateUi(ProjectDescWindow)
-        QtCore.QMetaObject.connectSlotsByName(ProjectDescWindow)
+        self.retranslateUi(LongDescWindow)
+        QtCore.QMetaObject.connectSlotsByName(LongDescWindow)
 
-    def retranslateUi(self, ProjectDescWindow):
+    def retranslateUi(self, LongDescWindow):
         _translate = QtCore.QCoreApplication.translate
-        ProjectDescWindow.setWindowTitle(_translate("ProjectDescWindow", "MainWindow"))
-        self.label.setText(_translate("ProjectDescWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Project Description</span></p></body></html>"))
-        self.textBrowser.setHtml(_translate("ProjectDescWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        LongDescWindow.setWindowTitle(_translate("LongDescWindow", "MainWindow"))
+        self.label.setText(_translate("LongDescWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Long Description</span></p></body></html>"))
+        self.textBrowser.setHtml(_translate("LongDescWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">This project This project This project This project This project This project This project This project This project This project </span></p></body></html>"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("ProjectDescWindow", "1"))
+        self.menuInteractive_System_Modelling.setTitle(_translate("LongDescWindow", "1"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    ProjectDescWindow = QtWidgets.QMainWindow()
-    ui = Ui_ProjectDescWindow()
-    ui.setupUi(ProjectDescWindow)
-    ProjectDescWindow.show()
+    LongDescWindow = QtWidgets.QMainWindow()
+    ui = Ui_LongDescWindow()
+    ui.setupUi(LongDescWindow)
+    LongDescWindow.show()
     sys.exit(app.exec_())

@@ -12,11 +12,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import MySQLdb as mdb
 
-class Ui_EditVersionInfoWindow(object):
-    def setupUi(self, EditVersionInfoWindow):
-        EditVersionInfoWindow.setObjectName("EditVersionInfoWindow")
-        EditVersionInfoWindow.setFixedSize(575, 895)
-        self.centralwidget = QtWidgets.QWidget(EditVersionInfoWindow)
+class Ui_EditInfoWindow(object):
+    def setupUi(self, EditInfoWindow):
+        EditInfoWindow.setObjectName("EditInfoWindow")
+        EditInfoWindow.setFixedSize(575, 895)
+        self.centralwidget = QtWidgets.QWidget(EditInfoWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(40, 10, 591, 51))
@@ -64,34 +64,43 @@ class Ui_EditVersionInfoWindow(object):
         self.label_7.setGeometry(QtCore.QRect(170, 130, 481, 51))
         self.label_7.setObjectName("label_7")
         self.label_7.setFont(font)
-        EditVersionInfoWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(EditVersionInfoWindow)
+        EditInfoWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(EditInfoWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 553, 22))
         self.menubar.setObjectName("menubar")
         self.menuInteractive_System_Modelling = QtWidgets.QMenu(self.menubar)
         self.menuInteractive_System_Modelling.setObjectName("menuInteractive_System_Modelling")
-        EditVersionInfoWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(EditVersionInfoWindow)
+        EditInfoWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(EditInfoWindow)
         self.statusbar.setObjectName("statusbar")
-        EditVersionInfoWindow.setStatusBar(self.statusbar)
+        EditInfoWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menuInteractive_System_Modelling.menuAction())
 
-        self.retranslateUi(EditVersionInfoWindow)
-        QtCore.QMetaObject.connectSlotsByName(EditVersionInfoWindow)
+        self.retranslateUi(EditInfoWindow)
+        QtCore.QMetaObject.connectSlotsByName(EditInfoWindow)
 
         self.saveBtn.clicked.connect(self.edit_version)
-        self.saveBtn.clicked.connect(EditVersionInfoWindow.close)
+        self.saveBtn.clicked.connect(EditInfoWindow.close)
 
     def edit_version(self):
         db = mdb.connect('127.0.0.1', 'root', '', 'interSys')
         with db:
             cur = db.cursor()
-            
-            cur.execute("UPDATE versions SET name = '%s', short_descr = '%s', long_descr = '%s' WHERE name = '%s'"
-                                                 % (''.join(self.lineEdit.text()),
-                                                  ''.join(self.textEdit.toPlainText()),
-                                                  ''.join(self.textEdit_2.toPlainText()),
-                                                  ''.join(self.origin_name)))
+            if self.label_7.text() == '':
+                cur.execute("UPDATE projects SET name = '%s', short_descr = '%s', long_descr = '%s' WHERE name = '%s'"
+                            % (''.join(self.lineEdit.text()),
+                               ''.join(self.textEdit.toPlainText()),
+                               ''.join(self.textEdit_2.toPlainText()),
+                               ''.join(self.origin_name)))
+                cur.execute("UPDATE versions SET project_name = '%s' WHERE project_name = '%s'"
+                            % (''.join(self.lineEdit.text()),
+                               ''.join(self.origin_name)))
+            else:
+                cur.execute("UPDATE versions SET name = '%s', short_descr = '%s', long_descr = '%s' WHERE name = '%s'"
+                                                     % (''.join(self.lineEdit.text()),
+                                                      ''.join(self.textEdit.toPlainText()),
+                                                      ''.join(self.textEdit_2.toPlainText()),
+                                                      ''.join(self.origin_name)))
             #cur_name = 'Project: ' + self.lineEdit.text()
             #cur_vers = 'Version #1.0: New '
  
@@ -99,15 +108,14 @@ class Ui_EditVersionInfoWindow(object):
             QtWidgets.QMessageBox.about(self.centralwidget,'Connection', 'Data Edited Successfully')
         
 
-    def retranslateUi(self, EditVersionInfoWindow):
+    def retranslateUi(self, EditInfoWindow):
         _translate = QtCore.QCoreApplication.translate
-        EditVersionInfoWindow.setWindowTitle(_translate("EditVersionInfoWindow", "MainWindow"))
-        self.label.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit Version Information</span></p></body></html>"))
-        self.label_2.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Version Name</span></p></body></html>"))
-        self.label_4.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Short Description</span></p></body></html>"))
-        self.label_5.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Long Description</span></p></body></html>"))
-        self.label_6.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:16pt; color:#888a85;\">Optional</span></p></body></html>"))
-        self.saveBtn.setText(_translate("EditVersionInfoWindow", "Save"))
-        self.label_3.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Animal-Dog</span></p></body></html>"))
-        self.label_7.setText(_translate("EditVersionInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt; font-style:italic;\">Version #1.1</span></p></body></html>"))
-        self.menuInteractive_System_Modelling.setTitle(_translate("EditVersionInfoWindow", "1"))
+        EditInfoWindow.setWindowTitle(_translate("EditInfoWindow", "MainWindow"))
+        self.label.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:28pt;\">Edit Information</span></p></body></html>"))
+        self.label_2.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Name</span></p></body></html>"))
+        self.label_4.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Short Description</span></p></body></html>"))
+        self.label_5.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Long Description</span></p></body></html>"))
+        self.label_6.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:16pt; color:#888a85;\">Optional</span></p></body></html>"))
+        self.saveBtn.setText(_translate("EditInfoWindow", "Save"))
+        self.label_3.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Animal-Dog</span></p></body></html>"))
+        self.label_7.setText(_translate("EditInfoWindow", "<html><head/><body><p><span style=\" font-size:20pt; font-style:italic;\">Version #1.1</span></p></body></html>"))
